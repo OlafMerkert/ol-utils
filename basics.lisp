@@ -5,7 +5,7 @@
 (export '(group
           flatten
           mkstr
-          symb
+          symb keyw
           defsymconstant))
 
 ;; Lists
@@ -34,8 +34,11 @@
 (defun symb (&rest args)
   (values (intern (apply #'mkstr args))))
 
-;; Defining symbol constants
+(defun keyw (&rest args)
+  (values (intern (apply #'mkstr args)
+                  #:keyword)))
 
+;; Defining persistent symbol constants
 (defmacro defsymconstant (name)
   `(defconstant ,name (if (boundp ',name)
                           ,name
