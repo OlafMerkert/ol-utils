@@ -68,5 +68,5 @@ is inclusive, end is exclusive."
     (nreverse (rec list nil))))
 
 (defun singleton-p (list)
-  (and (listp list)
+  (and (consp list)
        (null (cdr list))))
