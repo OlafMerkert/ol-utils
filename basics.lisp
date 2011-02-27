@@ -36,7 +36,7 @@
 
 (defun keyw (&rest args)
   (values (intern (apply #'mkstr args)
-                  #:keyword)))
+                  :keyword)))
 
 ;; Defining persistent symbol constants
 (defmacro defsymconstant (name)

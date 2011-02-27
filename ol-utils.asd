@@ -9,4 +9,6 @@
                (:file "lists")
                (:file "functions")
                (:file "arrays")
-               (:file "arithmetic")))
+               (:file "arithmetic")
+               (:file "tables")
+               (:file "clos")))
