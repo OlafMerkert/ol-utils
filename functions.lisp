@@ -2,7 +2,8 @@
 
 (export '(swallow list->gensyms
           memoize mlambda
-          defmemfun))
+          defmemfun
+          compose))
 
 (defun swallow (fun)
   "Transform the function such that it appears to accept arguments,
@@ -56,3 +57,9 @@ but call it with none."
          (setf ,g!funo (memoize #',g!fun))
          (defun ,name (,@args)
            (funcall ,g!funo ,@names))))))
+
+(defun compose (&rest functions)
+    (lambda (x)
+      (reduce #'funcall functions
+              :initial-value x
+              :from-end t)))
