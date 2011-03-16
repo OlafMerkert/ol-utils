@@ -5,6 +5,8 @@
 
 (defmacro defclass/f (name direct-superclasses
                       direct-slots &rest options)
+  "Enhancement of defclass: For slots where only a symbol is given for
+a name, an accessor and initarg are automatically added."
   (let ((normalized-slots
          (mapcar (lambda (slot)
                    (etypecase slot

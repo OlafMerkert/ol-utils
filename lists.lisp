@@ -40,9 +40,14 @@ is inclusive, end is exclusive."
     (push i l)))
 
 (defun lrange (seq)
+  "Indizes of elements of seq."
   (range (length seq)))
 
 (defun alternate (&rest lists)
+  "Splice lists together by alternating through their elements,
+i.e. the result will first have all the first elements of the lists,
+then the second elements and so on.  The first arg can be a keyword
+argument, `:reverse` which will reverse the order of the lists."
   (case (car lists)
     ((:normal)
      (apply #'mapcan #'list (cdr lists)))
@@ -51,18 +56,19 @@ is inclusive, end is exclusive."
     (t (apply #'mapcan #'list lists))))
 
 (defun reverse/n (n list)
-  "Verdrehe die Reihenfolge der ersten n Eintraege der Liste."
+  "Reverse only the first n entries of the list."
   (let ((a (subseq list 0 n))
         (b (subseq list n)))
     (nconc (nreverse a) b)))
 
 (defun drop (n list)
-  "Entferne den n-ten Eintrag aus der Liste."
+  "Remove the n-th element from list."
   (nconc (subseq list 0 n)
          (subseq list (1+ n))))
 
 (defun split (sep list)
-  "Teile die Liste auf in Teile, die durch sep getrennt sind."
+  "Split the list at every occurence of sep.  The result will be a
+list of the parts."
   (labels ((rec (remaining parts)
              (aif (position sep remaining)
                   (rec (nthcdr (1+ it) remaining)

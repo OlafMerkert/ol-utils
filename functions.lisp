@@ -40,6 +40,7 @@ but call it with none."
 (def-symbol-p &)
 
 (defun args->names (args)
+  "Extract the parameter names from an argument list."
   (mapcan (lambda (x)
             (cond ((&-symbol-p x) nil)
                   ((listp x) (list (car x)))
@@ -59,6 +60,8 @@ but call it with none."
            (funcall ,g!funo ,@names))))))
 
 (defun compose (&rest functions)
+  "Compose the functions.  The leftmost function will be applied last.
+Currently only works with functions that take a single argument."
     (lambda (x)
       (reduce #'funcall functions
               :initial-value x

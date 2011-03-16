@@ -2,6 +2,7 @@
 
 (export '(sum prod))
 
+;; TODO capture the abstraction
 (defmacro! sum ((var o!start &optional o!end (o!step 1)) expr)
   `(progn
      (unless ,g!end

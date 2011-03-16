@@ -14,7 +14,6 @@
                        (safety ,(- 3 numarg))))))
 
 ;; use #` syntax to build lambda's that build lists
-;;
 (defun |#`-reader| (stream sub-char numarg)
   "use #` syntax to build lambda's that build lists.  Parameters are
 called a1, a2, ...j"
