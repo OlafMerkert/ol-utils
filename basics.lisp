@@ -6,10 +6,12 @@
           flatten
           mkstr
           symb keyw
+          defconstant/g
           defsymconstant))
 
 ;; Lists
 (defun group (source n)
+  "Partition the list source into a list of lists of length n."
   (if (zerop n) (error "zero length"))
   (labels ((rec (source acc)
              (let ((rest (nthcdr n source)))
@@ -20,6 +22,7 @@
 
 
 (defun flatten (x)
+  "Flatten the tree structure of x to a list."
   (labels ((rec (x acc)
              (cond ((null x) acc)
                    ((atom x) (cons x acc))
@@ -28,18 +31,31 @@
 
 ;; Symbols & Strings
 (defun mkstr (&rest args)
+  "Concatenate the string values of all args."
   (with-output-to-string (s)
     (dolist (a args) (princ a s))))
 
 (defun symb (&rest args)
+  "Build a symbol by concatenating all args (which may be symbols or
+strings or whatever."
   (values (intern (apply #'mkstr args))))
 
 (defun keyw (&rest args)
+  "The same as symb, but for keyword symbols."
   (values (intern (apply #'mkstr args)
                   :keyword)))
 
 ;; Defining persistent symbol constants
-(defmacro defsymconstant (name)
+(defmacro defconstant/g (name expr &optional documentation)
+  "Define a constant using a non-constant expression."
   `(defconstant ,name (if (boundp ',name)
                           ,name
-                          (gensym ,(symbol-name name)))))
+                          ,expr)
+     ,documentation))
+
+(defmacro defsymconstant (name &optional documentation)
+  "Define a constant with a gensym as value."
+  `(defconstant ,name (if (boundp ',name)
+                          ,name
+                          (gensym ,(symbol-name name)))
+     ,documentation))

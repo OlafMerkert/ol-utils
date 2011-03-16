@@ -6,9 +6,12 @@
           reverse/n
           drop
           split
-          singleton-p))
+          singleton-p
+          nconc1
+          group-by))
 
 (defun mklist (x)
+  "Ensure that x is a list."
   (if (listp x) x (list x)))
 
 (defun range (start &optional end (step 1))
@@ -68,5 +71,25 @@ is inclusive, end is exclusive."
     (nreverse (rec list nil))))
 
 (defun singleton-p (list)
+  "Test whether list has exactly one element."
   (and (consp list)
        (null (cdr list))))
+
+(defun nconc1 (list obj)
+  "Destructively append obj to list."
+  (nconc list (list obj)))
+
+(defun group-by (key list &key (test #'equal))
+  "Partition list into sublists according values of the function key.
+Each sublist starts with the value of key on all of its elements (so
+this is actually an alist).
+
+You could think of this as calculating the inverse image of key on
+list."
+  (let (grouping)
+    (dolist (l list)
+      (let ((k (funcall key l)))
+        (aif (assoc k grouping :test test)
+             (nconc1 it l)
+             (push (list k l) grouping))))
+    grouping))
