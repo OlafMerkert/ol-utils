@@ -13,6 +13,16 @@
    `(declare (optimize (speed ,numarg)
                        (safety ,(- 3 numarg))))))
 
+;; insert debug declaration with #d
+(set-dispatch-macro-character
+ #\# #\d
+ (lambda (stream sub-char numarg)
+   (declare (ignore stream sub-char))
+   (setq numarg (or numarg 2))
+   (unless (<= numarg 3)
+     (error "Bad value for #d: ~A" numarg))
+   `(declare (optimize (debug ,numarg)))))
+
 ;; use #` syntax to build lambda's that build lists
 (defun |#`-reader| (stream sub-char numarg)
   "use #` syntax to build lambda's that build lists.  Parameters are
