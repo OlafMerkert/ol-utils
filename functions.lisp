@@ -3,7 +3,7 @@
 (export '(swallow list->gensyms
           memoize mlambda
           defmemfun
-          compose))
+          compose composer))
 
 (defun swallow (fun)
   "Transform the function such that it appears to accept arguments,
@@ -66,3 +66,14 @@ Currently only works with functions that take a single argument."
       (reduce #'funcall functions
               :initial-value x
               :from-end t)))
+
+(defmacro/g! composer (&rest function-symbols)
+  "Compose the functions given by symbols.  The leftmost function will
+be appliead last.  Currently expects all functions to take a single
+argument."
+  (labels ((call (fns)
+             (if fns
+                 `(,(car fns) ,(call (cdr fns)))
+                 g!arg)))
+   `(lambda (,g!arg)
+      ,(call function-symbols))))
