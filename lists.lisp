@@ -14,29 +14,54 @@
   "Ensure that x is a list."
   (if (listp x) x (list x)))
 
+
+(defmacro! do-range ((var
+                      o!start &optional o!end (o!step 1)
+                      result-form
+                      (default-start 0) end-inclusive)
+                     local-binds
+                     &body body)
+  `(progn
+     ;; when only one argument is given, it is the end
+     (unless ,g!end
+       (setf ,g!end ,g!start
+             ,g!start ,default-start))
+     ;; check whether range is valid, i.e. step size is non-zero
+     (when (zerop ,g!step)
+       (error "Invalid range from ~A to ~A by ~A" ,g!start ,g!end ,g!step))
+     ;; provide an anaphoric variable length which describes the
+     ;; length of the resulting sequence.
+     (multiple-value-bind (length ,g!rest)
+         (ceiling (max 0 (/ (- ,g!end ,g!start) ,g!step)))
+       (declare (ignorable length ,g!rest))
+       ,(when end-inclusive
+                `(if (zerop ,g!rest) (incf length)))
+      ;; different comparators for negative step
+      (if (plusp ,g!step)
+          (do ((,var ,g!start (+ ,var ,g!step))
+               ,@local-binds)
+              ((,(if end-inclusive '> '>=)
+                 ,var ,g!end) ,result-form)
+            ,@body)
+          (do ((,var ,g!start (+ ,var ,g!step))
+               ,@local-binds)
+              ((,(if end-inclusive '< '<=)
+                 ,var ,g!end) ,result-form)
+            ,@body)))))
+
+
 (defun range (start &optional end (step 1))
   "Create a list with numbers between start and end with step.  start
 is inclusive, end is exclusive."
-  (unless end
-    (setf end start
-          start 0))
-  (unless (plusp (* step (- end start)))
-    (error "Invalid range from ~A to ~A by ~A" start end step))
-  (do ((i start (+ step i))
-       (l))
-      ((>= i end) (nreverse l))
+  (do-range (i start end step (nreverse l))
+      (l)
     (push i l)))
 
+
 (defun mrange (start &optional end (step 1))
-  "As range, only end is inclusive."
-  (unless end
-    (setf end start
-          start 1))
-  (unless (plusp (* step (- end start)))
-    (error "Invalid mrange from ~A to ~A by ~A" start end step))
-  (do ((i start (+ step i))
-       (l))
-      ((> i end) (nreverse l))
+  "As range, only end is inclusive (Matlab-Style)."
+  (do-range (i start end step (nreverse l) 1 t)
+      (l)
     (push i l)))
 
 (defun lrange (seq)
