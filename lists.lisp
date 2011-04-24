@@ -7,7 +7,7 @@
           drop
           split
           singleton-p
-          nconc1
+          append1 nconc1
           group-by))
 
 (defun mklist (x)
@@ -80,6 +80,10 @@ list of the parts."
   "Test whether list has exactly one element."
   (and (consp list)
        (null (cdr list))))
+
+(defun append1 (list obj)
+  "Append obj to list."
+  (append list (list obj)))
 
 (defun nconc1 (list obj)
   "Destructively append obj to list."
