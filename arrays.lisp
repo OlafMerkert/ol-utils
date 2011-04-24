@@ -1,7 +1,9 @@
 (in-package #:ol-utils)
 
 (export '(list->array array->list
-          fill-array% fill-array old index))
+          fill-array% fill-array old indices
+          shuffle
+          arange amrange))
 
 (defun list->array (list)
   "Make an array from list."
@@ -32,9 +34,9 @@
 
 (defmacro! fill-array (fill-spec o!array expr)
   "Fill the array in the parts described by fill-spec with values described by
-expr.fill-spec consists of integers or the keyword :fill.
+expr.  fill-spec consists of integers or the keyword :fill.
 
-The integers select a single row/col in the matching dimension,
+An integer selects a single row/col in the matching dimension,
 whereas :fill selects all rows/cols in the matching dimension.
 
 The expr can use the anaphoric variables old and index to access the
@@ -50,3 +52,26 @@ previous value of the field and the list of its indices."
   "Companion macro for fill-array, allowing to name the indices more
 conveniently."
   `(destructuring-bind ,(mklist names) index ,@body))
+
+(defun shuffle (seq)
+  "Destructively shuffle the given sequence."
+  (let ((n (length seq)))
+    (loop for i from (- n 1) downto 1
+       for j = (random (+ i 1))
+       do (rotatef (elt seq i)
+                   (elt seq j))))
+  seq)
+
+(defun arange (start &optional end (step 1))
+  "As range, but builds an array/vector instead of a list."
+  (do-range (i start end step a)
+      ((j 0 (+ j 1))
+       (a (make-array length)))
+    (setf (aref a j) i)))
+
+(defun amrange (start &optional end (step 1))
+  (do-range (i start end step a 1 t)
+      ((j 0 (+ j 1))
+       (a (make-array length)))
+    (setf (aref a j) i)))
+
