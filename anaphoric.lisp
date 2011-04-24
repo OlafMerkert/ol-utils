@@ -1,6 +1,8 @@
 (in-package #:ol-utils)
 
-(export '(aif acond it))
+(export '(aif acond it
+          alambda self
+          aand))
 
 ;;; Commonly used anaphoric macros
 
@@ -19,3 +21,16 @@ then clause.  (and the else clause, but there it will always be nil.)"
              (declare (ignorable it))
              ,@(cdar clauses))
            (acond ,@(cdr clauses))))))
+
+(defmacro alambda (args &body body)
+  "Anaphoric lambda.  Can call itself using `(self ...)`."
+  `(labels ((self (,@args) ,@body))
+     #'self))
+
+(defmacro aand (&rest forms)
+  "Anaphoric and.  The result of the previous form can be referred to
+with `it`."
+  (if (null forms)
+      'it
+      `(aif ,(first forms)
+            (aand ,@(rest  forms)))))
