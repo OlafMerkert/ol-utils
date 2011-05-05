@@ -3,7 +3,8 @@
 (export '(list->array array->list
           fill-array% fill-array old indices
           shuffle
-          arange amrange))
+          arange amrange
+          alast))
 
 (defun list->array (list)
   "Make an array from list."
@@ -75,3 +76,12 @@ conveniently."
        (a (make-array length)))
     (setf (aref a j) i)))
 
+(defun alast (vector)
+  "Get at the last element of a vector."
+  (aref vector (1- (length vector))))
+
+(defsetf alast (vector) (value)
+  (with-gensyms!
+     `(let ((,g!vector ,vector))
+        (setf (aref ,g!vector (1- (length ,g!vector)))
+              ,value))))
