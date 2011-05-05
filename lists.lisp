@@ -8,7 +8,8 @@
           split
           singleton-p
           append1 nconc1
-          group-by))
+          group-by
+          mappend))
 
 (defun mklist (x)
   "Ensure that x is a list."
@@ -128,3 +129,7 @@ list."
              (nconc1 it l)
              (push (list k l) grouping))))
     grouping))
+
+(defun mappend (fn the-list)
+  "Apply fn to each element of list and append the results."
+  (apply #'append (mapcar fn the-list)))
