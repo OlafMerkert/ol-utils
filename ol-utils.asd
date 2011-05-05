@@ -6,6 +6,7 @@
                (:file "reader")
                (:file "macrodef")
                (:file "anaphoric")
+               (:file "setf")
                (:file "sequences")
                (:file "lists")
                (:file "trees")
