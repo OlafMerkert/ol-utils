@@ -1,6 +1,7 @@
 (in-package #:ol-utils)
 
-(export '(swallow list->gensyms
+(export '(swallow mswallow ilambda
+          list->gensyms
           memoize mlambda
           defmemfun
           compose composer))
@@ -11,6 +12,18 @@ but call it with none."
   (lambda (&rest x)
     (declare (ignore x))
     (funcall fun)))
+
+(defmacro/g! mswallow (&body body)
+  "Enclose the body with a lambda that ignores arbitrary arguments."
+  `(lambda (&rest ,g!args)
+     (declare (ignore ,g!args))
+     ,@body))
+
+(defmacro ilambda (args &body body)
+  "lambda form where all arguments are declared ignorable."
+  `(lambda ,args
+     (declare (ignorable ,@(args->names args)))
+     ,@body))
 
 (defun list->gensyms (&rest lists)
   "Collect a gensym for every common element of the lists."
