@@ -1,7 +1,7 @@
 (in-package #:ol-utils)
 
 (export '(list->array array->list
-          fill-array% fill-array old indices
+          fill-array% fill-array old indices index
           shuffle
           arange amrange
           alast))
@@ -52,7 +52,9 @@ previous value of the field and the list of its indices."
 (defmacro indices (names &body body)
   "Companion macro for fill-array, allowing to name the indices more
 conveniently."
-  `(destructuring-bind ,(mklist names) index ,@body))
+  `(destructuring-bind ,(mklist names) index
+     (declare (ignorable ,@(mklist names)))
+     ,@body))
 
 (defun shuffle (seq)
   "Destructively shuffle the given sequence."
