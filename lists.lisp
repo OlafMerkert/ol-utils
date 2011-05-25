@@ -9,6 +9,7 @@
           singleton-p
           append1 nconc1
           group-by
+          collect
           mappend
           assoc1
           filter))
@@ -131,6 +132,24 @@ list."
              (nconc1 it l)
              (push (list k l) grouping))))
     grouping))
+
+(defun collect (list &key singletons (test #'eql) (key #'identity))
+  "Group subsequent elements of LIST if they satisfy TEST.  Unless SINGLETONS is T, groups of only one element are flattened again."
+  (labels ((compact-group (g)
+             (if (or (cdr g) singletons)
+                 (nreverse g)
+                 (car g)))
+           (rec (list previous previous-group acc)
+             (if (null list)
+                 (cons (compact-group previous-group) acc)
+                 (let ((k (funcall key (car list))))
+                   (if (funcall test previous k)
+                       (rec (cdr list) k (cons (car list) previous-group) acc)
+                       (rec (cdr list) k (list (car list))
+                            (cons (compact-group previous-group) acc)))))))
+    (if (null list) nil
+        (nreverse (rec (cdr list) (funcall key (car list))
+                       (list (car list)) nil)))))
 
 (defun mappend (fn the-list)
   "Apply fn to each element of list and append the results."
