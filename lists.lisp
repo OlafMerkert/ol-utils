@@ -9,7 +9,9 @@
           singleton-p
           append1 nconc1
           group-by
-          mappend))
+          mappend
+          assoc1
+          filter))
 
 (defun mklist (x)
   "Ensure that x is a list."
@@ -133,3 +135,19 @@ list."
 (defun mappend (fn the-list)
   "Apply fn to each element of list and append the results."
   (apply #'append (mapcar fn the-list)))
+
+(defun assoc1 (key alist &optional default &rest params)
+  "Retrieve value assigned to KEY from ALIST.  If not found, return
+DEFAULT.  A second value indicates whether KEY was found (like
+gethash)."
+  (aif (apply #' assoc key alist params)
+       (values (cdr it) t)
+       (values default nil)))
+
+(defun filter (fn lst &optional acc)
+  "filter lst through fn, dropping any nil values."
+  (if lst
+      (aif (funcall fn (car lst))
+           (filter fn (cdr lst) (cons it acc))
+           (filter fn (cdr lst) acc))
+      (nreverse acc)))
