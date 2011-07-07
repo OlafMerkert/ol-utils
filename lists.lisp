@@ -12,7 +12,8 @@
           collect
           mappend
           assoc1
-          filter))
+          filter
+          splitn))
 
 (defun mklist (x)
   "Ensure that x is a list."
@@ -170,3 +171,10 @@ gethash)."
            (filter fn (cdr lst) (cons it acc))
            (filter fn (cdr lst) acc))
       (nreverse acc)))
+
+(defun splitn (list &optional (n 2))
+  "Split LIST into sequences of all n-th elements of LIST."
+  (let ((splits (make-array n :initial-element nil)))
+    (loop for l in list and i = 0 then (mod (+ i 1) n)
+       do (push l (aref splits i)))
+    (values-list (map 'list #'nreverse splits))))
