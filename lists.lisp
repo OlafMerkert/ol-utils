@@ -10,6 +10,7 @@
           append1 nconc1
           group-by
           collect
+          compress
           mappend
           assoc1
           filter
@@ -151,6 +152,38 @@ list."
     (if (null list) nil
         (nreverse (rec (cdr list) (funcall key (car list))
                        (list (car list)) nil)))))
+
+;;; todo maybe move this
+(defun recons (cons car cdr)
+  "Reuse a cons cell.  "
+  (unless (eql car :keep)
+    (setf (car cons) car))
+   (unless (eql cdr :keep)
+    (setf (cdr cons) cdr))
+   cons)
+
+(defun compress (list &key singletons (test #'eql) (key #'identity))
+  "Count the numbers of subsequent elements of LIST if they satisfy
+TEST as (FIRST-OCCURENCE . COUNT).  Unless SINGLETONS is T, counts of
+1 are flattened again."
+  (labels ((compact-group (g)
+             (if (or (< 1 (cdr g)) singletons)
+                 g
+                 (car g)))
+           (rec (list previous previous-group acc)
+             (if (null list)
+                 (cons (compact-group previous-group) acc)
+                 (let ((k (funcall key (car list))))
+                   (if (funcall test previous k)
+                       (rec (cdr list) k (recons previous-group
+                                                 :keep
+                                                 (+ 1 (cdr previous-group)))
+                            acc)
+                       (rec (cdr list) k (cons (car list) 1)
+                            (cons (compact-group previous-group) acc)))))))
+    (if (null list) nil
+        (nreverse (rec (cdr list) (funcall key (car list))
+                       (cons (car list) 1) nil)))))
 
 (defun mappend (fn the-list)
   "Apply fn to each element of list and append the results."
