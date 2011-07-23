@@ -6,7 +6,7 @@
           reverse/n
           drop
           split
-          singleton-p
+          length=1
           append1 nconc1
           group-by
           collect
@@ -14,7 +14,9 @@
           mappend
           assoc1
           filter
-          splitn))
+          splitn
+          last1
+          starts-with))
 
 (defun mklist (x)
   "Ensure that x is a list."
@@ -107,7 +109,7 @@ list of the parts."
                   (cons (subseq remaining 0) parts))))
     (nreverse (rec list nil))))
 
-(defun singleton-p (list)
+(defun length=1 (list)
   "Test whether list has exactly one element."
   (and (consp list)
        (null (cdr list))))
@@ -211,3 +213,11 @@ gethash)."
     (loop for l in list and i = 0 then (mod (+ i 1) n)
        do (push l (aref splits i)))
     (values-list (map 'list #'nreverse splits))))
+
+(defun last1 (list)
+  "Return the last element of LIST."
+  (first (last list)))
+
+(defun starts-with (list x)
+  "Is this a list whose first element is x?"
+  (and (consp list) (eql (first list) x)))

@@ -1,9 +1,9 @@
 (in-package #:ol-utils)
 
-(export '(starts-with
+(export '(begins-with
           copy))
 
-(defun starts-with (start seq)
+(defun begins-with (seq start)
   "Test whether the first part of SEQ is START."
   (let ((l (length start)))
     (and (<= l (length seq))
