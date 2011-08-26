@@ -6,9 +6,17 @@
           reverse/n
           drop
           split
-          singleton-p
+          length=1
           append1 nconc1
-          group-by))
+          group-by
+          collect
+          compress
+          mappend
+          assoc1
+          filter
+          splitn
+          last1
+          starts-with))
 
 (defun mklist (x)
   "Ensure that x is a list."
@@ -101,7 +109,7 @@ list of the parts."
                   (cons (subseq remaining 0) parts))))
     (nreverse (rec list nil))))
 
-(defun singleton-p (list)
+(defun length=1 (list)
   "Test whether list has exactly one element."
   (and (consp list)
        (null (cdr list))))
@@ -128,3 +136,88 @@ list."
              (nconc1 it l)
              (push (list k l) grouping))))
     grouping))
+
+(defun collect (list &key singletons (test #'eql) (key #'identity))
+  "Group subsequent elements of LIST if they satisfy TEST.  Unless SINGLETONS is T, groups of only one element are flattened again."
+  (labels ((compact-group (g)
+             (if (or (cdr g) singletons)
+                 (nreverse g)
+                 (car g)))
+           (rec (list previous previous-group acc)
+             (if (null list)
+                 (cons (compact-group previous-group) acc)
+                 (let ((k (funcall key (car list))))
+                   (if (funcall test previous k)
+                       (rec (cdr list) k (cons (car list) previous-group) acc)
+                       (rec (cdr list) k (list (car list))
+                            (cons (compact-group previous-group) acc)))))))
+    (if (null list) nil
+        (nreverse (rec (cdr list) (funcall key (car list))
+                       (list (car list)) nil)))))
+
+;;; todo maybe move this
+(defun recons (cons car cdr)
+  "Reuse a cons cell.  "
+  (unless (eql car :keep)
+    (setf (car cons) car))
+   (unless (eql cdr :keep)
+    (setf (cdr cons) cdr))
+   cons)
+
+(defun compress (list &key singletons (test #'eql) (key #'identity))
+  "Count the numbers of subsequent elements of LIST if they satisfy
+TEST as (FIRST-OCCURENCE . COUNT).  Unless SINGLETONS is T, counts of
+1 are flattened again."
+  (labels ((compact-group (g)
+             (if (or (< 1 (cdr g)) singletons)
+                 g
+                 (car g)))
+           (rec (list previous previous-group acc)
+             (if (null list)
+                 (cons (compact-group previous-group) acc)
+                 (let ((k (funcall key (car list))))
+                   (if (funcall test previous k)
+                       (rec (cdr list) k (recons previous-group
+                                                 :keep
+                                                 (+ 1 (cdr previous-group)))
+                            acc)
+                       (rec (cdr list) k (cons (car list) 1)
+                            (cons (compact-group previous-group) acc)))))))
+    (if (null list) nil
+        (nreverse (rec (cdr list) (funcall key (car list))
+                       (cons (car list) 1) nil)))))
+
+(defun mappend (fn the-list)
+  "Apply fn to each element of list and append the results."
+  (apply #'append (mapcar fn the-list)))
+
+(defun assoc1 (key alist &optional default &rest params)
+  "Retrieve value assigned to KEY from ALIST.  If not found, return
+DEFAULT.  A second value indicates whether KEY was found (like
+gethash)."
+  (aif (apply #' assoc key alist params)
+       (values (cdr it) t)
+       (values default nil)))
+
+(defun filter (fn lst &optional acc)
+  "filter lst through fn, dropping any nil values."
+  (if lst
+      (aif (funcall fn (car lst))
+           (filter fn (cdr lst) (cons it acc))
+           (filter fn (cdr lst) acc))
+      (nreverse acc)))
+
+(defun splitn (list &optional (n 2))
+  "Split LIST into sequences of all n-th elements of LIST."
+  (let ((splits (make-array n :initial-element nil)))
+    (loop for l in list and i = 0 then (mod (+ i 1) n)
+       do (push l (aref splits i)))
+    (values-list (map 'list #'nreverse splits))))
+
+(defun last1 (list)
+  "Return the last element of LIST."
+  (first (last list)))
+
+(defun starts-with (list x)
+  "Is this a list whose first element is x?"
+  (and (consp list) (eql (first list) x)))

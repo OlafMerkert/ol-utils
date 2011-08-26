@@ -7,7 +7,8 @@
           mkstr
           symb keyw
           defconstant/g
-          defsymconstant))
+          defsymconstant
+          ew))
 
 ;; Lists
 (defun group (source n)
@@ -59,3 +60,8 @@ strings or whatever."
                           ,name
                           (gensym ,(symbol-name name)))
      ,documentation))
+
+;; Abbreviate eval-when
+(defmacro ew (&body body)
+  `(eval-when (:compile-toplevel :load-toplevel :execute)
+     ,@body))

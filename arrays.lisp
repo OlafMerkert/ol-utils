@@ -1,9 +1,10 @@
 (in-package #:ol-utils)
 
 (export '(list->array array->list
-          fill-array% fill-array old indices
+          fill-array% fill-array old indices index
           shuffle
-          arange amrange))
+          arange amrange
+          alast))
 
 (defun list->array (list)
   "Make an array from list."
@@ -51,7 +52,9 @@ previous value of the field and the list of its indices."
 (defmacro indices (names &body body)
   "Companion macro for fill-array, allowing to name the indices more
 conveniently."
-  `(destructuring-bind ,(mklist names) index ,@body))
+  `(destructuring-bind ,(mklist names) index
+     (declare (ignorable ,@(mklist names)))
+     ,@body))
 
 (defun shuffle (seq)
   "Destructively shuffle the given sequence."
@@ -75,3 +78,12 @@ conveniently."
        (a (make-array length)))
     (setf (aref a j) i)))
 
+(defun alast (vector)
+  "Get at the last element of a vector."
+  (aref vector (1- (length vector))))
+
+(defsetf alast (vector) (value)
+  (with-gensyms!
+     `(let ((,g!vector ,vector))
+        (setf (aref ,g!vector (1- (length ,g!vector)))
+              ,value))))

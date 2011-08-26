@@ -3,6 +3,7 @@
 (export '(test-symbol-start
           def-symbol-p
           def-symbol-transform
+          with-gensyms!
           defmacro/g!
           defmacro!))
 
@@ -42,18 +43,22 @@ symbols starting with start."
   (def-symbol-transform o! g!))
 
 ;;; Macros with gensyms and once-only evaluation
-(defmacro defmacro/g! (name args &body body)
-  "Define a macro, where all symbols starting with g! will
-automatically evaluate to gensyms."
+(defmacro with-gensyms! (&body body)
+  "Bind all symbols starting with g! to gensyms."
   (let ((syms (remove-duplicates
                (remove-if-not #'g!-symbol-p
                               (flatten body)))))
-    `(defmacro ,name ,args
-       (let ,(mapcar
-              (lambda (s)
-                `(,s (gensym ,(subseq (symbol-name s) 2))))
-              syms)
-         ,@body))))
+    `(let ,(mapcar
+            (lambda (s)
+              `(,s (gensym ,(subseq (symbol-name s) 2))))
+            syms)
+      ,@body)))
+
+(defmacro defmacro/g! (name args &body body)
+  "Define a macro, where all symbols starting with g! will
+automatically evaluate to gensyms."
+  `(defmacro ,name ,args
+     (with-gensyms! ,@body)))
 
 (defmacro defmacro! (name args &body body)
   "Define a macro, where all symbols starting with g! will
