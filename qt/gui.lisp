@@ -4,12 +4,6 @@
           make-qapp
           run-qapp))
 
-(defun same-symbol-name (s1 s2)
-  "Teste, ob zwei Symbole die gleichen Symbolnamen haben (ignoriert
-Paketzugehörigkeit)."
-  (string-equal (symbol-name s1)
-                (symbol-name s2)))
-
 (defmacro! qlayout (widget type &body widgets)
   "Versehe das widget mit einem Layout und füge gleich die widgets hinzu."
   `(let ((,g!layout (make-qinstance ',(symb type '-layout))))
