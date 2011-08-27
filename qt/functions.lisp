@@ -2,6 +2,7 @@
 
 (export '(q
           qconnect
+          qemit
           make-qinstance))
 
 (defmacro q (function instance &rest args)
@@ -30,6 +31,9 @@ Qt Funktion exisitiert."
   `(optimized-call T "QObject" "connect"
                    ,source (QSIGNAL ,(qsignature signal))
                    ,sink (QSLOT ,(qsignature slot))))
+
+(defmacro qemit (object signal &rest args)
+  `(emit-signal ,object ,(qsignature signal) ,@args))
 
 (defmacro! make-qinstance (class-name &rest parameters)
   "Benutze ähnlich wie make-instance.  Die ersten Parameter, die kein
