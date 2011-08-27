@@ -8,7 +8,8 @@
           symb keyw
           defconstant/g
           defsymconstant
-          ew))
+          ew
+          lambda-form-p))
 
 ;; Lists
 (defun group (source n)
@@ -65,3 +66,14 @@ strings or whatever."
 (defmacro ew (&body body)
   `(eval-when (:compile-toplevel :load-toplevel :execute)
      ,@body))
+
+;; detecting lambda forms
+(defun lambda-form-p (s-exp)
+  "Test whether this is a cons, where the car is symbol whose name
+  contains lambda.  It returns the part before the lambda (as a string) if so."
+  (and (consp s-exp)
+       (symbolp (car s-exp))
+       (let ((name (symbol-name (car s-exp))))
+         (aif (search "lambda" name 
+                      :test #'char-equal)
+              (subseq name 0 it)))))

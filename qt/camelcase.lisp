@@ -1,6 +1,7 @@
 (in-package #:qt-utils)
 
 (export '(lisp->camel
+          q-symbol-p
           qfunname
           qclassname
           qsignature))
@@ -17,10 +18,14 @@
 Example: set-parent becomes setParent"
   (lisp->camel (mkstr symbol)))
 
+(defun q-symbol-p (symbol)
+  (test-symbol-start "Q-" 2 symbol))
+
 (defun qclassname (symbol)
   "generate Qt class name from lisp-style class name.  Example:
 box-layout becomes QBoxLayout"
-  (lisp->camel (mkstr "Q-" symbol) t))
+  (lisp->camel (if (q-symbol-p symbol) symbol
+                   (mkstr "Q-" symbol)) t))
 
 (defun qsignature (signal-or-slot-sexp)
   "Generate the signature of a Qt signal/slot.  Currently no
