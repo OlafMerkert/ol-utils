@@ -1,7 +1,8 @@
 (in-package :qt-utils)
 
 (export '(qlayout
-          make-qapp))
+          make-qapp
+          run-qapp))
 
 (defun same-symbol-name (s1 s2)
   "Teste, ob zwei Symbole die gleichen Symbolnamen haben (ignoriert
@@ -11,7 +12,7 @@ Paketzugehörigkeit)."
 
 (defmacro! qlayout (widget type &body widgets)
   "Versehe das widget mit einem Layout und füge gleich die widgets hinzu."
-  `(let ((,g!layout (make-qinstance ,(symb type '-layout))))
+  `(let ((,g!layout (make-qinstance ',(symb type '-layout))))
      ;; Verschiedene Anordnung für verschiedene Layout
      ,@(cond 
         ((or (same-symbol-name type :h-box)
@@ -32,12 +33,13 @@ Paketzugehörigkeit)."
                            (lrange row) (mklist row)))
                  (lrange widgets) widgets)))
      ;; ordne layout dem widget zu
-     (setf (q layout ,widget) ,g!layout))
-  `(qnew ,(mkstr type :-layout)
-         ,@(mapcar #`(:add-widget ,@(mklist a1))
-                   widgets)))
+     (setf (q layout ,widget) ,g!layout)))
 
 (defun make-qapp ()
-  "Starte Qt Anwendung."
+  "Lege Qt Anwendung an."
   (setf qt-user:*application*
         (make-qapplication)))
+
+(defun run-qapp ()
+  "Starte Qt Anwendung."
+  (q exec qt-user:*application*))
