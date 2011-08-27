@@ -42,8 +42,9 @@ anderen werden als Properties aufgefasst und mit setXxx eingestellt."
   (let* ((i (or (position-if #'keywordp parameters)
                 (length parameters)))
          (standard-params (subseq parameters 0 i))
-         (keyword-params  (group (subseq parameters i]) 2)))
-    `(let ((,g!instance (optimized-new ,(qclassname class-name)
+         (keyword-params  (group (subseq parameters i) 2)))
+    ;; eval removes the quote?!
+    `(let ((,g!instance (optimized-new ,(qclassname (eval class-name))
                                        ,@standard-params)))
        ,@(mapcar #`(setf (q ,(first a1) ,g!instance)
                          ,(second a1))

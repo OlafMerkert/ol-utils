@@ -32,7 +32,7 @@ should only be one."
   (let ((lisp-superclasses (remove-if #'q-symbol-p direct-superclasses))
         (qt-superclasses   (mapcar #'qclassname
                                    (remove-if-not #'q-symbol-p direct-superclasses))))
-    (assert (length=1 qt-superclasses))
+    (assert (<= (length qt-superclasses) 1))
     `(defclass ,name ,lisp-superclasses
        (,@direct-slots)
        (:metaclass qt:qt-class)

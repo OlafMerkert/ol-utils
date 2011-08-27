@@ -73,7 +73,7 @@ strings or whatever."
   contains lambda.  It returns the part before the lambda (as a string) if so."
   (and (consp s-exp)
        (symbolp (car s-exp))
-       (let ((name (symbol-name (car s-exp))))
-         (aif (search "lambda" name 
-                      :test #'char-equal)
-              (subseq name 0 it)))))
+       (let* ((name (symbol-name (car s-exp)))
+              (pos (search "lambda" name 
+                          :test #'char-equal)))
+         (if pos (subseq name 0 pos)))))
