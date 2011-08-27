@@ -1,4 +1,4 @@
-(in-package :qt-utils)
+(in-package #:qt-utils)
 
 (export '(defqclass))
 
