@@ -38,7 +38,8 @@ box-layout becomes QBoxLayout"
   '((integer . "int")
     (int . "int")
     (boolean . "bool")
-    (bool . "bool")))
+    (bool . "bool")
+    (void . "void")))
 
 (defun qtype (symbol)
   "signatures require specification of types.  This function basically
@@ -48,9 +49,14 @@ box-layout becomes QBoxLayout"
       (qclassname symbol)))
 
 (defun qsignature (signal-or-slot-sexp)
-  "Generate the signature of a Qt signal/slot.  Currently no
-parameters are considered."
-  (let ((s-o-s (mklist signal-or-slot-sexp)))
-   (format nil "~A(~{~A~^, ~})"
-           (qfunname (first s-o-s))
-           (mapcar #'qtype (rest s-o-s)))))
+  "Generate the signature of a Qt signal/slot.  If the first element
+is :return, consider the following one the return type."
+  (let ((sos (mklist signal-or-slot-sexp)))
+    (if (eql :return (first sos))
+        (format nil "~A ~A(~{~A~^, ~})"
+                (qtype (second sos))
+                (qfunname (third sos))
+                (mapcar #'qtype (nthcdr 3 sos)))
+        (format nil "~A(~{~A~^, ~})"
+                (qfunname (first sos))
+                (mapcar #'qtype (rest sos))))))
