@@ -1,6 +1,7 @@
 (in-package #:ol-utils)
 
 (export '(mklist
+          mkatom
           range mrange lrange
           alternate
           reverse/n
@@ -22,6 +23,11 @@
   "Ensure that x is a list."
   (if (listp x) x (list x)))
 
+(defun mkatom (x)
+  "Ensure that X is an atom, by applying CAR until it is."
+  (if (consp x)
+      (mkatom (car x))
+      x))
 
 (defmacro! do-range ((var
                       o!start &optional o!end (o!step 1)
