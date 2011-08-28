@@ -60,13 +60,23 @@ automatically evaluate to gensyms."
   `(defmacro ,name ,args
      (with-gensyms! ,@body)))
 
-(defmacro defmacro! (name args &body body)
+(defmacro defmacro/o! (name args &body body)
   "Define a macro, where all symbols starting with g! will
 automatically evaluate to gensyms.  Furthermore, args starting with o!
 will be evaluated once and bound to the according symbol starting with
 g!."
   (let* ((os (remove-if-not #'o!-symbol-p (flatten args)))
          (gs (mapcar #'o!-symbol-to-g!-symbol os)))
-    `(defmacro/g! ,name ,args
-       `(let ,(mapcar #'list (list ,@gs) (list ,@os))
-          ,(progn ,@body)))))
+    `(defmacro ,name ,args
+       (with-gensyms!
+         `(let ,(mapcar #'list (list ,@gs) (list ,@os))
+            ,(progn ,@body))))))
+
+(defmacro defmacro! (name args &body body)
+  "Define a macro, where all symbols starting with g! will
+automatically evaluate to gensyms.  Furthermore, args starting with o!
+will be evaluated once and bound to the according symbol starting with
+g!."
+  (if (member-if #'o!-symbol-p (flatten args))
+      `(defmacro/o! ,name ,args ,@body)
+      `(defmacro/g! ,name ,args ,@body)))
