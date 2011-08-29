@@ -17,7 +17,9 @@
           filter
           splitn
           last1
-          starts-with))
+          starts-with
+          maximise minimise
+          transpose-list))
 
 (defun mklist (x)
   "Ensure that x is a list."
@@ -227,3 +229,18 @@ gethash)."
 (defun starts-with (list x)
   "Is this a list whose first element is x?"
   (and (consp list) (eql (first list) x)))
+
+(defun maximise (seq &key (key #'identity))
+  "Find the maximum value of the sequence."
+  (apply #'max (map 'list key seq)))
+
+(defun minimise (seq &key (key #'identity))
+  "Find the minimum value of the sequence."
+  (apply #'min (map 'list key seq)))
+
+(defun transpose-list (list)
+  "Create a transposition of the LIST of lists."
+  (let ((max-len (maximise list :key #'length)))
+    (mapcar (lambda (i)
+              (mapcar (lambda (l) (nth i l)) list))
+            (range max-len))))
