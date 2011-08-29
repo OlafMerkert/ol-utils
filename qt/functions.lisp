@@ -3,7 +3,8 @@
 (export '(q
           qconnect
           qemit
-          make-qinstance))
+          make-qinstance
+          qt))
 
 (defmacro q (function instance &rest args)
   "Aufrufen von Qt Funktionen, aber Notation der Funktionennamen im
@@ -50,3 +51,8 @@ anderen werden als Properties aufgefasst und mit setXxx eingestellt."
                          ,(second a1))
                  keyword-params)
        ,g!instance)))
+
+(defmacro qt (global-constant &optional class)
+  "Access static stuff like Qt::Horizontal et alii."
+  (let ((class (if class (lisp->camel (symbol-name class) t) "Qt")))
+   `(optimized-call t ,class ,(lisp->camel (symbol-name global-constant) t))))
