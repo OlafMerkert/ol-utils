@@ -4,6 +4,7 @@
 
 (export '(group
           flatten
+          flatten1
           mkstr
           symb keyw
           defconstant/g
@@ -31,6 +32,10 @@
                    ((atom x) (cons x acc))
                    (t (rec (car x) (rec (cdr x) acc))))))
     (rec x nil)))
+
+(defun flatten1 (x)
+  "Flatten the tree structure of x by one."
+  (mapcan #'mklist x))
 
 ;; Symbols & Strings
 (defun mkstr (&rest args)
