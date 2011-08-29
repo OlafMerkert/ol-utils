@@ -33,9 +33,14 @@
                    (t (rec (car x) (rec (cdr x) acc))))))
     (rec x nil)))
 
-(defun flatten1 (x)
+(defun flatten1 (x &optional (n 1))
   "Flatten the tree structure of x by one."
-  (mapcan #'mklist x))
+  (labels ((rec (x acc level)
+             (cond ((null x) acc)
+                   ((atom x) (cons x acc))
+                   ((<= n level) (cons (car x) (rec (cdr x) acc level)))
+                   (t (rec (car x) (rec (cdr x) acc level) (+ level 1))))))
+    (rec x nil 0)))
 
 ;; Symbols & Strings
 (defun mkstr (&rest args)
