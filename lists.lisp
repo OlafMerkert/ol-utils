@@ -19,7 +19,8 @@
           last1
           starts-with
           maximise minimise
-          transpose-list))
+          transpose-list
+          make-queue enqueue dequeue))
 
 (defun mklist (x)
   "Ensure that x is a list."
@@ -244,3 +245,23 @@ gethash)."
     (mapcar (lambda (i)
               (mapcar (lambda (l) (nth i l)) list))
             (range max-len))))
+
+;; simple queue datatype, taken from ANSI Common Lisp by Paul Graham
+(defun make-queue ()
+  "Create a simple queue.  Implemented as a cons (list . last), where
+last points to the last cons cell of list and list starts with the
+next object to be dequeued."
+  (cons nil nil))
+
+(defun enqueue (obj q)
+  "Put an object into the queue."
+  (if (null (car q))
+      (setf (cdr q) (setf (car q) (list obj)))
+      (setf (cdr (cdr q)) (list obj)
+            (cdr q) (cdr (cdr q))))
+  (car q))
+
+(defun dequeue (q)
+  "Get the next object from the queue (or just nil)."
+  (pop (car q)))
+
