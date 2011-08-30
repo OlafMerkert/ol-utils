@@ -2,7 +2,8 @@
 
 (export '(qlayout
           make-qapp
-          run-qapp))
+          run-qapp
+          within-qapp))
 
 (defmacro! qlayout (widget type &body widgets)
   "Versehe das widget mit einem Layout und füge gleich die widgets hinzu."
@@ -37,3 +38,10 @@
 (defun run-qapp ()
   "Starte Qt Anwendung."
   (q exec qt-user:*application*))
+
+(defmacro within-qapp (&body body)
+  `(progn
+     (unless qt-user:*application*
+       (make-qapp))
+     ,@body
+     (run-qapp)))
