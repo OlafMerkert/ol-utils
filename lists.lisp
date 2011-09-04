@@ -167,11 +167,13 @@ list."
                        (list (car list)) nil)))))
 
 ;;; todo maybe move this
+(defsymconstant +keep+)
+
 (defun recons (cons car cdr)
   "Reuse a cons cell.  "
-  (unless (eql car :keep)
+  (unless (eql car +keep+)
     (setf (car cons) car))
-   (unless (eql cdr :keep)
+   (unless (eql cdr +keep+)
     (setf (cdr cons) cdr))
    cons)
 
@@ -180,7 +182,7 @@ list."
 TEST as (FIRST-OCCURENCE . COUNT).  Unless SINGLETONS is T, counts of
 1 are flattened again."
   (labels ((compact-group (g)
-             (if (or (< 1 (cdr g)) singletons)
+             (if (or singletons (< 1 (cdr g)))
                  g
                  (car g)))
            (rec (list previous previous-group acc)
@@ -189,7 +191,7 @@ TEST as (FIRST-OCCURENCE . COUNT).  Unless SINGLETONS is T, counts of
                  (let ((k (funcall key (car list))))
                    (if (funcall test previous k)
                        (rec (cdr list) k (recons previous-group
-                                                 :keep
+                                                 +keep+
                                                  (+ 1 (cdr previous-group)))
                             acc)
                        (rec (cdr list) k (cons (car list) 1)
