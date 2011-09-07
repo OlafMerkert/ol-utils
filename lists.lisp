@@ -14,6 +14,7 @@
           compress
           mappend
           assoc1
+          assoc1a
           filter
           splitn
           last1
@@ -144,7 +145,8 @@ list."
         (aif (assoc k grouping :test test)
              (nconc1 it l)
              (push (list k l) grouping))))
-    grouping))
+    ;; put the grouping in order
+    (nreverse grouping)))
 
 (defun collect (list &key singletons (test #'eql) (key #'identity))
   "Group subsequent elements of LIST if they satisfy TEST.  Unless SINGLETONS is T, groups of only one element are flattened again."
@@ -204,8 +206,14 @@ TEST as (FIRST-OCCURENCE . COUNT).  Unless SINGLETONS is T, counts of
   "Retrieve value assigned to KEY from ALIST.  If not found, return
 DEFAULT.  A second value indicates whether KEY was found (like
 gethash)."
-  (aif (apply #' assoc key alist params)
+  (aif (apply #'assoc key alist params)
        (values (cdr it) t)
+       (values default nil)))
+
+(defun assoc1a (key alist &optional default &rest params)
+  "Like assoc1, but take the CADR instead of the CDR of the result.  (Useful for list structures)."
+  (aif (apply #'assoc key alist params)
+       (values (cadr it) t)
        (values default nil)))
 
 (defun filter (fn lst &optional acc)
