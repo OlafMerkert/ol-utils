@@ -1,6 +1,7 @@
 (in-package #:ol-utils)
 
 (export '(mklist
+          mkatom
           range mrange lrange
           alternate
           reverse/n
@@ -17,12 +18,20 @@
           filter
           splitn
           last1
-          starts-with))
+          starts-with
+          maximise minimise
+          transpose-list
+          make-queue enqueue dequeue))
 
 (defun mklist (x)
   "Ensure that x is a list."
   (if (listp x) x (list x)))
 
+(defun mkatom (x)
+  "Ensure that X is an atom, by applying CAR until it is."
+  (if (consp x)
+      (mkatom (car x))
+      x))
 
 (defmacro! do-range ((var
                       o!start &optional o!end (o!step 1)
@@ -229,3 +238,38 @@ gethash)."
 (defun starts-with (list x)
   "Is this a list whose first element is x?"
   (and (consp list) (eql (first list) x)))
+
+(defun maximise (seq &key (key #'identity))
+  "Find the maximum value of the sequence."
+  (apply #'max (map 'list key seq)))
+
+(defun minimise (seq &key (key #'identity))
+  "Find the minimum value of the sequence."
+  (apply #'min (map 'list key seq)))
+
+(defun transpose-list (list)
+  "Create a transposition of the LIST of lists."
+  (let ((max-len (maximise list :key #'length)))
+    (mapcar (lambda (i)
+              (mapcar (lambda (l) (nth i l)) list))
+            (range max-len))))
+
+;; simple queue datatype, taken from ANSI Common Lisp by Paul Graham
+(defun make-queue ()
+  "Create a simple queue.  Implemented as a cons (list . last), where
+last points to the last cons cell of list and list starts with the
+next object to be dequeued."
+  (cons nil nil))
+
+(defun enqueue (obj q)
+  "Put an object into the queue."
+  (if (null (car q))
+      (setf (cdr q) (setf (car q) (list obj)))
+      (setf (cdr (cdr q)) (list obj)
+            (cdr q) (cdr (cdr q))))
+  (car q))
+
+(defun dequeue (q)
+  "Get the next object from the queue (or just nil)."
+  (pop (car q)))
+

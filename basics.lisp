@@ -4,11 +4,14 @@
 
 (export '(group
           flatten
+          flatten1
           mkstr
           symb keyw
           defconstant/g
           defsymconstant
-          ew))
+          ew
+          lambda-form-p
+          bind-multi))
 
 ;; Lists
 (defun group (source n)
@@ -29,6 +32,15 @@
                    ((atom x) (cons x acc))
                    (t (rec (car x) (rec (cdr x) acc))))))
     (rec x nil)))
+
+(defun flatten1 (x &optional (n 1))
+  "Flatten the tree structure of x by one."
+  (labels ((rec (x acc level)
+             (cond ((null x) acc)
+                   ((atom x) (cons x acc))
+                   ((<= n level) (cons (car x) (rec (cdr x) acc level)))
+                   (t (rec (car x) (rec (cdr x) acc level) (+ level 1))))))
+    (rec x nil 0)))
 
 ;; Symbols & Strings
 (defun mkstr (&rest args)
@@ -65,3 +77,27 @@ strings or whatever."
 (defmacro ew (&body body)
   `(eval-when (:compile-toplevel :load-toplevel :execute)
      ,@body))
+
+;; detecting lambda forms
+(defun lambda-form-p (s-exp)
+  "Test whether this is a cons, where the car is symbol whose name
+  contains lambda.  It returns the part before the lambda (as a string) if so."
+  (and (consp s-exp)
+       (symbolp (car s-exp))
+       (let* ((name (symbol-name (car s-exp)))
+              (pos (search "lambda" name 
+                          :test #'char-equal)))
+         (if pos (subseq name 0 pos)))))
+
+;;
+(defmacro bind-multi (bindings &body body)
+  "Macro to define groups of similar functions or methods.
+Syntax: (bind-multi ((v1 b1 b2)
+                     (v2 b3 b4))
+           body)"
+  (let ((vars (mapcar #'first bindings))
+        (vals (transpose-list (mapcar #'rest bindings))))
+   `(progn
+      ,@(mapcan (lambda (vals)
+                  (sublis (mapcar #'cons vars vals) body))
+                vals))))
