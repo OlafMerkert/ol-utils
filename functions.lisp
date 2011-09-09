@@ -4,25 +4,23 @@
           list->gensyms
           memoize mlambda
           defmemfun
-          compose composer))
-
-(defun swallow (fun)
-  "Transform the function such that it appears to accept arguments,
-but call it with none."
-  (lambda (&rest x)
-    (declare (ignore x))
-    (funcall fun)))
-
-(defmacro/g! mswallow (&body body)
-  "Enclose the body with a lambda that ignores arbitrary arguments."
-  `(lambda (&rest ,g!args)
-     (declare (ignore ,g!args))
-     ,@body))
+          compose compose/red))
 
 (defmacro ilambda (args &body body)
   "lambda form where all arguments are declared ignorable."
   `(lambda ,args
      (declare (ignorable ,@(args->names args)))
+     ,@body))
+
+(defun swallow (fun)
+  "Transform the function such that it appears to accept arguments,
+but call it with none."
+  (ilambda (&rest x)
+    (funcall fun)))
+
+(defmacro/g! mswallow (&body body)
+  "Enclose the body with a lambda that ignores arbitrary arguments."
+  `(ilambda (&rest ,g!args)
      ,@body))
 
 (defun list->gensyms (&rest lists)
@@ -72,7 +70,7 @@ but call it with none."
          (defun ,name (,@args)
            (funcall ,g!funo ,@names))))))
 
-(defun compose (&rest functions)
+(defun compose/red (&rest functions)
   "Compose the functions.  The leftmost function will be applied last.
 Currently only works with functions that take a single argument."
     (lambda (x)
@@ -80,13 +78,15 @@ Currently only works with functions that take a single argument."
               :initial-value x
               :from-end t)))
 
-(defmacro/g! composer (&rest function-symbols)
-  "Compose the functions given by symbols.  The leftmost function will
-be appliead last.  Currently expects all functions to take a single
-argument."
-  (labels ((call (fns)
-             (if fns
-                 `(,(car fns) ,(call (cdr fns)))
-                 g!arg)))
-   `(lambda (,g!arg)
-      ,(call function-symbols))))
+(defmacro! compose (&rest functions)
+  "Compose the functions.  The leftmost function will be applied
+  last."
+  (labels ((generate-funcalls (functions value call)
+             (if functions
+                 (generate-funcalls (rest functions)
+                                    `(,call ,(first functions)
+                                              ,value)
+                                    'funcall)
+                 value)))
+  `(lambda (&rest ,g!x)
+     ,(generate-funcalls (reverse functions) g!x 'apply))))
