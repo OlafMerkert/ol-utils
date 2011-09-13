@@ -6,6 +6,17 @@
           defmemfun
           compose compose/red))
 
+(ew
+ (def-symbol-p &)
+
+ (defun args->names (args)
+   "Extract the parameter names from an argument list."
+   (mapcan (lambda (x)
+             (cond ((&-symbol-p x) nil)
+                   ((listp x) (list (car x)))
+                   (t (list x))))
+           args)))
+
 (defmacro ilambda (args &body body)
   "lambda form where all arguments are declared ignorable."
   `(lambda ,args
@@ -48,17 +59,6 @@ but call it with none."
               (self (&rest ,g!args) (apply ,g!funo ,g!args)))
        (setf ,g!funo (memoize #',g!fun))
        #'self)))
-
-
-(def-symbol-p &)
-
-(defun args->names (args)
-  "Extract the parameter names from an argument list."
-  (mapcan (lambda (x)
-            (cond ((&-symbol-p x) nil)
-                  ((listp x) (list (car x)))
-                  (t (list x))))
-          args))
 
 (defmacro/g! defmemfun (name args &body body)
   "Define a memoizing function.  Allows recursive calls as well."
