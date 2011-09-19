@@ -1,7 +1,7 @@
 (in-package #:ol-utils)
 
 (export '(defclass/f
-          undefmethoda udm))
+          create-standard-print-object))
 
 (defmacro defclass/f (name direct-superclasses
                       direct-slots &rest options)
@@ -15,3 +15,18 @@ a name, an accessor and initarg are automatically added."
                  direct-slots)))
     `(defclass ,name ,direct-superclasses
        ,normalized-slots ,@options)))
+
+(defmacro! create-standard-print-object
+    (class &rest slots)
+  (let ((slots-flat (flatten slots)))
+    `(defmethod print-object ((,g!object ,class) ,g!stream)
+       (print-unreadable-object (,g!object ,g!stream :type t)
+         (with-slots ,(remove-if-not #'symbolp slots-flat) ,g!object
+           (format ,g!stream ,(format nil "~{~A~^ ~}"
+                                      (mapcar (alambda (x)
+                                                       (if (listp x)
+                                                           (format nil "[~{~A~^ ~}]"
+                                                                   (mapcar #'self x))
+                                                           "~A"))
+                                              slots))
+                   ,@slots-flat))))))
