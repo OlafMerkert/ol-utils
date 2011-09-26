@@ -27,7 +27,7 @@ Qt Funktion exisitiert."
                  ,g!store)
               `(q ,property ,g!object)))))
 
-(defmacro qconnect (source signal sink slot)
+(defmacro qconnect% (source signal sink slot)
   "Connect a signal to a slot"
   `(optimized-call T "QObject" "connect"
                    ,source (QSIGNAL ,(qsignature signal))
@@ -56,3 +56,20 @@ anderen werden als Properties aufgefasst und mit setXxx eingestellt."
   "Access static stuff like Qt::Horizontal et alii."
   (let ((class (if class (lisp->camel (symbol-name class) t) "Qt")))
    `(optimized-call t ,class ,(lisp->camel (symbol-name global-constant) t))))
+
+(defqclass slot-slut (q-object)
+  ((callable :initarg :callable))
+  (:slots (call (lambda (this) (funcall (slot-value this 'callable))))))
+
+(defmethod initialize-instance :after ((slot-slut slot-slut) &key)
+  (new slot-slut))
+
+(defmacro! qconnect (source signal sink &optional slot)
+  "SOURCE must be an QObject, SIGNAL a signal on it.  Likewise SINK
+and SLOT.  However, slot may be omitted.  Then SINK is assumed a
+function object and we generate a helper object that calls it upon
+receiving a signal from SOURCE."
+  (if slot
+      `(qconnect% ,source ,signal ,sink ,slot)
+      `(let ((,g!slot-slut (make-instance 'slot-slut :callable ,sink)))
+         (qconnect% ,source ,signal ,g!slot-slut call))))
