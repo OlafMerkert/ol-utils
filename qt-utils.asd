@@ -5,6 +5,6 @@
                         :serial t
                         :components ((:file "packages")
                                      (:file "camelcase")
-                                     (:file "functions")
                                      (:file "classes")
+                                     (:file "functions")
                                      (:file "gui")))))
