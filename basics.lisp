@@ -11,7 +11,8 @@
           defsymconstant
           ew
           lambda-form-p
-          bind-multi))
+          bind-multi
+          dbug))
 
 ;; Lists
 (defun group (source n)
@@ -101,3 +102,11 @@ Syntax: (bind-multi ((v1 b1 b2)
       ,@(mapcan (lambda (vals)
                   (sublis (mapcar #'cons vars vals) body))
                 vals))))
+
+;;
+(defun dbug (string &rest args)
+  "Output a debugging info to the standard output.  This mimics
+format, but prepends 'DEBUG' and appends a line-break."
+  (princ "DEBUG: ")
+  (apply #'format t string args)
+  (terpri))
