@@ -44,9 +44,9 @@
 
 (defun pipe-elt (pipe i)
   "The i-th element of a pipe, 0-based."
-  (if (= i 0)
-      (head pipe)
-      (pipe-elt (tail pipe) (- i 1))))
+  (cond ((= i 0) (head pipe))
+        ((tail pipe) ; only descend if the tail is non-nil
+         (pipe-elt (tail pipe) (- i 1)))))
 
 (defun filter-pipe (pred pipe)
   "Keep only items in pipe satisfying pred."
