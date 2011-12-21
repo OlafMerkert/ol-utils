@@ -2,7 +2,8 @@
 
 (export '(aif acond it
           alambda self
-          aand))
+          aand
+          aprog1))
 
 ;;; Commonly used anaphoric macros
 
@@ -34,3 +35,10 @@ with `it`."
       'it
       `(aif ,(first forms)
             (aand ,@(rest  forms)))))
+
+(defmacro aprog1 (form &body body)
+  "as PROG1, but FORM is bound to IT in BODY."
+  `(let ((it ,form))
+     ,@body
+     it))
+
