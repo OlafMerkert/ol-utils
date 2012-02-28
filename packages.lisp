@@ -30,7 +30,8 @@
            :SHUFFLE :ASSOC1A :MEMOIZE
            :ASSOC1 :ALTERNATE :GROUP
            :ENQUEUE :ARRAY->LIST :SELF
-           :FILL-ARRAY%))
+           :FILL-ARRAY%
+           :square-multiply))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils))
