@@ -29,5 +29,7 @@
            (defun ,(symb 'save- ,g!var-name) ()
              (,',#2#)
              (setf (cl-prevalence:get-root-object ,',storage ',,g!var-name)
-                   ,,g!var-name))
+                   ,,g!var-name)
+             (cl-prevalence:snapshot ,',storage)
+             ,,g!var-name)
            (,(symb 'load- ,g!var-name)))))))
