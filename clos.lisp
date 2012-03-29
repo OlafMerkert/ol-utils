@@ -18,6 +18,9 @@ a name, an accessor and initarg are automatically added."
 
 (defmacro! create-standard-print-object
     (class &rest slots)
+  "For the given CLASS, define a print-object method which output
+#<CLASS SLOTS> where SLOTS is a tree of slot identifiers and strings
+and is printed with the values of the slots put in."
   (let ((slots-flat (flatten slots)))
     `(defmethod print-object ((,g!object ,class) ,g!stream)
        (print-unreadable-object (,g!object ,g!stream :type t)
