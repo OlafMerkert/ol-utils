@@ -275,3 +275,11 @@ next object to be dequeued."
   "Get the next object from the queue (or just nil)."
   (pop (car q)))
 
+(defun splice-in (item list)
+  "Create a copy of LIST, but with ITEM inserted between consecutive
+elements."
+  (labels ((acc (acc list)
+             (if list
+                 (acc (list* (car list) item acc) (cdr list))
+                 (nreverse acc))))
+    (acc (list (first list)) (rest list))))

@@ -31,7 +31,9 @@
            :ASSOC1 :ALTERNATE :GROUP
            :ENQUEUE :ARRAY->LIST :SELF
            :FILL-ARRAY%
-           :square-multiply))
+           :square-multiply
+           :splice-in
+           :in))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils))
