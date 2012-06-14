@@ -33,7 +33,8 @@
            :FILL-ARRAY%
            :square-multiply
            :splice-in
-           :in))
+           :in
+           :ncond))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils))
