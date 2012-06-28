@@ -45,11 +45,10 @@ provide with INDEX-VAR, by default just INDEX."
     :finite ,finite
     :default-value ,default-value))
 
-(defun la (&rest start)
+(defun la% (default &rest start)
   "Abbreviation for lazy arrays that are guaranteed finite.  If only
 one parameter of type array is given, use that one to base the
 lazy-array on.  Sets the default-value to 0."
-  ;; 
   (when (and (length=1 start)
              (arrayp (first start)))
     (setf start (first start)))
@@ -57,4 +56,10 @@ lazy-array on.  Sets the default-value to 0."
                                        :adjustable t :fill-pointer t
                                        :initial-contents start)
                     :finite (length start)
-                    :default-value 0))
+                    :default-value default))
+
+(defun la (&rest start)
+  "Abbreviation for lazy arrays that are guaranteed finite.  If only
+one parameter of type array is given, use that one to base the
+lazy-array on.  Sets the default-value to 0."
+  (apply #'la% nil start))
