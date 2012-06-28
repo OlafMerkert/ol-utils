@@ -16,6 +16,23 @@
   (finite nil)
   (default-value))
 
+(defun extend-lazy-array (lazy-array index)
+  "make all the entries of LAZY-ARRAY up to INDEX concrete and call
+  the FILL-FORM.  Return the last filled value."
+  (let ((array (lazy-array-array lazy-array)))
+        (unless (< index (length array))
+          ;;  call adjust array to provide the room
+          (unless (eq array
+                      (adjust-array array (min (+ index 1)
+                                               (+ (length array) 20))))
+            (error "ARRAY of LAZY-ARRAY ~A was not adjustable." lazy-array))
+          ;; generate the missing ones
+          (loop for i from (length array) to index do
+               (vector-push
+                (funcall (lazy-array-function lazy-array) array i)
+                array)))
+        (aref array index)))
+
 (defun lazy-aref (lazy-array index)
   "Give the appropriate entry of the lazy array.  If the entry has not
 been calculated, all the missing entries up to it are calculated and
@@ -23,15 +40,7 @@ appended to"
   (if (aand (lazy-array-finite lazy-array) (>= index it))
       ;; when over the finite bound, just return the default value, do not extend the array.
       (lazy-array-default-value lazy-array)
-      (let ((array (lazy-array-array lazy-array)))
-        (unless (< index (length array))
-          ;; generate the missing ones
-          ;; TODO maybe call adjust array
-          (loop for i from (length array) to index do
-               (vector-push-extend
-                (funcall (lazy-array-function lazy-array) array i)
-                array)))
-        (aref array index))))
+      (extend-lazy-array lazy-array index)))
 
 (defmacro make-lazy-array ((&key start (index-var 'index) finite default-value)
                            &body fill-form)
