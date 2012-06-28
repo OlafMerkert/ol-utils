@@ -63,3 +63,32 @@ lazy-array on.  Sets the default-value to 0."
 one parameter of type array is given, use that one to base the
 lazy-array on.  Sets the default-value to 0."
   (apply #'la% nil start))
+
+;; manipulation of lazy arrays
+(defun lazy-array-take (lazy-array n &optional (lazy-p t))
+  "Extract the first N entries from the LAZY-ARRAY.  If LAZY-P is nil,
+the result will be an ordinary array."
+  ;; first evaluate all of these
+  ;; TODO what if the lazy-array is finite?? then lazy-aref won't work as expected here
+  (lazy-aref lazy-array n)
+  (let ((result (subseq (lazy-array-array lazy-array) 0 n)))
+    (if lazy-p
+        (la (lazy-array-default-value lazy-array) result)
+        result)))
+
+(defmacro la-finite-test (lazy-arrays &body body)
+  "If all the given LAZY-ARRAYS are finite, then evaluate the body
+  expression where each array stands for its FINITE slot."
+  `(let ,(mapcar #`(,a1 (lazy-array-finite ,a1)) lazy-arrays)
+     (when (and ,@lazy-arrays)
+       ,@body)))
+
+(defun lazy-array-drop (lazy-array n)
+  "Return a new lazy array with the first n entries removed."
+  ;; this is rather tricky, as it has to work when the generation
+  ;; function depends on entries which this function removes from the
+  ;; array.  A simple solution is to always refer to the original
+  ;; array (maybe not the most efficient one).
+  (make-lazy-array (:start nil :finite (la-finite-test (lazy-array)
+                                                   (- lazy-array n)))
+    (lazy-aref lazy-array (+ index n))))
