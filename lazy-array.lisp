@@ -7,6 +7,9 @@
 
 ;;; lazy array datastructure, developed for power series computations
 
+;;; as the contents of this data structure are calculated from a given
+;;; formula, this is an immutable data structure
+
 (defstruct (lazy-array (:constructor make-lazy-array%))
   (array (make-array 10 :adjustable t :fill-pointer 0))
   (function (ilambda (this i) nil))
@@ -92,3 +95,16 @@ the result will be an ordinary array."
   (make-lazy-array (:start nil :finite (la-finite-test (lazy-array)
                                                    (- lazy-array n)))
     (lazy-aref lazy-array (+ index n))))
+
+(defmacro! with-lazy-arefs ((o!object &rest accessors) &body body)
+  "For each A in ACCESSORS, allow writing (A I) instead
+  of (lazy-aref (A OBJECT) I)."
+  (let ((acsyms (list->gensyms :accessor accessors)))
+    `(let ,(mapcar #2`(,a1 (,a2 ,g!object))
+                   acsyms accessors)
+       (flet
+           ;; no need for macrolet as lazy-aref is not setf-able anyway
+           ,(mapcar #2`(,a2 (,g!index)
+                            (lazy-aref ,a1 ,g!index))
+                    acsyms accessors)
+         ,@body))))
