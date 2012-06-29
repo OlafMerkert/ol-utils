@@ -111,7 +111,8 @@ the result will be an ordinary array."
   ;; array.  A simple solution is to always refer to the original
   ;; array (maybe not the most efficient one).
   (make-lazy-array (:start nil :finite (la-finite-test (lazy-array)
-                                                   (- lazy-array n)))
+                                                   (- lazy-array n))
+                           :default-value (lazy-array-default-value lazy-array))
     (lazy-aref lazy-array (+ index n))))
 
 (defmacro! with-lazy-arefs ((o!object &rest accessors) &body body)
