@@ -26,6 +26,7 @@
   (default-value))
 
 (defun extend-lazy-array (lazy-array index)
+  (declare (inline))
   "make all the entries of LAZY-ARRAY up to INDEX concrete and call
   the FILL-FORM.  Return the last filled value."
   (let ((array (lazy-array-array lazy-array)))
@@ -90,11 +91,10 @@ lazy-array on.  Sets the default-value to 0."
   "Extract the first N entries from the LAZY-ARRAY.  If LAZY-P is nil,
 the result will be an ordinary array."
   ;; first evaluate all of these
-  ;; TODO what if the lazy-array is finite?? then lazy-aref won't work as expected here
-  (lazy-aref lazy-array n)
+  (extend-lazy-array lazy-array n)
   (let ((result (subseq (lazy-array-array lazy-array) 0 n)))
     (if lazy-p
-        (la (lazy-array-default-value lazy-array) result)
+        (la% (lazy-array-default-value lazy-array) result)
         result)))
 
 (defmacro la-finite-test (lazy-arrays &body body)
