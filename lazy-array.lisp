@@ -4,6 +4,10 @@
           make-lazy-array
           this
           index
+          lazy-array-array
+          lazy-array-function
+          lazy-array-finite
+          lazy-array-default-value
           la la%
           lazy-array-take
           lazy-array-drop
