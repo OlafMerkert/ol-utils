@@ -3,7 +3,12 @@
 (export '(lazy-aref
           make-lazy-array
           this
-          index))
+          index
+          la la%
+          lazy-array-take
+          lazy-array-drop
+          la-finite-test
+          with-lazy-arefs))
 
 ;;; lazy array datastructure, developed for power series computations
 
