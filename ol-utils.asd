@@ -15,6 +15,7 @@
                (:file "lazy")
                (:file "arrays")
                (:file "lazy-array")
+               (:file "nlazy-array")
                (:file "strings")
                (:file "arithmetic")
                (:file "tables")

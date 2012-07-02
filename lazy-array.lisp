@@ -58,7 +58,12 @@ appended to"
 FILL-FORM, the generated actual array is bound to THIS, so you may
 reference array elements of lower index, but never of higher.  The
 index of the field to be filled is stored in a variable whose name you
-provide with INDEX-VAR, by default just INDEX."
+provide with INDEX-VAR, by default just INDEX.
+
+The lazy-array can also be specified as finite by providing a length.
+In that case, the underlying array will not be extended above FINITE,
+and LAZY-AREF will just return DEFAULT-VALUE for anything above
+FINITE."
   `(make-lazy-array%
     :array (make-array ,(length start) :adjustable t :fill-pointer t
                        :initial-contents (list ,@start))
@@ -105,7 +110,7 @@ the result will be an ordinary array."
        ,@body)))
 
 (defun lazy-array-drop (lazy-array n)
-  "Return a new lazy array with the first n entries removed."
+  "Return a new lazy array with the first N entries removed."
   ;; this is rather tricky, as it has to work when the generation
   ;; function depends on entries which this function removes from the
   ;; array.  A simple solution is to always refer to the original
