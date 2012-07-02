@@ -12,6 +12,14 @@
 ;; lazy-array, but now for ordinary (1-Ð) arrays, enabling duality of
 ;; code.
 
+(defun max% (&rest args)
+  "The same as max, with nil treated as -infinity."
+  (apply #'max (remove nil args)))
+
+(defun min% (&rest args)
+  "The same as min, with nil treated as +infinity."
+  (apply #'max (remove nil args)))
+
 (defmacro! make-nlazy-array ((&key start (index-var 'index) finite default-value)
                              &body fill-form)
   "START must be a list of the first entries of the array.  In
@@ -23,17 +31,16 @@ provide with INDEX-VAR, by default just INDEX.
 If FINITE exceeds the length of START, the remaining entries of the
 array will be filled, so that is has length FINITE.  Otherwise, the
 array will just contain the elements of START."
-  `(let* (,@(when finite `((,g!finite ,finite)))
-          (this (make-array ,(if finite
-                                `(max ,g!finite ,(length start))
-                                (length start))
-                           :initial-element nil)))
-     (setf ,@(mapcan #2`((aref this ,a1) ,a2) (lrange start) start))
-     ,@(when finite 
-             `((loop
-                  for ,index-var from ,(length start) below ,g!finite do
-                  (setf (aref this ,index-var) (progn ,@fill-form)))))
-     this))
+  (if (not finite)
+      `(nla% nil ,@start)
+      `(let* ((,g!finite ,finite)
+              (this (make-array (max% ,(length start) ,g!finite) :initial-element ,default-value)))
+         (setf ,@(mapcan #2`((aref this ,a1) ,a2) (lrange start) start))
+         (when ,g!finite
+           (loop
+              for ,index-var from ,(length start) below ,g!finite do
+                (setf (aref this ,index-var) (progn ,@fill-form))))
+         this)))
 
 (defun nla% (default &rest start)
   "Behaves exactly like NLA, only with the first parameter ignored."
