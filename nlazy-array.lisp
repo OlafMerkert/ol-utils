@@ -46,11 +46,11 @@ array will just contain the elements of START."
   "Behaves exactly like NLA, only with the first parameter ignored."
   (declare (ignore default))
   (if (and (length=1 start)
-             (arrayp (first start)))
+           (arrayp (first start)))
       start
       (list->array start)))
 
-(defun la% (&rest start)
+(defun nla (&rest start)
   "If there is only parameter of type array given, return it.
 Otherwise, create an array from all parameters."
   (apply #'nla% start))
