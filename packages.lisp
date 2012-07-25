@@ -35,7 +35,8 @@
            :splice-in
            :in
            :ncond
-           :dotimes+))
+           :dotimes+
+           :split-last))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils))

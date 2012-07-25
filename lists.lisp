@@ -136,6 +136,18 @@ list of the parts."
                   (cons (subseq remaining 0) parts))))
     (nreverse (rec list nil))))
 
+(defun split-last (list)
+  "destructively split the last entry from the list. return (values
+list last)"
+  (if (cdr list)
+      ;; first deal with lists of more than 1 element
+      (let* ((l (last list 2))
+             (e (second l)))
+        (setf (cdr l) nil)
+        (values list e))
+      ;; then the special case of just one or none element.
+      (values nil (first list))))
+
 (defun length=1 (list)
   "Test whether list has exactly one element."
   (and (consp list)
