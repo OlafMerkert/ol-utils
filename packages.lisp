@@ -34,7 +34,8 @@
            :square-multiply
            :splice-in
            :in
-           :ncond))
+           :ncond
+           :dotimes+))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils))

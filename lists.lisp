@@ -67,6 +67,23 @@
                  ,var ,g!end) ,result-form)
             ,@body)))))
 
+(defmacro! dotimes+ ((var
+                      o!start &optional o!end
+                      result-form
+                      (default-start 0) end-inclusive)
+                     local-binds
+                     &body body)
+  "a simpler version of do-range (or fancier version of dotimes) where
+  always step = 1."
+  `(progn
+     (unless ,g!end
+       (setf ,g!end ,g!start
+             ,g!start ,default-start))
+     (do ((,var ,g!start (+ ,var 1))
+          ,@local-binds)
+         ((,(if end-inclusive '> '>=)
+            ,var ,g!end) ,result-form)
+       ,@body)))
 
 (defun range (start &optional end (step 1))
   "Create a list with numbers between start and end with step.  start
