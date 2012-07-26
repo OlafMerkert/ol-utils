@@ -26,22 +26,22 @@
   (default-value))
 
 (defun extend-lazy-array (lazy-array index)
-  (declare (inline))
   "make all the entries of LAZY-ARRAY up to INDEX concrete and call
   the FILL-FORM.  Return the last filled value."
+  (declare (inline))
   (let ((array (lazy-array-array lazy-array)))
-        (unless (< index (length array))
-          ;;  call adjust array to provide the room
-          (unless (eq array
-                      (adjust-array array (min (+ index 1)
-                                               (+ (length array) 20))))
-            (error "ARRAY of LAZY-ARRAY ~A was not adjustable." lazy-array))
-          ;; generate the missing ones
-          (loop for i from (length array) to index do
-               (vector-push
-                (funcall (lazy-array-function lazy-array) array i)
-                array)))
-        (aref array index)))
+    (unless (< index (length array))
+      ;;  call adjust array to provide the room
+      (unless (eq array
+                  (adjust-array array (max (+ index 10)
+                                           (array-dimension array 0))))
+        (error "ARRAY of LAZY-ARRAY ~A was not adjustable." lazy-array))
+      ;; generate the missing ones
+      (loop for i from (length array) to index do
+           (vector-push
+            (funcall (lazy-array-function lazy-array) array i)
+            array)))
+    (aref array index)))
 
 (defun lazy-aref (lazy-array index)
   "Give the appropriate entry of the lazy array.  If the entry has not
