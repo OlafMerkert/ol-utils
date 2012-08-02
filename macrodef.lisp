@@ -80,3 +80,9 @@ g!."
   (if (member-if #'o!-symbol-p (flatten args))
       `(defmacro/o! ,name ,args ,@body)
       `(defmacro/g! ,name ,args ,@body)))
+
+(defmacro! defalias (alias whatfor &optional args)
+  "Create an alias for a function or macro."
+  `(defmacro ,alias (&whole ,g!args ,@args)
+     (declare (ignorable ,@args)) ; TODO filter out &stuff
+     `(,',whatfor ,@,g!args)))

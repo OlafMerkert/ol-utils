@@ -38,3 +38,7 @@
      do
      (setf result (funcall multiplication result base))
      finally (return result)))
+
+(defalias ^ expt (base power))
+
+(defalias _ elt (seq index))
