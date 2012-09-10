@@ -2,7 +2,9 @@
   (:use #:cl #:ol)
   (:export
    :define-prevalence-storage
-   :storage))
+   :storage
+   :prevailing
+   :prevalence-id))
 
 (in-package :prevalence-utils)
 
@@ -33,3 +35,7 @@
              (cl-prevalence:snapshot ,',storage)
              ,,g!var-name)
            (,(symb 'load- ,g!var-name)))))))
+
+(defclass prevailing ()
+  ((id :accessor prevalence-id))
+  (:documentation "A base class for anything that needs to be persisted."))
