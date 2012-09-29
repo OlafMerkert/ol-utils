@@ -37,10 +37,10 @@
                                            (array-dimension array 0))))
         (error "ARRAY of LAZY-ARRAY ~A was not adjustable." lazy-array))
       ;; generate the missing ones
-      (loop for i from (length array) to index do
-           (vector-push
-            (funcall (lazy-array-function lazy-array) array i)
-            array)))
+      (iter (for i from (length array) to index)
+            (vector-push
+             (funcall (lazy-array-function lazy-array) array i)
+             array)))
     (aref array index)))
 
 (defun lazy-aref (lazy-array index)

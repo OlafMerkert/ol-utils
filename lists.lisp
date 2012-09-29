@@ -258,8 +258,9 @@ gethash)."
 (defun splitn (list &optional (n 2))
   "Split LIST into sequences of all n-th elements of LIST."
   (let ((splits (make-array n :initial-element nil)))
-    (loop for l in list and i = 0 then (mod (+ i 1) n)
-       do (push l (aref splits i)))
+    (iter (for l in list)
+          (for i initially 0 then (mod (+ i 1) n))
+          (push l (aref splits i)))
     (values-list (map 'list #'nreverse splits))))
 
 (defun last1 (list)

@@ -37,9 +37,8 @@ array will just contain the elements of START."
               (this (make-array (max% ,(length start) ,g!finite) :initial-element ,default-value)))
          (setf ,@(mapcan #2`((aref this ,a1) ,a2) (lrange start) start))
          (when ,g!finite
-           (loop
-              for ,index-var from ,(length start) below ,g!finite do
-                (setf (aref this ,index-var) (progn ,@fill-form))))
+           (iter (for ,index-var from ,(length start) below ,g!finite)
+                 (setf (aref this ,index-var) (progn ,@fill-form))))
          this)))
 
 (defun nla% (default &rest start)

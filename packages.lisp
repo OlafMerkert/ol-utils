@@ -2,7 +2,8 @@
 
 (defpackage #:ol-utils
   (:nicknames #:ol)
-  (:use #:cl)
+  (:use #:cl
+        #:iterate)
   (:export :KEYW :GETHASH/C :MAPPEND :ILAMBDA
            :LENGTH=1 :COMPOSE :DEFMACRO!
            :SYMB :LAMBDA-FORM-P :DEFCONSTANT/G
@@ -39,4 +40,5 @@
            :split-last))
 
 (defpackage #:ol-user
-  (:use #:cl #:ol-utils))
+  (:use #:cl #:ol-utils
+        #:iterate))
