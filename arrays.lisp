@@ -68,16 +68,10 @@ conveniently."
 
 (defun arange (start &optional end (step 1))
   "As range, but builds an array/vector instead of a list."
-  (do-range (i start end step a)
-      ((j 0 (+ j 1))
-       (a (make-array length)))
-    (setf (aref a j) i)))
+  (coerce (range start end step) 'vector))
 
 (defun amrange (start &optional end (step 1))
-  (do-range (i start end step a 1 t)
-      ((j 0 (+ j 1))
-       (a (make-array length)))
-    (setf (aref a j) i)))
+  (coerce (mrange start end step) 'vector))
 
 (defun alast (vector)
   "Get at the last element of a vector."

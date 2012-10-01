@@ -65,6 +65,14 @@
                       (terminate))
                      (t ,var)))))))
 
+(defmacro with-range-spec ((start end &optional (default-start 0)) &body body)
+  "both start and end ought to be symbols!!"
+  `(progn
+     (unless ,end
+      (setf ,end ,start
+            ,start ,default-start))
+     ,@body))
+
 (defmacro! do-range ((var
                       o!start &optional o!end (o!step 1)
                       result-form
@@ -120,16 +128,15 @@
 (defun range (start &optional end (step 1))
   "Create a list with numbers between start and end with step.  start
 is inclusive, end is exclusive."
-  (do-range (i start end step (nreverse l))
-      (l)
-    (push i l)))
-
+  (with-range-spec (start end 0)
+    (iter (for i between start and-without end by step)
+          (collect i))))
 
 (defun mrange (start &optional end (step 1))
   "As range, only end is inclusive (Matlab-Style)."
-  (do-range (i start end step (nreverse l) 1 t)
-      (l)
-    (push i l)))
+  (with-range-spec (start end 1)
+    (iter (for i between start and end by step)
+          (collect i))))
 
 (defun lrange (seq)
   "Indizes of elements of seq."
