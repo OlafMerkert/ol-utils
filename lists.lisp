@@ -33,6 +33,38 @@
       (mkatom (car x))
       x))
 
+(defmacro-driver (FOR var BETWEEN start AND end &optional BY (step 1))
+  (with-gensyms!
+    (let ((kwd (if generate 'generate 'for)))
+      `(progn
+         (with ,g!start      = ,start)
+         (with ,g!end        = ,end)
+         (with ,g!increasing = (<= ,g!start ,g!end))
+         (with ,g!step       = (if ,g!increasing (abs ,step) (- (abs ,step))))
+         (,kwd ,var next
+               (cond ((first-iteration-p) ,g!start)
+                     ((if ,g!increasing
+                          (> (incf ,var ,g!step) ,g!end)
+                          (< (incf ,var ,g!step) ,g!end))
+                      (terminate))
+                     (t ,var)))))))
+
+(defmacro-driver (FOR var BETWEEN start AND-WITHOUT end &optional BY (step 1))
+  (with-gensyms!
+    (let ((kwd (if generate 'generate 'for)))
+      `(progn
+         (with ,g!start      = ,start)
+         (with ,g!end        = ,end)
+         (with ,g!increasing = (<= ,g!start ,g!end))
+         (with ,g!step       = (if ,g!increasing (abs ,step) (- (abs ,step))))
+         (,kwd ,var next
+               (cond ((first-iteration-p) ,g!start)
+                     ((if ,g!increasing
+                          (>= (incf ,var ,g!step) ,g!end)
+                          (<= (incf ,var ,g!step) ,g!end))
+                      (terminate))
+                     (t ,var)))))))
+
 (defmacro! do-range ((var
                       o!start &optional o!end (o!step 1)
                       result-form
