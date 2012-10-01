@@ -8,16 +8,12 @@
 
 (defun list->array (list)
   "Make an array from list."
-  (let ((n (length list)))
-    (values
-     (make-array n :initial-contents list)
-     n)))
+  (coerce list 'vector))
 
 ;; TODO Mehrdimensionale Arrays
 (defun array->list (array)
   "Make a list from the 1-dim array."
-  (iter (for x in-vector array)
-        (collect x)))
+  (coerce array 'list))
 
 (defun fill-array% (dim index fill-spec array fill-fn)
   "Helper function to fill-array."
