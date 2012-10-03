@@ -8,34 +8,36 @@
 
 (in-package :prevalence-utils)
 
-(defmacro! define-prevalence-storage
+(defmacro define-prevalence-storage
     (directory &optional (storage 'storage))
   (let ((dir-var (symb storage '-directory)))
-   `(progn
-      (defparameter ,dir-var ,directory)
-      (defvar ,storage nil)
+    `(progn
+       (defparameter ,dir-var ,directory)
+       (defvar ,storage nil)
 
-      (defun ,#2=(symb 'init- storage) ()
-          (unless ,storage
-            (ensure-directories-exist ,dir-var)
-            (setf ,storage
-                  (cl-prevalence:make-prevalence-system ,dir-var))))
+       (defun ,#2=(symb 'init- storage) ()
+              (unless ,storage
+                (ensure-directories-exist ,dir-var)
+                (setf ,storage
+                      (cl-prevalence:make-prevalence-system ,dir-var))))
 
-      (defmacro ,(symb 'define- storage) (,g!var-name)
-        `(progn
-           (defvar ,,g!var-name nil)
-           (defun ,(symb 'load- ,g!var-name) ()
-             (,',#2#)
-             (setf ,,g!var-name
-                   (cl-prevalence:get-root-object ,',storage ',,g!var-name)))
-           (defun ,(symb 'save- ,g!var-name) ()
-             (,',#2#)
-             (setf (cl-prevalence:get-root-object ,',storage ',,g!var-name)
-                   ,,g!var-name)
-             (cl-prevalence:snapshot ,',storage)
-             ,,g!var-name)
-           (,(symb 'load- ,g!var-name)))))))
+       (defmacro ,(symb 'define- storage) (var-name &optional (autoload t))
+         `(progn
+            (defvar ,var-name nil)
+            (defun ,(symb 'load- var-name) ()
+              (,',#2#)
+              (setf ,var-name
+                    (cl-prevalence:get-root-object ,',storage ',var-name)))
+            (defun ,(symb 'save- var-name) ()
+              (,',#2#)
+              (setf (cl-prevalence:get-root-object ,',storage ',var-name)
+                    ,var-name)
+              (cl-prevalence:snapshot ,',storage)
+              ,var-name)
+            ,(when autoload
+                   `(,(symb 'load- var-name))))))))
 
 (defclass prevailing ()
   ((id :accessor prevalence-id))
   (:documentation "A base class for anything that needs to be persisted."))
+
