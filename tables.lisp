@@ -23,6 +23,6 @@ default and return the new value."
   "Give a sorted list of the entries of hash-table.  The key and
 predicate apply directly on the entries."
   (let ((entries
-         (loop for e being the hash-values of hash-table
-            collect e)))
+         (iter (for (e nil) in-hashtable hash-table )
+               (collect e))))
     (sort entries predicate :key key)))

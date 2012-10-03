@@ -29,8 +29,8 @@
 called a1, a2, ...j"
   (declare (ignore sub-char))
   (unless numarg (setq numarg 1))
-  (let ((args (loop for i from 1 to numarg
-                collect (symb 'a i))))
+  (let ((args (iter (for i from 1 to numarg)
+                    (collect (symb 'a i)))))
    `(lambda ,args
       (declare (ignorable ,@args))
       ,(funcall

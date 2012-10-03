@@ -8,15 +8,12 @@
 
 (defun list->array (list)
   "Make an array from list."
-  (let ((n (length list)))
-    (values
-     (make-array n :initial-contents list)
-     n)))
+  (coerce list 'vector))
 
 ;; TODO Mehrdimensionale Arrays
 (defun array->list (array)
   "Make a list from the 1-dim array."
-  (loop for x across array collect x))
+  (coerce array 'list))
 
 (defun fill-array% (dim index fill-spec array fill-fn)
   "Helper function to fill-array."
@@ -59,24 +56,18 @@ conveniently."
 (defun shuffle (seq)
   "Destructively shuffle the given sequence."
   (let ((n (length seq)))
-    (loop for i from (- n 1) downto 1
-       for j = (random (+ i 1))
-       do (rotatef (elt seq i)
+    (iter (for i from (- n 1) downto 1)
+          (for j = (random (+ i 1)))
+          (rotatef (elt seq i)
                    (elt seq j))))
   seq)
 
 (defun arange (start &optional end (step 1))
   "As range, but builds an array/vector instead of a list."
-  (do-range (i start end step a)
-      ((j 0 (+ j 1))
-       (a (make-array length)))
-    (setf (aref a j) i)))
+  (coerce (range start end step) 'vector))
 
 (defun amrange (start &optional end (step 1))
-  (do-range (i start end step a 1 t)
-      ((j 0 (+ j 1))
-       (a (make-array length)))
-    (setf (aref a j) i)))
+  (coerce (mrange start end step) 'vector))
 
 (defun alast (vector)
   "Get at the last element of a vector."

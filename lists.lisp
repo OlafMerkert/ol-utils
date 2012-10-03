@@ -33,6 +33,46 @@
       (mkatom (car x))
       x))
 
+(defmacro-driver (FOR var BETWEEN start AND end &optional BY (step 1))
+  (with-gensyms!
+    (let ((kwd (if generate 'generate 'for)))
+      `(progn
+         (with ,g!start      = ,start)
+         (with ,g!end        = ,end)
+         (with ,g!increasing = (<= ,g!start ,g!end))
+         (with ,g!step       = (if ,g!increasing (abs ,step) (- (abs ,step))))
+         (,kwd ,var next
+               (cond ((first-iteration-p) ,g!start)
+                     ((if ,g!increasing
+                          (> (incf ,var ,g!step) ,g!end)
+                          (< (incf ,var ,g!step) ,g!end))
+                      (terminate))
+                     (t ,var)))))))
+
+(defmacro-driver (FOR var BETWEEN start AND-WITHOUT end &optional BY (step 1))
+  (with-gensyms!
+    (let ((kwd (if generate 'generate 'for)))
+      `(progn
+         (with ,g!start      = ,start)
+         (with ,g!end        = ,end)
+         (with ,g!increasing = (<= ,g!start ,g!end))
+         (with ,g!step       = (if ,g!increasing (abs ,step) (- (abs ,step))))
+         (,kwd ,var next
+               (cond ((first-iteration-p) ,g!start)
+                     ((if ,g!increasing
+                          (>= (incf ,var ,g!step) ,g!end)
+                          (<= (incf ,var ,g!step) ,g!end))
+                      (terminate))
+                     (t ,var)))))))
+
+(defmacro with-range-spec ((start end &optional (default-start 0)) &body body)
+  "both start and end ought to be symbols!!"
+  `(progn
+     (unless ,end
+      (setf ,end ,start
+            ,start ,default-start))
+     ,@body))
+
 (defmacro! do-range ((var
                       o!start &optional o!end (o!step 1)
                       result-form
@@ -88,16 +128,15 @@
 (defun range (start &optional end (step 1))
   "Create a list with numbers between start and end with step.  start
 is inclusive, end is exclusive."
-  (do-range (i start end step (nreverse l))
-      (l)
-    (push i l)))
-
+  (with-range-spec (start end 0)
+    (iter (for i between start and-without end by step)
+          (collect i))))
 
 (defun mrange (start &optional end (step 1))
   "As range, only end is inclusive (Matlab-Style)."
-  (do-range (i start end step (nreverse l) 1 t)
-      (l)
-    (push i l)))
+  (with-range-spec (start end 1)
+    (iter (for i between start and end by step)
+          (collect i))))
 
 (defun lrange (seq)
   "Indizes of elements of seq."
@@ -258,8 +297,9 @@ gethash)."
 (defun splitn (list &optional (n 2))
   "Split LIST into sequences of all n-th elements of LIST."
   (let ((splits (make-array n :initial-element nil)))
-    (loop for l in list and i = 0 then (mod (+ i 1) n)
-       do (push l (aref splits i)))
+    (iter (for l in list)
+          (for i initially 0 then (mod (+ i 1) n))
+          (push l (aref splits i)))
     (values-list (map 'list #'nreverse splits))))
 
 (defun last1 (list)
