@@ -78,3 +78,12 @@ conveniently."
      `(let ((,g!vector ,vector))
         (setf (aref ,g!vector (1- (length ,g!vector)))
               ,value))))
+
+(defmacro! ensure-adjustable-array (o!place)
+  "Transform the sequence held in place to an adjustable array. This
+macro can be useful with arrays taken from a prevalence store."
+  `(unless (and (arrayp ,g!place)
+                (adjustable-array-p ,g!place))
+    (let ((,g!array (make-array (length ,g!place) :adjustable t :fill-pointer t)))
+      (map-into ,g!array #'identity ,g!place)
+      (setf ,o!place ,g!array))))

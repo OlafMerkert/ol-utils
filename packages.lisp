@@ -37,7 +37,8 @@
            :in
            :ncond
            :dotimes+
-           :split-last))
+           :split-last
+           :ensure-adjustable-array))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
