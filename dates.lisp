@@ -34,5 +34,5 @@
        ;; the date.
        (apply #'encode-date int-parts)))))
 
-(defun from-today (nr-of-days &optional evening)
+(defun from-today (&optional (nr-of-days 0) evening)
   (timestamp+ (today) (if evening (+ 1 nr-of-days) nr-of-days) :day ))
