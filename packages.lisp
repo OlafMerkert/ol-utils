@@ -38,7 +38,8 @@
            :ncond
            :dotimes+
            :split-last
-           :ensure-adjustable-array))
+           :ensure-adjustable-array
+           :droplast))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

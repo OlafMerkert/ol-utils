@@ -165,6 +165,13 @@ argument, `:reverse` which will reverse the order of the lists."
   (nconc (subseq list 0 n)
          (subseq list (1+ n))))
 
+(defun droplast (list &optional acc)
+  "Remove the last element from list."
+  (if (or (null list) (null (cdr list)))
+      (nreverse acc)
+      (droplast (cdr list) (cons (car list) acc))))
+
+
 (defun split (sep list)
   "Split the list at every occurence of sep.  The result will be a
 list of the parts."
