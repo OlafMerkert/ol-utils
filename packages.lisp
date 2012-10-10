@@ -39,7 +39,9 @@
            :dotimes+
            :split-last
            :ensure-adjustable-array
-           :droplast))
+           :droplast
+           :start-app
+           :define-application))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
