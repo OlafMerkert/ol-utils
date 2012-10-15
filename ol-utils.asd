@@ -19,4 +19,5 @@
                (:file "strings")
                (:file "arithmetic")
                (:file "tables")
-               (:file "clos")))
+               (:file "clos")
+               (:file "applications")))
