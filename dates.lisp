@@ -35,4 +35,14 @@
        (apply #'encode-date int-parts)))))
 
 (defun from-today (&optional (nr-of-days 0) evening)
+  "Generate a date offset from today by NR-OF-DAYS. If EVENING,
+increase offset by 1."
   (timestamp+ (today) (if evening (+ 1 nr-of-days) nr-of-days) :day ))
+
+(defun shift-dates (ref-from ref-to &rest other-dates)
+  "Return a list of the OTHER-DATES shifted by the same time
+difference as REF-FROM and REF-TO."
+  (let ((diff (timestamp-difference ref-to ref-from)))
+    (mapcar (lambda (x)
+              (timestamp+ x diff :sec))
+            other-dates)))
