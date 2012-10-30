@@ -14,7 +14,9 @@
                     (cond ((null year) (timestamp-year (today)))
                           ((< year 35) (+ 2000 year))
                           ((< year 100) (+ 1900 year))
-                          (t year))))
+                          (t year))
+                    ;; use timezone UTC, so sec-of is 0
+                    :timezone +utc-zone+))
 
 (defun print-date (date &optional stream)
   (format stream
