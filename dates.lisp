@@ -4,7 +4,11 @@
    :encode-date
    :print-date
    :parse-date
-   :from-today))
+   :from-today
+   :define-parse-date
+   :year
+   :month
+   :day))
 
 (in-package :ol-date-utils)
 
@@ -25,16 +29,24 @@
           (timestamp-month date)
           (timestamp-year  date)))
 
-(defun parse-date (string)
-  "Parse a date of form DD.MM.YYYY or DD.MM."
-  (let* ((parts     (split-sequence:split-sequence #\. string
-                                                   :remove-empty-subseqs t))
-         (int-parts (mapcar #'parse-integer parts)))
-    (case (length int-parts)
-      ((2 3)
-       ;; TODO fancier validation, check that we only have digits in
-       ;; the date.
-       (apply #'encode-date int-parts)))))
+(defun ->integer (obj)
+  (cond ((stringp obj) (parse-integer obj))
+        (t obj)))
+
+(defmacro! define-parse-date (name separator parts &optional doc)
+  `(defun ,name (,g!string)
+     ,doc
+     (let ((,g!parts (split-sequence:split-sequence ,separator ,g!string
+                                                    :remove-empty-subseqs t)))
+       (when ,g!parts
+         (destructuring-bind ,parts ,g!parts
+           (encode-date
+            (->integer day)
+            (->integer month)
+            (->integer year)))))))
+
+(define-parse-date parse-date #\. (day month &optional year)
+                   "Parse a date of form DD.MM.YYYY or DD.MM.")
 
 (defun from-today (&optional (nr-of-days 0) evening)
   "Generate a date offset from today by NR-OF-DAYS. If EVENING,
