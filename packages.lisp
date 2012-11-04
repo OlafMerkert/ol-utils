@@ -16,7 +16,7 @@
            :MRANGE :ALAMBDA :TRANSPOSE-LIST
            :DEQUEUE :BIND-MULTI :RANGE
            :LIST->GENSYMS :ALAST :AIF
-           :MSWALLOW :SWALLOW :FLATTEN
+           :SWALLOW :FLATTEN
            :UDM :DEFCLASS/F :MKATOM :DROP
            :OLD :NCONC1 :SPLITN :COLLECT
            :STRING-REPLACE-ALL :STARTS-WITH
@@ -41,7 +41,8 @@
            :ensure-adjustable-array
            :droplast
            :start-app
-           :define-application))
+           :define-application
+           :ilambda+))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

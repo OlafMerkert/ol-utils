@@ -23,16 +23,18 @@
      (declare (ignorable ,@(args->names args)))
      ,@body))
 
+(defmacro ilambda+ (&body body)
+  "lambda form where any arguments are accepted, and anaphorically bound to
+  ARGS."
+  ;; this provides almost identical functionality as mswallow
+  `(ilambda (&rest args)
+     ,@body))
+
 (defun swallow (fun)
   "Transform the function such that it appears to accept arguments,
 but call it with none."
   (ilambda (&rest x)
     (funcall fun)))
-
-(defmacro/g! mswallow (&body body)
-  "Enclose the body with a lambda that ignores arbitrary arguments."
-  `(ilambda (&rest ,g!args)
-     ,@body))
 
 (defun list->gensyms (&rest lists)
   "Collect a gensym for every common element of the lists."
