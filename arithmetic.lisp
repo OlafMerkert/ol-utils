@@ -17,7 +17,8 @@
           (incf start (elt seq i))))
   seq)
 
-(defun square-multiply (base exponent multiplication)
+(defun square-multiply (base exponent multiplication
+                        &optional (squaring (lambda (x) (funcall multiplication x x))))
   "Calculate BASE^EXPONENT as it arises from the binary operation
   MULTIPLICATION."
   (unless (and (integerp exponent)
@@ -26,7 +27,7 @@
      "Square-Multiply requires a positive integer exponent, but got ~A."
      exponent))
   (iter (for i from (1- (integer-length exponent)) downto 0)
-        (for result first base then (funcall multiplication result result))
+        (for result first base then (funcall squaring result ))
         (if-first-time nil
                        (if (logbitp i exponent)
                            (setf result (funcall multiplication result base))))
