@@ -2,6 +2,7 @@
   :serial t
   :depends-on ("ol-utils"
                "cl-prevalence"
-               "local-time")
+               "local-time"
+               "split-sequence")
   :components ((:file "prevalence")
                (:file "dates")))

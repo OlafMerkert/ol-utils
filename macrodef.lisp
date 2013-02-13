@@ -12,8 +12,8 @@
     "Check whether the symbol s matches the string start in the first
 len characters."
      (and (symbolp s)
-          (> (length (symbol-name s))
-             len)
+          (>= (length (symbol-name s))
+              len)
           (string-equal (symbol-name s)
                         start
                         :start1 0
