@@ -363,3 +363,15 @@ elements."
                  (acc (list* (car list) item acc) (cdr list))
                  (nreverse acc))))
     (acc (list (first list)) (rest list))))
+
+(defun popn% (n list)
+  (let* ((prevcdr (nthcdr (- n 1) list))
+         (tail (cdr prevcdr)))
+    (setf (cdr prevcdr) nil)
+    (values list tail)))
+
+(defmacro! popn (n place)
+  `(multiple-value-bind (,g!head ,g!tail)
+       (popn% ,n ,place)
+     (setf ,place ,g!tail)
+     ,g!head))

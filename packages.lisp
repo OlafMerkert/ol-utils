@@ -42,7 +42,10 @@
            :droplast
            :start-app
            :define-application
-           :ilambda+))
+           :ilambda+
+           :args->names
+           :popn
+           :popn%))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
