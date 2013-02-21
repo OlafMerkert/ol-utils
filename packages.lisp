@@ -45,7 +45,11 @@
            :ilambda+
            :args->names
            :popn
-           :popn%))
+           :popn%
+           :make-infinite-array
+           :inf-aref
+           :extend-infinite-array
+           :ignore-unbound))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
