@@ -132,3 +132,11 @@ the result will be an ordinary array."
                             (lazy-aref ,a1 ,g!index))
                     acsyms accessors)
          ,@body))))
+
+(defun lazy-array-map (function lazy-array)
+  "Apply FUNCTION to all entries of lazy-array."
+  (make-lazy-array
+      (:start nil :finite (lazy-array-finite lazy-array)
+              :default-value (funcall function
+                                      (lazy-array-default-value lazy-array)))
+    (funcall function (lazy-aref lazy-array index))))
