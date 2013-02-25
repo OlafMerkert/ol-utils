@@ -14,3 +14,5 @@ arguments we call mkstr, so use symbols or strings as you prefer."
               ,(mkstr package)))))
 
 (define-application :tvs tv-series-status tvs-clim tv-series-display)
+
+(define-application :mi math-interactor math-interactor math-interactor)

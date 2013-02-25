@@ -68,11 +68,10 @@ strings or whatever."
      ,documentation))
 
 (defmacro defsymconstant (name &optional documentation)
-  "Define a constant with a gensym as value."
-  `(defconstant ,name (if (boundp ',name)
-                          ,name
-                          (gensym ,(symbol-name name)))
+  "Define a constant with a symbol as value."
+  `(defconstant ,name ',(symb 'ol-sym-constant- name)
      ,documentation))
+;; TODO figure out what to do about collisions
 
 ;; Abbreviate eval-when
 (defmacro ew (&body body)

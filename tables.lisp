@@ -19,10 +19,12 @@ return the result."
 default and return the new value."
   `(gethash/c% ,key ,table (lambda () ,default)))
 
-(defun sort-hash-table (hash-table predicate &key (key #'identity))
-  "Give a sorted list of the entries of hash-table.  The key and
-predicate apply directly on the entries."
+(defun sort-hash-table (hash-table predicate &key (key #'identity) entries)
+  "Give a sorted list of the keys (or entries) of hash-table. The key
+and predicate apply directly on the keys (or entries)."
   (let ((entries
-         (iter (for (e nil) in-hashtable hash-table )
-               (collect e))))
+         (iter (for (k e) in-hashtable hash-table )
+               (if entries
+                   (collect e)
+                   (collect k)))))
     (sort entries predicate :key key)))
