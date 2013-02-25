@@ -194,6 +194,10 @@ list last)"
       ;; then the special case of just one or none element.
       (values nil (first list))))
 
+(defun length=0 (seq)
+  "Test whether sequence has no element."
+  (zerop (length seq)))
+
 (defun length=1 (list)
   "Test whether list has exactly one element."
   (and (consp list)

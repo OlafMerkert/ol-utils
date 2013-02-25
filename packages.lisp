@@ -42,7 +42,8 @@
            :droplast
            :start-app
            :define-application
-           :ilambda+))
+           :ilambda+
+           :length=0))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
