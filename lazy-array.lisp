@@ -133,10 +133,13 @@ the result will be an ordinary array."
                     acsyms accessors)
          ,@body))))
 
-(defun lazy-array-map (function lazy-array)
+(defun lazy-array-map (function lazy-array
+                       &optional (default-value nil custom-default-p ))
   "Apply FUNCTION to all entries of lazy-array."
   (make-lazy-array
-      (:start nil :finite (lazy-array-finite lazy-array)
-              :default-value (funcall function
-                                      (lazy-array-default-value lazy-array)))
+      (:finite (lazy-array-finite lazy-array)
+               :default-value (if custom-default-p
+                                  default-value
+                                  (funcall function
+                                           (lazy-array-default-value lazy-array))))
     (funcall function (lazy-aref lazy-array index))))
