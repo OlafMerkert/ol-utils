@@ -196,7 +196,8 @@ list last)"
 
 (defun length=0 (seq)
   "Test whether sequence has no element."
-  (zerop (length seq)))
+  (or (null seq)
+      (zerop (length seq))))
 
 (defun length=1 (list)
   "Test whether list has exactly one element."
