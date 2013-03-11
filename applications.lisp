@@ -15,4 +15,6 @@ arguments we call mkstr, so use symbols or strings as you prefer."
 
 (define-application :tvs tv-series-status tvs-clim tv-series-display)
 
+(define-application :tvs-web tv-series-status tvs-web start-server-and-open)
+
 (define-application :mi math-interactor math-interactor math-interactor)
