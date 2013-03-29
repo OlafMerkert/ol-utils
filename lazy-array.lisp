@@ -83,7 +83,8 @@ lazy-array on.  Sets the default-value to 0."
                                        :adjustable t :fill-pointer t
                                        :initial-contents start)
                     :finite (length start)
-                    :default-value default))
+                    :default-value default
+                    :function (ilambda (this index) default)))
 
 (defun la (&rest start)
   "Abbreviation for lazy arrays that are guaranteed finite.  If only
