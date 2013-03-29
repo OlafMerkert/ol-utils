@@ -51,7 +51,8 @@
            #:extend-infinite-array
            #:ignore-unbound
            #:lazy-array-map
-           #:length=0))
+           #:length=0
+           #:symb+))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

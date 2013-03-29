@@ -54,6 +54,10 @@
 strings or whatever."
   (values (intern (apply #'mkstr args))))
 
+(defun symb+ (package &rest args)
+  "Like symb, but put the symbol in the specified package."
+  (values (intern (apply #'mkstr args) package)))
+
 (defun keyw (&rest args)
   "The same as symb, but for keyword symbols."
   (values (intern (apply #'mkstr args)
