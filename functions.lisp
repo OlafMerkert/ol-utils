@@ -1,6 +1,6 @@
 (in-package #:ol-utils)
 
-(export '(swallow mswallow ilambda
+(export '(swallow ilambda ilambda+
           list->gensyms
           memoize mlambda
           defmemfun
@@ -39,7 +39,7 @@ but call it with none."
 (defun list->gensyms (&rest lists)
   "Collect a gensym for every common element of the lists."
   (if (keywordp (first lists))
-      (apply #'mapcar (mswallow (gensym (symbol-name (first lists)))) (rest lists))
+      (apply #'mapcar (ilambda+ (gensym (symbol-name (first lists)))) (rest lists))
       (apply #'mapcar (swallow #'gensym) lists)))
 
 
