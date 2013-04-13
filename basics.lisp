@@ -74,7 +74,7 @@ strings or whatever."
 (defmacro defsymconstant (name &optional documentation)
   "Define a constant with a symbol as value."
   `(defconstant ,name ',(symb 'ol-sym-constant- name)
-     ,documentation))
+     ,@(if documentation (list documentation))))
 ;; TODO figure out what to do about collisions
 
 ;; Abbreviate eval-when

@@ -52,7 +52,9 @@
            #:ignore-unbound
            #:lazy-array-map
            #:length=0
-           #:symb+))
+           #:symb+
+           #:run-program
+           #:funcall+thread))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
