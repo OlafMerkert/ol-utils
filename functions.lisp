@@ -37,7 +37,8 @@ but call it with none."
     (funcall fun)))
 
 (defun list->gensyms (&rest lists)
-  "Collect a gensym for every common element of the lists."
+  "Collect a gensym for every common element of the lists, if the
+first item is a keyword symbol use it as the base of the gensyms."
   (if (keywordp (first lists))
       (apply #'mapcar (ilambda+ (gensym (symbol-name (first lists)))) (rest lists))
       (apply #'mapcar (swallow #'gensym) lists)))

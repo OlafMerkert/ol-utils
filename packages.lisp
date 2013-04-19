@@ -54,7 +54,9 @@
            #:length=0
            #:symb+
            #:run-program
-           #:funcall+thread))
+           #:funcall+thread
+           #:n-copies
+           #:map-on-car))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

@@ -370,13 +370,29 @@ elements."
     (acc (list (first list)) (rest list))))
 
 (defun popn% (n list)
+  "Cut off the first N elements of list, and return this subsequence
+together with (nthcdr LIST)."
   (let* ((prevcdr (nthcdr (- n 1) list))
          (tail (cdr prevcdr)))
     (setf (cdr prevcdr) nil)
     (values list tail)))
 
 (defmacro! popn (n place)
+  "Set place to its nthcdr, and return the list we cut off."
   `(multiple-value-bind (,g!head ,g!tail)
        (popn% ,n ,place)
      (setf ,place ,g!tail)
      ,g!head))
+
+(defun n-copies (n item &optional acc)
+  "Create a list containing N times the ITEM."
+  (if (<= n 0)
+      acc
+      (n-copies (- n 1) item (cons item acc))))
+
+(defun map-on-car (fn alist)
+  "Call FN on every CAR of ALIST, preserving the CDR."
+  (mapcar (lambda (x)
+            (cons (funcall fn (car x))
+                  (cdr x)))
+          alist))
