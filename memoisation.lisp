@@ -59,9 +59,9 @@ expected to always be a non-negative integer." ))
      (lambda (&rest args)
        ;; special constants allow to get at the container, and also
        ;; allow clearing everything.
-       (case (first args)
-         (+memo-clear+ (memo-clear memo))
-         (+memo-container+ memo)
+       (cond
+         ((eq (first args) +memo-clear+) (memo-clear memo))
+         ((eq (first args) +memo-container+) memo)
          (t
           (get-memo memo function args)))))))
 
@@ -91,3 +91,17 @@ with the anaphoric variable SELF."
     `(let ((,g!memofun (memoize/hash-table (lambda ,args ,@body))))
        (defun ,name (&rest ,g!args)
          (apply ,g!memofun ,g!args)))))
+
+;;; add facilities to change the "values" of memoised functions
+(defun set-memo (function value &rest args)
+  (let ((container (funcall function +memo-container+))
+        (n (first args)))
+    (etypecase container
+      (hash-table (setf (gethash args container) value))
+      (array (setf (aref container n) value)))
+    value))
+
+(defsetf mfuncall (function &rest args) (value)
+  `(set-memo ,function ,value ,@args))
+
+

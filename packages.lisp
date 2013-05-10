@@ -65,7 +65,9 @@
            #:memodefun
            #:memolambda/i
            #:memolabels/i
-           #:memodefun/i))
+           #:memodefun/i
+           #:+uncalculated+
+           #:mfuncall))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
