@@ -43,38 +43,6 @@ first item is a keyword symbol use it as the base of the gensyms."
       (apply #'mapcar (ilambda+ (gensym (symbol-name (first lists)))) (rest lists))
       (apply #'mapcar (swallow #'gensym) lists)))
 
-
-;;; Memoization
-(defun memoize (fun)
-  "Make the given function memoizing."
-  (let ((memo (make-hash-table :test 'equal)))
-    (lambda (&rest args)
-      (multiple-value-bind (res found-p) (gethash args memo)
-        (if found-p
-            res
-            (setf (gethash args memo)
-                  (apply fun args)))))))
-
-(defmacro/g! mlambda (args &body body)
-  "Anaphoric lambda that does memoization."
-  `(let (,g!funo)
-     (labels ((,g!fun (,@args) ,@body)
-              (self (&rest ,g!args) (apply ,g!funo ,g!args)))
-       (setf ,g!funo (memoize #',g!fun))
-       #'self)))
-
-(defmacro/g! defmemfun (name args &body body)
-  "Define a memoizing function.  Allows recursive calls as well."
-  (let ((names (args->names args)))
-    `(let (,g!funo)
-       (labels ((,g!fun (,@names)
-                  (symbol-macrolet ((,name ',g!self))
-                    ,@body))
-                (,g!self (&rest ,g!args) (apply ,g!funo ,g!args)))
-         (setf ,g!funo (memoize #',g!fun))
-         (defun ,name (,@args)
-           (funcall ,g!funo ,@names))))))
-
 (defun compose/red (&rest functions)
   "Compose the functions.  The leftmost function will be applied last.
 Currently only works with functions that take a single argument."

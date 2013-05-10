@@ -12,6 +12,7 @@
                (:file "lists")
                (:file "trees")
                (:file "functions")
+               (:file "memoisation")
                (:file "lazy")
                (:file "arrays")
                (:file "lazy-array")

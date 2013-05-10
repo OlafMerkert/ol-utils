@@ -56,7 +56,13 @@
            #:run-program
            #:funcall+thread
            #:n-copies
-           #:map-on-car))
+           #:map-on-car
+           #:clambda
+           #:+memo-clear+
+           #:+memo-container+
+           #:memolabels
+           #:memolambda
+           #:memodefun))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
