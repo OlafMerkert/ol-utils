@@ -95,3 +95,14 @@ Currently only works with functions that take a single argument."
                  value)))
   `(lambda (&rest ,g!x)
      ,(generate-funcalls (reverse functions) g!x 'apply))))
+
+(def-symbol-p x!)
+
+(defmacro clambda (function &rest arguments)
+  "Create a function from a named function where parameters are fixed.
+ATM, only positional parameters are supported, and non-fixed
+parameters must start with \"x!\"."
+  ;; TODO support for &optional etc
+  (let ((free-variables (remove-if-not #'x!-symbol-p arguments )))
+    `(lambda ,free-variables
+       (,function ,@arguments))))
