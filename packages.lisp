@@ -62,7 +62,10 @@
            #:+memo-container+
            #:memolabels
            #:memolambda
-           #:memodefun))
+           #:memodefun
+           #:memolambda/i
+           #:memolabels/i
+           #:memodefun/i))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

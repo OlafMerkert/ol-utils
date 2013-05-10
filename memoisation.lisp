@@ -66,10 +66,10 @@ expected to always be a non-negative integer." ))
           (get-memo memo function args)))))))
 
 ;;; the memoisation macros
-(bind-multi ((memolabels memolabels memolabels/int+)
+(bind-multi ((memolabels memolabels memolabels/i)
              (memoize memoize/hash-table memoize/array)
-             (memolambda memolambda memolambda/int+)
-             (memodefun memodefun memodefun/int+))
+             (memolambda memolambda memolambda/i)
+             (memodefun memodefun memodefun/i))
   (defmacro! memolabels (definitions &body body)
     "Like labels, but all function are memoising."
     (let ((function-vars (list->gensyms definitions)))
