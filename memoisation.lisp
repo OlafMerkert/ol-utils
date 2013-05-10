@@ -8,7 +8,6 @@
 (defsymconstant +memo-container+)
 
 (defun make-memo-container/hash-table ()
-  (declare (ignore arity))
   (make-hash-table :test 'equal :size initial-memoisation-size))
 
 (defun get-memo/hash-table (container function args)
@@ -44,7 +43,7 @@
   (dotimes (i (length container))
     (setf (aref container i) +uncalculated+)))
 
-(bind-multi ((memoize memoize/hash-table memoize/array)
+(bind-multi ((memoize memoize memoize/i)
              (make-memo-container make-memo-container/hash-table make-memo-container/array)
              (get-memo get-memo/hash-table get-memo/array)
              (memo-clear memo-clear/hash-table memo-clear/array)
@@ -67,7 +66,7 @@ expected to always be a non-negative integer." ))
 
 ;;; the memoisation macros
 (bind-multi ((memolabels memolabels memolabels/i)
-             (memoize memoize/hash-table memoize/array)
+             (memoize memoize memoize/i)
              (memolambda memolambda memolambda/i)
              (memodefun memodefun memodefun/i))
   (defmacro! memolabels (definitions &body body)
@@ -76,7 +75,7 @@ expected to always be a non-negative integer." ))
       `(let ,function-vars
          (flet ,(mapcar #2`(,(first a1) (&rest ,g!args) (apply ,a2 ,g!args))
                         definitions function-vars)
-           (setf ,@(mapcan #2`(,a2 (memoize/hash-table (lambda ,@(rest a1))))
+           (setf ,@(mapcan #2`(,a2 (memoize (lambda ,@(rest a1))))
                            definitions function-vars))
            ,@body))))
 
@@ -88,7 +87,7 @@ with the anaphoric variable SELF."
 
   (defmacro! memodefun (name args &body body)
     "Define a global memoising function."
-    `(let ((,g!memofun (memoize/hash-table (lambda ,args ,@body))))
+    `(let ((,g!memofun (memoize (lambda ,args ,@body))))
        (defun ,name (&rest ,g!args)
          (apply ,g!memofun ,g!args)))))
 

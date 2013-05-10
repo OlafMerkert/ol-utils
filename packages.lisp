@@ -21,7 +21,7 @@
            #:old #:nconc1 #:splitn #:collect
            #:string-replace-all #:starts-with
            #:with-gensyms! #:mkstr #:prod
-           #:sum #:mlambda #:cumulative-sums
+           #:sum #:cumulative-sums
            #:matching-tree-nodes #:mklist #:split
            #:def-symbol-transform #:defmemfun
            #:minimise #:filter #:ew #:amrange
@@ -67,7 +67,8 @@
            #:memolabels/i
            #:memodefun/i
            #:+uncalculated+
-           #:mfuncall))
+           #:mfuncall
+           #:memoize/i))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
