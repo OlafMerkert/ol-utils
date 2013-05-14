@@ -103,7 +103,7 @@ Syntax: (bind-multi ((v1 b1 b2)
         (vals (transpose-list (mapcar #'rest bindings))))
    `(progn
       ,@(mapcan (lambda (vals)
-                  (sublis (mapcar #'cons vars vals) body))
+                  (sublis (mapcar #'cons vars vals) (copy-tree body)))
                 vals))))
 
 ;;
