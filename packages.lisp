@@ -68,7 +68,8 @@
            #:memodefun/i
            #:+uncalculated+
            #:mfuncall
-           #:memoize/i))
+           #:memoize/i
+           #:lazy-arefs))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
