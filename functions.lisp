@@ -6,17 +6,6 @@
           defmemfun
           compose compose/red))
 
-(ew
- (def-symbol-p &)
-
- (defun args->names (args)
-   "Extract the parameter names from an argument list."
-   (mapcan (lambda (x)
-             (cond ((&-symbol-p x) nil)
-                   ((listp x) (list (car x)))
-                   (t (list x))))
-           args)))
-
 (defmacro ilambda (args &body body)
   "lambda form where all arguments are declared ignorable."
   `(lambda ,args

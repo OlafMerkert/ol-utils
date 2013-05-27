@@ -81,8 +81,22 @@ g!."
       `(defmacro/o! ,name ,args ,@body)
       `(defmacro/g! ,name ,args ,@body)))
 
+(def-symbol-p &)
+
+(defun args->names (args)
+  "Extract the parameter names from an argument list."
+  (mapcan (lambda (x)
+            (cond ((&-symbol-p x) nil)
+                  ((listp x) (list (car x)))
+                  (t (list x))))
+          args))
+
 (defmacro! defalias (alias whatfor &optional args)
   "Create an alias for a function or macro."
-  `(defmacro ,alias (&whole ,g!args ,@args)
-     (declare (ignorable ,@args)) ; TODO filter out &stuff
-     `(,',whatfor ,@,g!args)))
+  `(defmacro ,alias ( &whole ,g!args ,@args)
+     (declare (ignore ,@(args->names args)))
+     `(,',whatfor ,@(rest ,g!args))))
+
+(defalias mvbind multiple-value-bind (vars value-form &body body))
+
+(defalias dbind destructuring-bind (lambda-list expression &body body))

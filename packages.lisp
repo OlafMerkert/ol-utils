@@ -68,7 +68,9 @@
            #:memodefun/i
            #:+uncalculated+
            #:mfuncall
-           #:memoize/i))
+           #:memoize/i
+           #:mvbind
+           #:dbind))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
