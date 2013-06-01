@@ -70,7 +70,8 @@
            #:mfuncall
            #:memoize/i
            #:mvbind
-           #:dbind))
+           #:dbind
+           #:lazy-arefs))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

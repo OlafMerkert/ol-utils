@@ -134,6 +134,13 @@ the result will be an ordinary array."
                     acsyms accessors)
          ,@body))))
 
+(defmacro! lazy-arefs (arrays o!index &body body)
+  "For symbols A given in arrays, allow writing A instead
+of (lazy-aref A index). This retrieves values before executing
+anything in body."
+  `(let ,(mapcar #`(,a1 (lazy-aref ,a1 ,g!index)) arrays)
+     ,@body))
+
 (defun lazy-array-map (function lazy-array
                        &optional (default-value nil custom-default-p ))
   "Apply FUNCTION to all entries of lazy-array."
