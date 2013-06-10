@@ -384,15 +384,38 @@ together with (nthcdr LIST)."
      (setf ,place ,g!tail)
      ,g!head))
 
-(defun n-copies (n item &optional acc)
-  "Create a list containing N times the ITEM."
-  (if (<= n 0)
-      acc
-      (n-copies (- n 1) item (cons item acc))))
-
 (defun map-on-car (fn alist)
   "Call FN on every CAR of ALIST, preserving the CDR."
   (mapcar (lambda (x)
             (cons (funcall fn (car x))
                   (cdr x)))
           alist))
+
+;;; building "constant" lists
+(defun n-copies (n item &optional acc)
+  "Create a list containing N times the ITEM."
+  (if (<= n 0)
+      acc
+      (n-copies (- n 1) item (cons item acc))))
+
+(defun foreach (item list)
+  "Build a list with one `item' for every element of `list'."
+  (map 'list (ilambda (x) item) list))
+
+(defun foreach1 (first item list)
+  "As `foreach', but use `first' for the first element instead of
+`item'."
+  (list* first (foreach item (rest list))))
+
+(defun unbox1 (x)
+  "If `x' is a cons, take the `car', otherwise just return `x'. Like
+`unbox', but we stop after the first iteration."
+  (if (consp x)
+      (car x)
+      x))
+
+(defun unbox (x)
+  "Take the `car' until we get an atom."
+  (if (consp x)
+      (unbox (car x))
+      x))

@@ -71,7 +71,11 @@
            #:memoize/i
            #:mvbind
            #:dbind
-           #:lazy-arefs))
+           #:lazy-arefs
+           #:foreach
+           #:foreach1
+           #:unbox1
+           #:unbox))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
