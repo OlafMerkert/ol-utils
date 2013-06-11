@@ -2,8 +2,6 @@
 
 (export '(swallow ilambda ilambda+
           list->gensyms
-          memoize mlambda
-          defmemfun
           compose compose/red))
 
 (defmacro ilambda (args &body body)

@@ -195,14 +195,15 @@ list last)"
       (values nil (first list))))
 
 (defun length=0 (seq)
-  "Test whether sequence has no element."
+  "Test whether sequence `seq' has no element."
   (or (null seq)
       (zerop (length seq))))
 
-(defun length=1 (list)
-  "Test whether list has exactly one element."
-  (and (consp list)
-       (null (cdr list))))
+(defun length=1 (seq)
+  "Test whether sequence `seq' has exactly one element."
+  (or (and (consp seq)
+           (null (cdr seq)))
+      (= (length seq) 1)))
 
 (defun append1 (list obj)
   "Append obj to list."
