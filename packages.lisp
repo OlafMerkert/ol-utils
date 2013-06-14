@@ -78,7 +78,8 @@
            #:unbox
            #:^
            #:_
-           #:signcase))
+           #:signcase
+           #:defalias))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
