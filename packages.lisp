@@ -75,7 +75,10 @@
            #:foreach
            #:foreach1
            #:unbox1
-           #:unbox))
+           #:unbox
+           #:^
+           #:_
+           #:signcase))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

@@ -36,3 +36,13 @@
 (defalias ^ expt (base power))
 
 (defalias _ elt (seq index))
+
+(defmacro! signcase (o!number minus zero plus &optional (nonumber nil noerror-p))
+  "Given a real `number', check for sign and branch to the appropriate
+case. NIL is also considered as zero. If `nonumber' is unspecified,
+signal an error if we did not get NIl or a `real'."
+  `(cond ((and ,g!number (not (realp ,g!number)))
+          ,(if noerror-p nonumber `(error "Expected number in signcase, got ~A" ,g!number)))
+         ((or (not ,g!number) (zerop ,g!number)) ,zero)
+         ((plusp ,g!number) ,plus)
+         (t ,minus)))
