@@ -81,6 +81,7 @@ g!."
       `(defmacro/o! ,name ,args ,@body)
       `(defmacro/g! ,name ,args ,@body)))
 
+(ew
 (def-symbol-p &)
 
 (defun args->names (args)
@@ -89,7 +90,7 @@ g!."
             (cond ((&-symbol-p x) nil)
                   ((listp x) (list (car x)))
                   (t (list x))))
-          args))
+          args)))
 
 (defmacro! defalias (alias whatfor &optional args)
   "Create an alias for a function or macro."
