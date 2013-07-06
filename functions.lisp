@@ -64,4 +64,10 @@ parameters must start with \"x!\"."
              ,@function)
           (error "can't add arguments in clambda when function is a cons."))
       `(lambda ,(remove-if-not #'x!-symbol-p arguments )
-         (,function ,@arguments))))
+         (funcall ,(if (symbolp function)
+                       `(function ,function)
+                       function)
+                  ,@arguments))))
+
+
+
