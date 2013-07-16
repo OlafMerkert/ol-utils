@@ -401,7 +401,7 @@ together with (nthcdr LIST)."
 
 (defun foreach (item list)
   "Build a list with one `item' for every element of `list'."
-  (map 'list (ilambda (x) item) list))
+  (map 'list (ilambda+ item) list))
 
 (defun foreach1 (first item list)
   "As `foreach', but use `first' for the first element instead of
