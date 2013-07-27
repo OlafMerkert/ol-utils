@@ -79,7 +79,10 @@
            #:^
            #:_
            #:signcase
-           #:defalias))
+           #:defalias
+           #:length=n
+           #:lines-of-file
+           #:mapc-lines-of-file))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

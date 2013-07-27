@@ -205,6 +205,9 @@ list last)"
            (null (cdr seq)))
       (= (length seq) 1)))
 
+(defun length=n (n)
+  (lambda (seq) (= (length seq) n)))
+
 (defun append1 (list obj)
   "Append obj to list."
   (append list (list obj)))
