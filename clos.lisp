@@ -25,11 +25,12 @@ and is printed with the values of the slots put in."
     `(defmethod print-object ((,g!object ,class) ,g!stream)
        (print-unreadable-object (,g!object ,g!stream :type t)
          (with-slots ,(remove-if-not #'symbolp slots-flat) ,g!object
-           (format ,g!stream ,(format nil "~{~A~^ ~}"
-                                      (mapcar (alambda (x)
-                                                       (if (listp x)
-                                                           (format nil "[~{~A~^ ~}]"
-                                                                   (mapcar #'self x))
-                                                           "~A"))
-                                              slots))
+           (format ,g!stream
+                   ,(format nil "~{~A~^ ~}"
+                            (mapcar (alambda (x)
+                                        (if (listp x)
+                                            (format nil "[~{~A~^ ~}]"
+                                                    (mapcar #'self x))
+                                            "~A"))
+                                    slots))
                    ,@slots-flat))))))
