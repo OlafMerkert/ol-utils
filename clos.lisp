@@ -34,3 +34,6 @@ and is printed with the values of the slots put in."
                                             "~A"))
                                     slots))
                    ,@slots-flat))))))
+
+(defun class-name-of (object)
+  (class-name (class-of object)))

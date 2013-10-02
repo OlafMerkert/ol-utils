@@ -82,7 +82,8 @@
            #:defalias
            #:length=n
            #:lines-of-file
-           #:mapc-lines-of-file))
+           #:mapc-lines-of-file
+           #:class-name-of))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
