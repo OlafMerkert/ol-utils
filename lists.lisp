@@ -311,12 +311,23 @@ gethash)."
       (nreverse acc)))
 
 (defun splitn (list &optional (n 2))
-  "Split LIST into sequences of all n-th elements of LIST."
+  "Split `list' into sequences of all `n'-th elements."
   (let ((splits (make-array n :initial-element nil)))
     (iter (for l in list)
           (for i initially 0 then (mod (+ i 1) n))
           (push l (aref splits i)))
-    (values-list (map 'list #'nreverse splits))))
+    (map 'list #'nreverse splits)))
+
+(defun splitn/values (list &optional (n 2))
+  (values-list (splitn list n)))
+
+(defun partition (list &optional (n 2))
+  "Split `list' into sequences of `n' elements."
+  (labels ((rec (list acc)
+             (cond ((null list) (nreverse acc))
+                   ((null (nthcdr (- n 1) list)) (nreverse (cons list acc)))
+                   (t (rec (subseq list n) (cons (subseq list 0 n) acc))))))
+    (rec list nil)))
 
 (defun last1 (list)
   "Return the last element of LIST."
@@ -423,3 +434,4 @@ together with (nthcdr LIST)."
   (if (consp x)
       (unbox (car x))
       x))
+

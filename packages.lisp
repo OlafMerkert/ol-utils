@@ -83,7 +83,9 @@
            #:length=n
            #:lines-of-file
            #:mapc-lines-of-file
-           #:class-name-of))
+           #:class-name-of
+           #:partition
+           #:splitn/values))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
