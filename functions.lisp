@@ -33,10 +33,14 @@ first item is a keyword symbol use it as the base of the gensyms."
 (defun compose/red (&rest functions)
   "Compose the functions.  The leftmost function will be applied last.
 Currently only works with functions that take a single argument."
-    (lambda (x)
-      (reduce #'funcall functions
-              :initial-value x
-              :from-end t)))
+  (let ((functions (remove #'identity functions)))
+    (case (length functions)
+            (0 #'identity)
+            (1 (first functions))
+            (t (lambda (x)
+                 (reduce #'funcall functions
+                         :initial-value x
+                         :from-end t))))))
 
 (defmacro! compose (&rest functions)
   "Compose the functions.  The leftmost function will be applied
