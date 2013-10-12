@@ -85,7 +85,8 @@
            #:mapc-lines-of-file
            #:class-name-of
            #:partition
-           #:splitn/values))
+           #:splitn/values
+           #:pass-symbol))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

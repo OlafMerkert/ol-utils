@@ -113,3 +113,10 @@ format, but prepends 'DEBUG' and appends a line-break."
   (princ "DEBUG: ")
   (apply #'format t string args)
   (terpri))
+
+(defmacro! pass-symbol ((op o!arg))
+  "Only apply a univariate function `op', if the actual `arg' is not a
+symbol. For symbols, just pass them."
+  `(if (symbolp ,g!arg)
+       ,g!arg
+       (,op ,g!arg)))
