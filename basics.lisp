@@ -94,17 +94,7 @@ strings or whatever."
          (if pos (subseq name 0 pos)))))
 
 ;;
-(defmacro bind-multi (bindings &body body)
-  "Macro to define groups of similar functions or methods.
-Syntax: (bind-multi ((v1 b1 b2)
-                     (v2 b3 b4))
-           body)"
-  (let ((vars (mapcar #'first bindings))
-        (vals (transpose-list (mapcar #'rest bindings))))
-   `(progn
-      ,@(mapcan (lambda (vals)
-                  (sublis (mapcar #'cons vars vals) (copy-tree body)))
-                vals))))
+
 
 ;;
 (defun dbug (string &rest args)
@@ -114,9 +104,3 @@ format, but prepends 'DEBUG' and appends a line-break."
   (apply #'format t string args)
   (terpri))
 
-(defmacro! pass-symbol ((op o!arg))
-  "Only apply a univariate function `op', if the actual `arg' is not a
-symbol. For symbols, just pass them."
-  `(if (symbolp ,g!arg)
-       ,g!arg
-       (,op ,g!arg)))

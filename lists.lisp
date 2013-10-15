@@ -356,6 +356,19 @@ gethash)."
               (mapcar (lambda (l) (nth i l)) list))
             (range max-len))))
 
+;; todo move to a better place
+(defmacro bind-multi (bindings &body body)
+  "Macro to define groups of similar functions or methods.
+Syntax: (bind-multi ((v1 b1 b2)
+                     (v2 b3 b4))
+           body)"
+  (let ((vars (mapcar #'first bindings))
+        (vals (transpose-list (mapcar #'rest bindings))))
+   `(progn
+      ,@(mapcan (lambda (vals)
+                  (sublis (mapcar #'cons vars vals) (copy-tree body)))
+                vals))))
+
 ;; simple queue datatype, taken from ANSI Common Lisp by Paul Graham
 (defun make-queue ()
   "Create a simple queue.  Implemented as a cons (list . last), where
