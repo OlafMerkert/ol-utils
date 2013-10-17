@@ -93,10 +93,7 @@ strings or whatever."
                           :test #'char-equal)))
          (if pos (subseq name 0 pos)))))
 
-;;
 
-
-;;
 (defun dbug (string &rest args)
   "Output a debugging info to the standard output.  This mimics
 format, but prepends 'DEBUG' and appends a line-break."
@@ -104,3 +101,19 @@ format, but prepends 'DEBUG' and appends a line-break."
   (apply #'format t string args)
   (terpri))
 
+
+(defmacro bind-multi (bindings &body body)
+  "Macro to define groups of similar functions or methods.
+Syntax: (bind-multi ((v1 b1 b2)
+                     (v2 b3 b4))
+           body)"
+  (let ((vars (mapcar #'first bindings))
+        (vals1 (mapcar #'rest bindings)))
+    (labels ((produce (vals)
+               (unless (some #'null vals)
+                 (append
+                  (sublis (mapcar (lambda (var val) (cons var (first val))) vars vals)
+                          (copy-tree body))
+                  (produce (mapcar #'rest vals))))))
+     `(progn
+        ,@(produce vals1)))))

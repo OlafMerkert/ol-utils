@@ -52,17 +52,17 @@
 compared using EQUAL."
               "Make the given function memoizing on the first argument, which is
 expected to always be a non-negative integer." ))
- (defun memoize (function)
-   doc
-   (let ((memo (make-memo-container)))
-     (lambda (&rest args)
-       ;; special constants allow to get at the container, and also
-       ;; allow clearing everything.
-       (cond
-         ((eq (first args) +memo-clear+) (memo-clear memo))
-         ((eq (first args) +memo-container+) memo)
-         (t
-          (get-memo memo function args)))))))
+  (defun memoize (function)
+    doc
+    (let ((memo (make-memo-container)))
+      (lambda (&rest args)
+        ;; special constants allow to get at the container, and also
+        ;; allow clearing everything.
+        (cond
+          ((eq (first args) +memo-clear+) (memo-clear memo))
+          ((eq (first args) +memo-container+) memo)
+          (t
+           (get-memo memo function args)))))))
 
 ;;; the memoisation macros
 (bind-multi ((memolabels memolabels memolabels/i)
