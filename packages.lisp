@@ -86,7 +86,11 @@
            #:class-name-of
            #:partition
            #:splitn/values
-           #:pass-symbol))
+           #:pass-symbol
+           #:table-clean-if
+           #:sethash
+           #:multi-dim-dotimes+
+           #:fill-array/old))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

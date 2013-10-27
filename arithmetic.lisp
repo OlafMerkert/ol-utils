@@ -3,12 +3,7 @@
 (export '(sum prod
           cumulative-sums))
 
-;; TODO capture the abstraction
-(defmacro! sum ((var start &optional end (step 1)) expr)
-  (error "how about using iterate for summation?"))
-
-(defmacro! prod ((var start &optional end (step 1)) expr)
-  (error "how about using iterate for multiplication?"))
+;; TODO capture the abstraction for sum and prod
 
 (defun cumulative-sums (seq &optional (start 0))
   "Calculate the cumulative sums of seq."

@@ -28,3 +28,19 @@ and predicate apply directly on the keys (or entries)."
                    (collect e)
                    (collect k)))))
     (sort entries predicate :key key)))
+
+(defun table-clean-if (test hash-table)
+  "Remove all keys from `hash-table' where the value satisfies
+`test'"
+  (let (clean)
+    (maphash (lambda (k v) (if (funcall test v) (push k clean))) hash-table)
+    (dolist (c clean)
+      (remhash c hash-table))
+    (values hash-table (length clean))))
+
+(defun sethash (key hash-table value &optional test)
+  "Set `key' to `value' in `hash-table', unless `value' satisfies
+`test'. In that case, remove the key from the `hash-table'."
+  (if (and test (funcall test value))
+      (remhash key hash-table)
+      (setf (gethash key hash-table) value)))
