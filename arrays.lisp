@@ -15,37 +15,6 @@
   "Make a list from the 1-dim array."
   (coerce array 'list))
 
-(defun fill-array% (dim index fill-spec array fill-fn)
-  "Helper function to fill-array."
-  (cond ((null fill-spec)            ; all indizes have been specified
-         (let ((index (reverse index)))
-           ;; call fill-fn for the index and put its value in the array
-           (setf #1=(apply #'aref array index)
-                 (funcall fill-fn #1# index))))
-        ((eq :fill (car fill-spec)) ; :fill means fill along this dimension
-         (dotimes (i (array-dimension array dim))
-           (fill-array% (1+ dim) (cons i index)
-                        (cdr fill-spec) array fill-fn)))
-        ;; otherwise the index is already fixed
-        (t (fill-array% (1+ dim) (cons (car fill-spec) index)
-                        (cdr fill-spec) array fill-fn))))
-
-(defmacro! fill-array (fill-spec o!array expr)
-  "Fill the array in the parts described by fill-spec with values described by
-expr.  fill-spec consists of integers or the keyword :fill.
-
-An integer selects a single row/col in the matching dimension,
-whereas :fill selects all rows/cols in the matching dimension.
-
-The expr can use the anaphoric variables old and index to access the
-previous value of the field and the list of its indices."
-  `(progn
-     (fill-array% 0 nil (list ,@fill-spec) ,g!array
-               (lambda (old index)
-                 (declare (ignorable old index))
-                 ,expr))
-     ,g!array))
-
 (defmacro indices (names &body body)
   "Companion macro for fill-array, allowing to name the indices more
 conveniently."
@@ -87,3 +56,68 @@ macro can be useful with arrays taken from a prevalence store."
     (let ((,g!array (make-array (length ,g!place) :adjustable t :fill-pointer t)))
       (map-into ,g!array #'identity ,g!place)
       (setf ,o!place ,g!array))))
+
+(defun multi-dim-dotimes+ (index-function positions)
+  "a helper function for FILL-ARRAY."
+  ;; just reverse the positions once here, so we don't have to reverse
+  ;; the index-lists all the time.
+  (setf positions (reverse positions))
+  (labels ((index-range (position)
+             ;; normalise the range information
+             (if (listp position)
+                 (values (first position) (second position))
+                 (values 0 position)))
+           (rec (positions indices)
+             (if positions
+                 ;; more ranges to iterate over
+                 (multiple-value-bind (start end) (index-range (first positions))
+                   (dotimes+ (i start end)
+                       ((rest (rest positions)))
+                     (rec rest
+                          (cons i indices))))
+                 ;; all index information available
+                 (funcall index-function indices))))
+    (rec positions nil)))
+
+
+(defun fill-array (array fill-function &optional (positions nil positions?))
+  "fill the ARRAY with the FILL-FUNCTION in the places given by
+POSITIONS. POSITIONS is a list of index ranges, where an index range
+is either a tuple (start end) with inclusive start and exclusive end,
+or simply an integer end, equivalent to (0 end). FILL-FUNCTION will be
+called in the same way as aref--first argument is the array, the
+remaining are the indices. "
+  (unless positions?
+    (setf positions (array-dimensions array)))
+  ;; return the now filled array
+  (multi-dim-dotimes+
+   (lambda (indices)
+     (setf (apply #'aref        array indices)
+           (apply fill-function array indices)))
+   positions)
+  array)
+
+(defun fill-array/old% (fill-spec array fill-function)
+  (multi-dim-dotimes+ (lambda (indices)
+                        (setf #1=(apply #'aref array indices)
+                              (funcall fill-function #1# indices)))
+                      (mapcar (lambda (x d)
+                                (case x
+                                  (:fill (list 0 d))
+                                  (t (list x (+ x 1)))))
+                              fill-spec (array-dimensions array)))
+  array)
+
+(defmacro! fill-array/old (fill-spec o!array expr)
+  "Fill the array in the parts described by fill-spec with values described by
+expr.  fill-spec consists of integers or the keyword :fill.
+
+An integer selects a single row/col in the matching dimension,
+whereas :fill selects all rows/cols in the matching dimension.
+
+The expr can use the anaphoric variables old and index to access the
+previous value of the field and the list of its indices."
+  `(fill-array/old% (list ,@fill-spec) ,g!array
+                    (lambda (old index)
+                      (declare (ignorable old index))
+                      ,expr)))
