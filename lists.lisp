@@ -375,6 +375,10 @@ next object to be dequeued."
   "Get the next object from the queue (or just nil)."
   (pop (car q)))
 
+(defun peek (q)
+  "Peek at the next object in the queue."
+  (car q))
+
 (defun splice-in (item list)
   "Create a copy of LIST, but with ITEM inserted between consecutive
 elements."

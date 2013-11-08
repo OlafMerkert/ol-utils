@@ -93,7 +93,8 @@
            #:fill-array/old
            #:make-array/fill
            #:make-array/fill%
-           #:make-array/sparse))
+           #:make-array/sparse
+           #:peek))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
