@@ -139,3 +139,14 @@ previous value of the field and the list of its indices."
                     (lambda (old index)
                       (declare (ignorable old index))
                       ,expr)))
+
+(defun pad-vector-front (vector required-length &optional (initial-element 0))
+  "add `initial-element' to the front of `vector', until it has `required-length'."
+  (let ((n (length vector))
+        (new-vector (make-array required-length :initial-element initial-element)))
+    (when (> n required-length)
+      (error "vector is already too long, has length ~A when ~A is required." n required-length))
+    (iter (for i from (- required-length n))
+          (for el in-vector vector)
+          (setf (aref new-vector i) el))
+    new-vector))
