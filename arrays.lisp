@@ -97,6 +97,24 @@ remaining are the indices. "
    positions)
   array)
 
+(defun make-array/fill% (dimensions fill-function)
+  (aprog1 (make-array dimensions)
+    (fill-array it fill-function dimensions)))
+
+(defmacro make-array/fill (dimensions indices &body fill-expr)
+  `(make-array/fill% (list ,@(mklist dimensions))
+                     (ilambda (this ,@indices)
+                       ,@fill-expr)))
+
+
+(defmacro! make-array/sparse (dimensions default-value &body special-values)
+  `(let ((,g!array (make-array (list ,@(mklist dimensions)) :initial-element ,default-value)))
+     ,@(mapcar #`(setf (aref ,g!array ,@(mklist (first a1)))
+                       ,(second a1))
+               special-values)
+     ,g!array))
+
+
 (defun fill-array/old% (fill-spec array fill-function)
   (multi-dim-dotimes+ (lambda (indices)
                         (setf #1=(apply #'aref array indices)

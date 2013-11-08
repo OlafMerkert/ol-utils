@@ -90,7 +90,10 @@
            #:table-clean-if
            #:sethash
            #:multi-dim-dotimes+
-           #:fill-array/old))
+           #:fill-array/old
+           #:make-array/fill
+           #:make-array/fill%
+           #:make-array/sparse))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
