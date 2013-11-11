@@ -410,6 +410,12 @@ together with (nthcdr LIST)."
                   (cdr x)))
           alist))
 
+(defun map-reverse (fn lst &optional acc)
+  "Apply `fn' on `lst' and return in reverse order."
+  (if (consp lst)
+      (map-reverse fn (cdr lst) (cons (funcall fn (car lst)) acc))
+      acc))
+
 ;;; building "constant" lists
 (defun n-copies (n item &optional acc)
   "Create a list containing N times the ITEM."
