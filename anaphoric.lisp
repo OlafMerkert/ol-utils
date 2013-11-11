@@ -8,10 +8,18 @@
 ;;; Commonly used anaphoric macros
 
 (defmacro aif (test then &optional else)
-  "Anaphoric if.  The value of the test clause is bound to `it` in the
-then clause.  (and the else clause, but there it will always be nil.)"
+  "Anaphoric if. The value of the `test' clause is bound to `it` in
+the `then' clause. (and the `else' clause, but there it will always be
+nil.)"
   `(let ((it ,test))
      (if it ,then ,else)))
+
+(defmacro awhen (test &body body)
+  "Anaphoric when. The value of the `test' clause is bound to `it' in
+  the `body'."
+  `(let ((it ,test))
+     (when it
+       ,@body)))
 
 (defmacro! ncond (name &body clauses)
   "Named cond.  The value of the test clause is bound to NAME."

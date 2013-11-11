@@ -95,7 +95,8 @@
            #:make-array/fill%
            #:make-array/sparse
            #:peek
-           #:pad-vector-front))
+           #:pad-vector-front
+           #:awhen))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
