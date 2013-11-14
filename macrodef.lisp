@@ -94,7 +94,8 @@ g!."
 
 (defmacro! defalias (alias whatfor &optional args)
   "Create an alias for a function or macro."
-  `(defmacro ,alias ( &whole ,g!args ,@args)
+  (unless args (setf args `(&rest ,g!rest)))
+  `(defmacro ,alias (&whole ,g!args ,@args)
      (declare (ignore ,@(args->names args)))
      `(,',whatfor ,@(rest ,g!args))))
 
