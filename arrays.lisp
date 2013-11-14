@@ -114,6 +114,22 @@ remaining are the indices. "
                special-values)
      ,g!array))
 
+(defun map-array (function array &rest other-arrays)
+  "Map a `function' over all entries of `array', and `other-arrays'.
+Please note that the `other-arrays' must be at least as big as
+`array'."
+  (make-array/fill% (array-dimensions array)
+                    (ilambda (this &rest indices)
+                      (apply function #1=(apply #'aref array indices)
+                             (mapcar (lambda (array) #1#) other-arrays)))))
+
+(defun map-array1 (function array)
+  "Map a `function' over all entries of `array'."
+  (make-array/fill% (array-dimensions array)
+                    (ilambda (this &rest indices)
+                      (funcall function #1=(apply #'aref array indices)))))
+
+
 
 (defun fill-array/old% (fill-spec array fill-function)
   (multi-dim-dotimes+ (lambda (indices)

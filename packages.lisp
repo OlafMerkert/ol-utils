@@ -97,7 +97,9 @@
            #:peek
            #:pad-vector-front
            #:awhen
-           #:until-t))
+           #:until-t
+           #:map-array
+           #:map-array1))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
