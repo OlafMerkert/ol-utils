@@ -16,3 +16,11 @@ predicate comparing sequences."
   "Create a copy of SEQUENCE that has type RESULT-TYPE."
   (map result-type #'identity sequence))
 
+(defun sequence= (seq1 seq2 &key (start 0) end (test #'equal))
+  "Check that two sequences agree completely on a subsequence. Type of
+sequences is irrelevant, elements are compared using `test', by
+default `equal'."
+  (let ((seq1 (subseq seq1 start end))
+        (seq2 (subseq seq2 start end)))
+   (and (= (length seq1) (length seq2))
+        (every (lambda (s1 s2) (funcall test s1 s2)) seq1 seq2))))

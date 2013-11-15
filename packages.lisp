@@ -99,7 +99,8 @@
            #:awhen
            #:until-t
            #:map-array
-           #:map-array1))
+           #:map-array1
+           #:sequence=))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
