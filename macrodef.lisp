@@ -102,3 +102,13 @@ g!."
 (defalias mvbind multiple-value-bind (vars value-form &body body))
 
 (defalias dbind destructuring-bind (lambda-list expression &body body))
+
+(defmacro! defmacros! (name args &body body)
+  "Produces a macro that \"applies\" defmacro! on each of its
+arguments (first calls `mklist' on every argument)."
+  `(defmacro! ,name (&rest ,g!configs)
+     `(progn
+        ,@(mapcar (lambda (,g!args)
+                    (dbind ,args (mklist ,g!args)
+                      ,@body))
+                  ,g!configs))))

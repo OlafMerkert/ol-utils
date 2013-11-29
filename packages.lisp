@@ -100,7 +100,8 @@
            #:until-t
            #:map-array
            #:map-array1
-           #:sequence=))
+           #:sequence=
+           #:defmacros!))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
