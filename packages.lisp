@@ -101,7 +101,8 @@
            #:map-array
            #:map-array1
            #:sequence=
-           #:defmacros!))
+           #:defmacros!
+           #:progress-event))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

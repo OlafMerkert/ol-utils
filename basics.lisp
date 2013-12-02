@@ -93,13 +93,20 @@ strings or whatever."
                           :test #'char-equal)))
          (if pos (subseq name 0 pos)))))
 
-
+;; some debugging and profiling helpers
 (defun dbug (string &rest args)
   "Output a debugging info to the standard output.  This mimics
 format, but prepends 'DEBUG' and appends a line-break."
   (princ "DEBUG: ")
   (apply #'format t string args)
   (terpri))
+
+(defparameter *progress-stream* *standard-output*)
+(declaim (inline progress-event))
+(defun progress-event ()
+  "Monitor loop iteration progress by printing dots to
+`*progress-stream*', which defaults to `*standard-output*'."
+  (princ "." *progress-stream*))
 
 
 (defmacro bind-multi (bindings &body body)
