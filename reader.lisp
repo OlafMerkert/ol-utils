@@ -37,3 +37,15 @@ called a1, a2, ...j"
         (get-macro-character #\`) stream nil))))
 
 (set-dispatch-macro-character #\# #\` #'|#`-reader|)
+
+;; declare variables as fixnum using #i (or integer with bounded bitlength)
+(set-dispatch-macro-character
+ #\# #\i
+ (lambda (stream sub-char numarg)
+   (declare (ignore sub-char))
+   (let ((variable-names (read stream t nil t)))
+     `(declare (,(if numarg
+                     (let ((bound (^ 2 numarg)))
+                      `(integer ,(- bound) ,bound))
+                     'fixnum)
+                ,@(mklist variable-names))))))
