@@ -94,7 +94,7 @@ strings or whatever."
          (if pos (subseq name 0 pos)))))
 
 ;; some debugging and profiling helpers
-(defparameter *debug-stream* *standard-output*)
+(defparameter *debug-stream* t)
 (defun dbug (string &rest args)
   "Output a debugging info to the standard output.  This mimics
 format, but prepends 'DEBUG' and appends a line-break."
@@ -102,7 +102,7 @@ format, but prepends 'DEBUG' and appends a line-break."
   (apply #'format *debug-stream* string args)
   (terpri *debug-stream*))
 
-(defparameter *progress-stream* *standard-output*)
+(defparameter *progress-stream* t)
 (declaim (inline progress-event))
 (defun progress-event ()
   "Monitor loop iteration progress by printing dots to
