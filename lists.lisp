@@ -296,6 +296,19 @@ gethash)."
        (values (cdr it) t)
        (values default nil)))
 
+(defun assoc1* (&rest arguments)
+  "Descend a tree of alists, given as the last argument.
+Essentially (assoc1* x y z alist) = (assoc1 x (assoc1 y (assoc1 z
+alist))), but more basic."
+  (mvbind (keys alist) (split-last arguments)
+    (labels ((rec (keys alist)
+               (acond ((null keys)
+                       (values alist t))
+                      ((assoc (car keys) alist)
+                       (rec (cdr keys) (cdr it)))
+                      (t (values nil nil)))))
+      (rec keys alist))))
+
 (defun assoc1a (key alist &optional default &rest params)
   "Like assoc1, but take the CADR instead of the CDR of the result.  (Useful for list structures)."
   (aif (apply #'assoc key alist params)
