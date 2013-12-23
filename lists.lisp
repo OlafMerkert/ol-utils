@@ -315,6 +315,26 @@ alist))), but more basic."
        (values (cadr it) t)
        (values default nil)))
 
+(defmacro! alist-bind (bindings o!alist &body body)
+  "Selectively bind entries of an `alist' to variables. `bindings' is
+a list of tuples (var key), where at the first occurence of `key' (the
+`car') in `alist' we bind the corresponding value (the `cdr') to
+`var'."
+  (let ((vars (mapcar #'first bindings))
+        (keys (mapcar #'second bindings))
+        (var-set (list->gensyms :var-set bindings)))
+    `(let ,vars
+       ;; make sure that eveyr variable will be set only the first
+       ;; time we see the corresponding key.
+       (let ,var-set
+         (dolist (,g!item ,g!alist)
+           (case (car ,g!item)
+             ,@(mapcar #3`((,a2) (unless ,a3
+                                   (setf ,a1 (cdr ,g!item)
+                                         ,a3 t)))
+                       vars keys var-set))))
+       ,@body)))
+
 (defun filter (fn lst &optional acc)
   "filter lst through fn, dropping any nil values."
   (if lst
