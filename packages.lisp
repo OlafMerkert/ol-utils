@@ -102,7 +102,11 @@
            #:map-array1
            #:sequence=
            #:defmacros!
-           #:progress-event))
+           #:progress-event
+           #:mappend-pipe
+           #:defpar
+           #:assoc1*
+           #:alist-bind))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

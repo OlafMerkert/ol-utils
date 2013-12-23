@@ -103,6 +103,9 @@ g!."
 
 (defalias dbind destructuring-bind (lambda-list expression &body body))
 
+;; duality of syntax with defvar, and brevity
+(defalias defpar defparameter (var val &optional doc))
+
 (defmacro! defmacros! (name args &body body)
   "Produces a macro that \"applies\" defmacro! on each of its
 arguments (first calls `mklist' on every argument)."
