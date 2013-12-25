@@ -45,7 +45,7 @@ called a1, a2, ...j"
    (declare (ignore sub-char))
    (let ((variable-names (read stream t nil t)))
      `(declare (,(if numarg
-                     (let ((bound (^ 2 numarg)))
+                     (let ((bound (expt 2 numarg)))
                       `(integer ,(- bound) ,bound))
                      'fixnum)
                 ,@(mklist variable-names))))))
