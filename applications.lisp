@@ -8,7 +8,7 @@
 FUNCTION in PACKAGE. ID ought to be a keyword symbol, on the other
 arguments we call mkstr, so use symbols or strings as you prefer."
   `(progn
-     (pushnew ,id application-registry)
+     (pushnew ,id *application-registry*)
      (defmethod start-app ((id (eql ,id)) &rest args)
       (ql:quickload ,(mkstr system))
       (apply
@@ -16,15 +16,15 @@ arguments we call mkstr, so use symbols or strings as you prefer."
                ,(mkstr package))
        args))))
 
-(defvar application-registry (list :list))
+(defvar *application-registry* (list :list))
 
 (defmethod start-app ((id (eql :list)) &rest args)
   (declare (ignore args))
-  application-registry)
+  *application-registry*)
 
-(define-application :tvs tv-series-status tvs-clim tv-series-display)
+(define-application :tvs tv-series-status-clim tvs-clim tv-series-display)
 
-(define-application :tvs-web tv-series-status tvs-web start-server-and-open)
+(define-application :tvs-web tv-series-status-web tvs-web start-server-and-open)
 
 (define-application :mi math-interactor math-interactor math-interactor)
 
