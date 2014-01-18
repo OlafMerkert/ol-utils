@@ -8,7 +8,8 @@
    :define-parse-date
    :year
    :month
-   :day))
+   :day
+   :print-date-and-time))
 
 (in-package :ol-date-utils)
 
@@ -28,6 +29,15 @@
           (timestamp-day   date)
           (timestamp-month date)
           (timestamp-year  date)))
+
+(defun print-date-and-time (date &optional stream)
+  (format stream
+          "~2,'0D.~2,'0D.~4,'0D ~2,'0D:~2,'0D"
+          (timestamp-day    date)
+          (timestamp-month  date)
+          (timestamp-year   date)
+          (timestamp-hour   date)
+          (timestamp-minute date)))
 
 (defun ->integer (obj)
   (cond ((stringp obj) (parse-integer obj))
