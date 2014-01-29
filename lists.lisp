@@ -320,8 +320,8 @@ alist))), but more basic."
 a list of tuples (var key), where at the first occurence of `key' (the
 `car') in `alist' we bind the corresponding value (the `cdr') to
 `var'."
-  (let ((vars (mapcar #'first bindings))
-        (keys (mapcar #'second bindings))
+  (let ((vars (mapcar #'unbox1 bindings))
+        (keys (mapcar (lambda (x) (if (consp x) (second x) (keyw x))) bindings))
         (var-set (list->gensyms :var-set bindings)))
     `(let ,vars
        ;; make sure that eveyr variable will be set only the first
@@ -478,3 +478,8 @@ together with (nthcdr LIST)."
       (unbox (car x))
       x))
 
+(defun odd-elements (sequence)
+  "Select the first element, the third, ... of a `sequence' (i.e. all
+element with odd index (starting from 1)."
+  (let ((odd t))
+    (remove-if (ilambda (x) (notf odd)) sequence)))

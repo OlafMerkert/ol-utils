@@ -106,7 +106,9 @@
            #:mappend-pipe
            #:defpar
            #:assoc1*
-           #:alist-bind))
+           #:alist-bind
+           #:tree-find-if
+           #:odd-elements))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

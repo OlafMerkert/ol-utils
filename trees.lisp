@@ -27,3 +27,10 @@
                   (funcall fn leaf)
                   leaf))
             tree))
+
+(defun tree-find-if (pred tree)
+  (cond ((funcall pred tree) tree)
+        ((consp tree)
+         (or (tree-find-if pred (car tree))
+             (tree-find-if pred (cdr tree))))
+        (t nil)))
