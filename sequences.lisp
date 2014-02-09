@@ -1,8 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(begins-with
-          copy))
-
 (defun begins-with (seq start &key (test 'equal))
   "Test whether the first part of SEQ is START. TEST must be a
 predicate comparing sequences."
@@ -23,4 +20,4 @@ default `equal'."
   (let ((seq1 (subseq seq1 start end))
         (seq2 (subseq seq2 start end)))
    (and (= (length seq1) (length seq2))
-        (every (lambda (s1 s2) (funcall test s1 s2)) seq1 seq2))))
+        (every test seq1 seq2))))
