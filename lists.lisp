@@ -300,7 +300,7 @@ gethash)."
   "Descend a tree of alists, given as the last argument.
 Essentially (assoc1* x y z alist) = (assoc1 x (assoc1 y (assoc1 z
 alist))), but more basic."
-  (mvbind (keys alist) (split-last arguments)
+  (dbind (alist . keys) (reverse arguments)
     (labels ((rec (keys alist)
                (acond ((null keys)
                        (values alist t))
