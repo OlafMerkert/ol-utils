@@ -21,3 +21,8 @@ default `equal'."
         (seq2 (subseq seq2 start end)))
    (and (= (length seq1) (length seq2))
         (every test seq1 seq2))))
+
+(defun remove* (list sequence &key test)
+  (if (null list)
+      sequence
+      (remove* (cdr list) (remove (car list) sequence :test test) :test test)))

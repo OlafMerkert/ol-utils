@@ -108,7 +108,8 @@
            #:assoc1*
            #:alist-bind
            #:tree-find-if
-           #:odd-elements))
+           #:odd-elements
+           #:remove*))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
