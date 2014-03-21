@@ -53,7 +53,7 @@ conveniently."
 macro can be useful with arrays taken from a prevalence store."
   `(unless (and (arrayp ,g!place)
                 (adjustable-array-p ,g!place))
-    (let ((,g!array (make-array (length ,g!place) :adjustable t :fill-pointer t)))
+    (let ((,g!array (make-array (length ,g!place) :adjustable t)))
       (map-into ,g!array #'identity ,g!place)
       (setf ,o!place ,g!array))))
 
