@@ -30,3 +30,8 @@
                  (push (funcall function line) mapped-lines)))
      file)
     (nreverse mapped-lines)))
+
+(defun read-file-1 (pathname)
+  "Read the first sexp in the given file."
+  (with-open-file (stream pathname :if-does-not-exist :error)
+    (read stream)))

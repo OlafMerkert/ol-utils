@@ -88,6 +88,7 @@ with the anaphoric variable SELF."
   (defmacro! memodefun (name args &body body)
     "Define a global memoising function."
     `(let ((,g!memofun (memoize (lambda ,args ,@body))))
+    ;; todo use args for debugging purposes
        (defun ,name (&rest ,g!args)
          (apply ,g!memofun ,g!args)))))
 

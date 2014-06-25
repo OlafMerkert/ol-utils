@@ -109,7 +109,8 @@
            #:alist-bind
            #:tree-find-if
            #:odd-elements
-           #:remove*))
+           #:remove*
+           #:read-file-1))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
