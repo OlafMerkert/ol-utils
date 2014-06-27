@@ -22,5 +22,6 @@
                (:file "arithmetic")
                (:file "tables")
                (:file "clos")
+               (:file "files")
                (:file "applications")
                (:file "portability")))
