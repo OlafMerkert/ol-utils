@@ -110,7 +110,8 @@
            #:tree-find-if
            #:odd-elements
            #:remove*
-           #:read-file-1))
+           #:read-file-1
+           #:length>0))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

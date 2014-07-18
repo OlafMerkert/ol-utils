@@ -206,7 +206,13 @@ list last)"
       (= (length seq) 1)))
 
 (defun length=n (n)
+  "Produce a function that tests if a sequence has precisely length
+`n'."
   (lambda (seq) (= (length seq) n)))
+
+(defun length>0 (seq)
+  "Test whether sequence `seq' is non-empty."
+  (> (length seq) 0))
 
 (defun append1 (list obj)
   "Append obj to list."
