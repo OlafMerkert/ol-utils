@@ -35,3 +35,16 @@
   "Read the first sexp in the given file."
   (with-open-file (stream pathname :if-does-not-exist :error)
     (read stream)))
+
+(defpar size-prefixes '("" K M G T))
+
+(defun format-file-size (size)
+  "Given the file size in bytes, produce something human readable like
+  8 MB."
+  ;; use that (^ 2 10) = 1024
+  (let ((level (floor (- (integer-length size) 1) 10)))
+    (if (<= level 0)
+        (format nil "~D B" size)
+        (format nil "~,2F ~AB"
+                (/ size (^ 1024 level))
+                (elt size-prefixes level)))))

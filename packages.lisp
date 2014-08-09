@@ -111,7 +111,8 @@
            #:odd-elements
            #:remove*
            #:read-file-1
-           #:length>0))
+           #:length>0
+           #:format-file-size))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
