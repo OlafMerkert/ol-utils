@@ -112,7 +112,8 @@
            #:remove*
            #:read-file-1
            #:length>0
-           #:format-file-size))
+           #:format-file-size
+           #:plist-bind))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

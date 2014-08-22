@@ -341,6 +341,12 @@ a list of tuples (var key), where at the first occurence of `key' (the
                        vars keys var-set))))
        ,@body)))
 
+(defmacro! plist-bind (bindings o!plist &body body)
+  "Bind keyword keys of `plist' to the corresponding variables.
+`bindings' should just e a list of symbols."
+  `(let ,(mapcar #`(,a1 (getf ,g!plist ,(keyw a1))) bindings)
+     ,@body))
+
 (defun filter (fn lst &optional acc)
   "filter lst through fn, dropping any nil values."
   (if lst
