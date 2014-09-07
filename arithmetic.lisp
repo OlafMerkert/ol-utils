@@ -13,16 +13,18 @@
   seq)
 
 (defun square-multiply (base exponent multiplication
-                        &optional (squaring (lambda (x) (funcall multiplication x x))))
+                        &optional squaring)
   "Calculate BASE^EXPONENT as it arises from the binary operation
   MULTIPLICATION."
+  (when squaring
+    (warn "SQUARE-MULTIPLY: does not use `squaring' parameter anymore."))
   (unless (and (integerp exponent)
                (> exponent 0))
     (error
      "Square-Multiply requires a positive integer exponent, but got ~A."
      exponent))
   (iter (for i from (1- (integer-length exponent)) downto 0)
-        (for result first base then (funcall squaring result ))
+        (for result first base then (funcall multiplication result result))
         (if-first-time nil
                        (if (logbitp i exponent)
                            (setf result (funcall multiplication result base))))
