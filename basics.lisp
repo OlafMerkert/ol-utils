@@ -25,11 +25,23 @@
                    (nreverse (cons source acc))))))
     (if source (rec source nil) nil)))
 
+;; SBCL workaround (from [[http://christophe.rhodes.io/notes/blog/posts/2014/naive_vs_proper_code-walking/]])
+#+sbcl
+(eval-when (:compile-toplevel :execute)
+  (defun comma-implementation ()
+    (typecase '`,x
+      (symbol 'old)
+      ((cons symbol (cons structure-object)) 'new)))
+  (if (eql (comma-implementation) 'new)
+      (pushnew 'cons-walkable-backquote *features*)
+      (setq *features* (remove 'cons-walkable-backquote *features*))))
 
 (defun flatten (x)
   "Flatten the tree structure of x to a list."
   (labels ((rec (x acc)
              (cond ((null x) acc)
+                   #+ol-utils::cons-walkable-backquote
+                   ((typep x 'sb-impl::comma) (rec (sb-impl::comma-expr x) acc))
                    ((atom x) (cons x acc))
                    (t (rec (car x) (rec (cdr x) acc))))))
     (rec x nil)))
@@ -39,9 +51,19 @@
   (labels ((rec (x acc level)
              (cond ((null x) acc)
                    ((atom x) (cons x acc))
+                   #+ol-utils::cons-walkable-backquote
+                   ((typep x 'sb-impl::comma) (rec (sb-impl::comma-expr x) acc level))
                    ((<= n level) (cons (car x) (rec (cdr x) acc level)))
                    (t (rec (car x) (rec (cdr x) acc level) (+ level 1))))))
     (rec x nil 0)))
+
+(defun collect-symbols-if (test form &optional unique)
+  "Produce a list of all symbols satisfying `test' in the lisp `form'.
+Also ensure no duplicates are in the result if `unique' is t."
+  (let ((symbols (remove-if-not test (flatten form))))
+    (if unique
+        (remove-duplicates symbols)
+        symbols)))
 
 ;; Symbols & Strings
 (defun mkstr (&rest args)

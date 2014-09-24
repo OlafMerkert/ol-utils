@@ -45,9 +45,7 @@ symbols starting with start."
 ;;; Macros with gensyms and once-only evaluation
 (defmacro with-gensyms! (&body body)
   "Bind all symbols starting with g! to gensyms."
-  (let ((syms (remove-duplicates
-               (remove-if-not #'g!-symbol-p
-                              (flatten body)))))
+  (let ((syms (collect-symbols-if #'g!-symbol-p body t)))
     `(let ,(mapcar
             (lambda (s)
               `(,s (gensym ,(subseq (symbol-name s) 2))))
@@ -65,7 +63,7 @@ automatically evaluate to gensyms."
 automatically evaluate to gensyms.  Furthermore, args starting with o!
 will be evaluated once and bound to the according symbol starting with
 g!."
-  (let* ((os (remove-if-not #'o!-symbol-p (flatten args)))
+  (let* ((os (collect-symbols-if #'o!-symbol-p args))
          (gs (mapcar #'o!-symbol-to-g!-symbol os)))
     `(defmacro ,name ,args
        (with-gensyms!
@@ -77,7 +75,7 @@ g!."
 automatically evaluate to gensyms.  Furthermore, args starting with o!
 will be evaluated once and bound to the according symbol starting with
 g!."
-  (if (member-if #'o!-symbol-p (flatten args))
+  (if (collect-symbols-if #'o!-symbol-p args)
       `(defmacro/o! ,name ,args ,@body)
       `(defmacro/g! ,name ,args ,@body)))
 

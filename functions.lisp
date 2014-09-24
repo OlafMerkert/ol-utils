@@ -64,7 +64,7 @@ parameters must start with \"x!\"."
   (if (consp function) 
       (if (null arguments)
           `(lambda ,(remove-duplicates
-                  (remove-if-not #'x!-symbol-p (flatten function)))
+                  (collect-symbols-if #'x!-symbol-p function))
              ,function)
           (error "can't add arguments in clambda when function is a cons."))
       `(lambda ,(remove-if-not #'x!-symbol-p arguments )
