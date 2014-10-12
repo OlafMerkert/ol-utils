@@ -495,3 +495,8 @@ together with (nthcdr LIST)."
 element with odd index (starting from 1)."
   (let ((odd t))
     (remove-if (ilambda (x) (notf odd)) sequence)))
+
+(declaim (inline zip))
+(defun zip (&rest lists)
+  "Create tuples (lists) of the matching elements of `lists'"
+    (apply #'mapcar #'list lists))

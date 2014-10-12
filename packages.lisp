@@ -113,7 +113,8 @@
            #:read-file-1
            #:length>0
            #:format-file-size
-           #:plist-bind))
+           #:plist-bind
+           #:zip))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
