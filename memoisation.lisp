@@ -49,7 +49,7 @@
              (memo-clear memo-clear/hash-table memo-clear/array)
              (doc
               "Make the given function memoizing on all parameters, which are
-compared using EQUAL."
+compared using `equal'."
               "Make the given function memoizing on the first argument, which is
 expected to always be a non-negative integer." ))
   (defun memoize (function)
@@ -104,4 +104,22 @@ with the anaphoric variable SELF."
 (defsetf mfuncall (function &rest args) (value)
   `(set-memo ,function ,value ,@args))
 
+(defun memoize/ignore-default (function &optional (default-values (list nil)))
+  "Make the given function memoizing on all parameters, which are
+  compared using `equal'. However, do not memoize values which are
+  equal to some member of `default-values', by default `nil'."
+  (let ((memo (make-memo-container/hash-table)))
+    (lambda (&rest args)
+      ;; special constants allow to get at the container, and also
+      ;; allow clearing everything.
+      (cond
+        ((eq (first args) +memo-clear+) (memo-clear/hash-table memo))
+        ((eq (first args) +memo-container+) memo)
+        (t
+         (mvbind (result found-p) #1=(gethash args memo)
+                 (if found-p
+                     result
+                     (aprog1 (apply function args)
+                       (unless (member it default-values :test 'equal)
+                         (setf #1# it))))))))))
 
