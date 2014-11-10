@@ -33,7 +33,9 @@ and is printed with the values of the slots put in."
                                                     (mapcar #'self x))
                                             "~A"))
                                     slots))
-                   ,@slots-flat))))))
+                   ,@slots-flat)))
+       ;; finally return object
+       ,g!object)))
 
 (defun class-name-of (object)
   (class-name (class-of object)))
