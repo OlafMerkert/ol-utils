@@ -115,7 +115,8 @@
            #:format-file-size
            #:plist-bind
            #:zip
-           #:memoize/ignore-default))
+           #:memoize/ignore-default
+           #:filter*))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

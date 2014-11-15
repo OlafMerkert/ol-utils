@@ -347,6 +347,13 @@ a list of tuples (var key), where at the first occurence of `key' (the
   `(let ,(mapcar #`(,a1 (getf ,g!plist ,(keyw a1))) bindings)
      ,@body))
 
+(defun all-p (list)
+  "Test whether all elements of `list' are non-nil."
+  (if (null list)
+      t
+      (if (car list)
+          (all-p (cdr list))
+          nil)))
 (defun filter (fn lst &optional acc)
   "filter lst through fn, dropping any nil values."
   (if lst
@@ -354,6 +361,16 @@ a list of tuples (var key), where at the first occurence of `key' (the
            (filter fn (cdr lst) (cons it acc))
            (filter fn (cdr lst) acc))
       (nreverse acc)))
+
+(defun filter* (fn list &rest lists)
+  "filter `list' through `fn', dropping any nil values."
+  (labels ((rec (lists acc)
+             (if (member nil lists)
+                 (nreverse acc)
+                 (aif (apply fn (mapcar #'car lists))
+                      (rec (mapcar #'cdr lists) (cons it acc))
+                      (rec (mapcar #'cdr lists) acc)))))
+    (rec (cons list lists) nil)))
 
 (defun splitn (list &optional (n 2))
   "Split `list' into sequences of all `n'-th elements."
