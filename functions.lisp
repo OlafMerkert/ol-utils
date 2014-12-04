@@ -61,7 +61,7 @@ Currently only works with functions that take a single argument."
   "Create a function from a named function where parameters are fixed.
 ATM, only positional parameters are supported, and non-fixed
 parameters must start with \"x!\"."
-  (if (consp function) 
+  (if (consp function)
       (if (null arguments)
           `(lambda ,(remove-duplicates
                   (collect-symbols-if #'x!-symbol-p function))
@@ -72,6 +72,3 @@ parameters must start with \"x!\"."
                        `(function ,function)
                        function)
                   ,@arguments))))
-
-
-
