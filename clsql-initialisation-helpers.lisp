@@ -46,6 +46,12 @@ mentioned in `cdr' has the appropriate (single) column index."
           tables-and-indices)
     (nreverse created)))
 
+(defun connect-sqlite3-db (path)
+  (let ((db (connect (list path) :database-type :sqlite3)))
+    (execute-command "PRAGMA synchronous=OFF" :database db)
+    (setf *default-caching* nil)
+    db))
+
 (defmacro define-sqlite3-database (name path &key sequences tables)
   (let ((db-name (symb '* name '-db*)))
     `(progn
@@ -56,8 +62,6 @@ mentioned in `cdr' has the appropriate (single) column index."
                  (ensure-tables-with-indices ,tables)))
 
        (defun ,(symb 'connect- name) (&optional (path ,path))
-         (setf ,db-name (connect (list path)
-                                 :database-type :sqlite3))
-         (execute-command "PRAGMA synchronous=OFF" :database ,db-name)
-         (setf *default-caching* nil)
-         (cons ',db-name (,(symb 'setup- name)))))))
+         (unless ,db-name
+           (setf ,db-name (connect-sqlite3-db path))
+           (cons ',db-name (,(symb 'setup- name))))))))
