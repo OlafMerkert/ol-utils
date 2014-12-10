@@ -95,9 +95,9 @@ strings or whatever."
 
 (defmacro defsymconstant (name &optional documentation)
   "Define a constant with a symbol as value."
-  `(defconstant ,name ',(symb 'ol-sym-constant- name)
-     ,@(if documentation (list documentation))))
-;; TODO figure out what to do about collisions
+  `(unless (constantp ',name)
+     (defconstant ,name ',(gensym (mkstr name '-constant))
+       ,@(if documentation (list documentation)))))
 
 ;; Abbreviate eval-when
 (defmacro ew (&body body)
@@ -111,8 +111,7 @@ strings or whatever."
   (and (consp s-exp)
        (symbolp (car s-exp))
        (let* ((name (symbol-name (car s-exp)))
-              (pos (search "lambda" name 
-                          :test #'char-equal)))
+              (pos (search "lambda" name :test #'char-equal)))
          (if pos (subseq name 0 pos)))))
 
 ;; some debugging and profiling helpers
