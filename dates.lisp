@@ -9,7 +9,8 @@
    :year
    :month
    :day
-   :print-date-and-time))
+   :print-date-and-time
+   :print-date/reverse))
 
 (in-package :ol-date-utils)
 
@@ -29,6 +30,13 @@
           (timestamp-day   date)
           (timestamp-month date)
           (timestamp-year  date)))
+
+(defun print-date/reverse (date &optional stream)
+  (format stream
+          "~4,'0D-~2,'0D-~2,'0D"
+          (timestamp-year  date)
+          (timestamp-month date)
+          (timestamp-day   date)))
 
 (defun print-date-and-time (date &optional stream)
   (format stream
