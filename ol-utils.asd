@@ -5,6 +5,7 @@
                (:file "basics")
                (:file "reader")
                (:file "macrodef")
+               (:file "binding")
                (:file "conditionals")
                (:file "anaphoric")
                (:file "setf")

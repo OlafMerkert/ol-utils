@@ -116,7 +116,8 @@
            #:plist-bind
            #:zip
            #:memoize/ignore-default
-           #:filter*))
+           #:filter*
+           #:le1))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

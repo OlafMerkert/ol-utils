@@ -97,10 +97,6 @@ g!."
      (declare (ignore ,@(args->names args)))
      `(,',whatfor ,@(rest ,g!args))))
 
-(defalias mvbind multiple-value-bind (vars value-form &body body))
-
-(defalias dbind destructuring-bind (lambda-list expression &body body))
-
 ;; duality of syntax with defvar, and brevity
 (defalias defpar defparameter (var val &optional doc))
 
