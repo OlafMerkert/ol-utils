@@ -120,7 +120,8 @@
            #:le1
            #:mvprog1
            #:appendf
-           #:random-elt))
+           #:random-elt
+           #:nprog1))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

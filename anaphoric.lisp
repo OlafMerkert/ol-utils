@@ -49,8 +49,15 @@ with `it`."
             (aand ,@(rest  forms)))))
 
 (defmacro aprog1 (form &body body)
-  "as PROG1, but FORM is bound to IT in BODY."
+  "As `prog1', but `form' is also bound to `it' in `body'."
   `(let ((it ,form))
      ,@body
      it))
+
+(defmacro nprog1 ((var form) &body body)
+  "As `prog1', but `form' is also bound to the given `var' in `body'."
+  `(let ((,var ,form))
+     ,@body
+     ,var))
+;; todo see also `alet'
 
