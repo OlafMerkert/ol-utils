@@ -517,3 +517,9 @@ element with odd index (starting from 1)."
 (defun zip (&rest lists)
   "Create tuples (lists) of the matching elements of `lists'"
     (apply #'mapcar #'list lists))
+
+(defun random-elt (sequence)
+  "Select a random element from `sequence' with uniform distribution."
+  (if (length=1 sequence)
+      (elt sequence 0)
+      (elt sequence (random (length sequence)))))

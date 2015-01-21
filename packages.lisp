@@ -117,7 +117,10 @@
            #:zip
            #:memoize/ignore-default
            #:filter*
-           #:le1))
+           #:le1
+           #:mvprog1
+           #:appendf
+           #:random-elt))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
