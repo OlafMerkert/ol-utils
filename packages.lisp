@@ -121,7 +121,11 @@
            #:mvprog1
            #:appendf
            #:random-elt
-           #:nprog1))
+           #:nprog1
+           #:map-vector-2
+           #:trim1-if
+           #:trim1-if-not
+           #:trim1))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

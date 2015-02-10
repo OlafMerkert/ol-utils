@@ -54,7 +54,3 @@ end) of `sequence'.")
   :include t
   :documentation "Remove everything from `sequence' up to and including the first
 occurrence of `elt'. Think `zap-to-char' of Emacs.")
-
-
-
-
