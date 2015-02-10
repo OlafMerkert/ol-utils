@@ -166,3 +166,35 @@ previous value of the field and the list of its indices."
           (for el in-vector vector)
           (setf (aref new-vector i) el))
     new-vector))
+
+(defun map-vector-2 (vector-a vector-b function-2
+                     &optional (function-a 'identity) (function-b function-a))
+  "For the vectors of different length, produce a new vector with
+  length the maximal length, for indices where both vectors have
+  entries, use `function-2' to combine them. If the vectors have
+  different length, map the remaining entries (of one vector) through
+  the according function. Note we cannot guarantee in which order the
+  functions are applied on the entries."
+  (let (length
+        result-vector
+        (l-a (length vector-a))
+        (l-b (length vector-b)))
+    (cond ((= l-a l-b)
+           (setf length l-a
+                 result-vector (make-array l-a)))
+          ((< l-a l-b)
+           (setf length l-a
+                 result-vector (make-array l-b))
+           (iter (for i from l-a below l-b)
+                 (setf (svref result-vector i)
+                       (funcall function-b (svref vector-b i)))))
+          ((> l-a l-b)
+           (setf length l-b
+                 result-vector (make-array l-a))
+           (iter (for i from l-b below l-a)
+                 (setf (svref result-vector i)
+                       (funcall function-a (svref vector-a i))))))
+    (iter (for i from 0 below length)
+          (setf (svref result-vector i)
+                (funcall function-2 (svref vector-a i) (svref vector-b i))))
+    result-vector))
