@@ -23,6 +23,38 @@ default `equal'."
         (every test seq1 seq2))))
 
 (defun remove* (list sequence &key test)
+  "Remove all elements of `list' from `sequence'."
   (if (null list)
       sequence
       (remove* (cdr list) (remove (car list) sequence :test test) :test test)))
+
+(defmacro! define-trimmer (name args trim-position &key include documentation)
+  "Define a trim function, which cuts of the start (or end) of `sequence'
+up to (or including) the computed `trim-position'. This macro is
+anaphoric, you should put `sequence' among the `args'."
+  `(defun ,name (,@args &key from-end)
+     (let ((,g!pos (,@trim-position :from-end from-end)))
+       (cond ((and from-end ,g!pos)
+              (subseq sequence 0 ,(if include g!pos `(+ 1 ,g!pos))))
+             (,g!pos (subseq sequence ,(if include `(+ 1 ,g!pos) g!pos)))
+             (t sequence)))))
+
+(define-trimmer trim1-if (test sequence)
+  (position-if-not test sequence)
+  :documentation "Remove all entries satisfying `test' from the start (respectively
+end) of `sequence'.")
+
+(define-trimmer trim1-if-not (test sequence)
+  (position-if test sequence)
+  :documentation "Remove all entries not satisfying `test' from the start (respectively
+end) of `sequence'.")
+
+(define-trimmer trim1 (elt sequence)
+  (position elt sequence)
+  :include t
+  :documentation "Remove everything from `sequence' up to and including the first
+occurrence of `elt'. Think `zap-to-char' of Emacs.")
+
+
+
+
