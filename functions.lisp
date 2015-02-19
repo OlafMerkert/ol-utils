@@ -43,8 +43,8 @@ Currently only works with functions that take a single argument."
                          :from-end t))))))
 
 (defmacro! compose (&rest functions)
-  "Compose the functions.  The leftmost function will be applied
-  last."
+  "Compose the `functions' given as objects. The leftmost function
+  will be applied last."
   (labels ((generate-funcalls (functions value call)
              (if functions
                  (generate-funcalls (rest functions)
@@ -54,6 +54,18 @@ Currently only works with functions that take a single argument."
                  value)))
   `(lambda (&rest ,g!x)
      ,(generate-funcalls (reverse functions) g!x 'apply))))
+
+(defmacro! compose/names (&rest functions)
+  "Compose the `functions' given as names. The leftmost function will
+  be applied last. Currently, all `functions' must accept a single
+  argument."
+  (labels ((generate-funcalls (functions value)
+             (if functions
+                 (generate-funcalls (rest functions)
+                                    `(,(first functions) ,value))
+                 value)))
+    `(lambda (,g!x)
+       ,(generate-funcalls (reverse functions) g!x))))
 
 (def-symbol-p x!)
 

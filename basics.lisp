@@ -24,6 +24,7 @@
                    (rec rest (cons (subseq source 0 n) acc))
                    (nreverse (cons source acc))))))
     (if source (rec source nil) nil)))
+;; TODO rename this to `partition'
 
 ;; SBCL workaround (from [[http://christophe.rhodes.io/notes/blog/posts/2014/naive_vs_proper_code-walking/]])
 #+sbcl
