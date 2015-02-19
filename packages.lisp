@@ -125,7 +125,11 @@
            #:map-vector-2
            #:trim1-if
            #:trim1-if-not
-           #:trim1))
+           #:trim1
+           #:let1
+           #:table-values
+           #:table-keys
+           #:table->alist))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
