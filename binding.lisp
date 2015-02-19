@@ -11,5 +11,7 @@
 binding. Example `(le1 (var value) ...)'."
   `(let (,bind) ,@body))
 
+(defalias let1 le1 (bind &body body))
+
 ;;; modify macros
 (define-modify-macro appendf (list) append)
