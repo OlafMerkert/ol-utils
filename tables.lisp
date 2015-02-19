@@ -44,3 +44,18 @@ and predicate apply directly on the keys (or entries)."
   (if (and test (funcall test value))
       (remhash key hash-table)
       (setf (gethash key hash-table) value)))
+
+(defun table-keys (hash-table)
+  "Return a list of all keys in `hash-table'."
+  (nprog1 list
+    (maphash (ilambda (k v) (push k list)) hash-table)))
+
+(defun table-values (hash-table)
+  "Return a list of all values in `hash-table'."
+  (nprog1 list
+    (maphash (ilambda (k v) (push v list)) hash-table)))
+
+(defun table->alist (hash-table)
+  "Convert `hash-table' into an alist."
+  (nprog1 list
+    (maphash (ilambda (k v) (push (cons k v) list)) hash-table)))
