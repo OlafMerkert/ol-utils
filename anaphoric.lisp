@@ -54,10 +54,11 @@ with `it`."
      ,@body
      it))
 
-(defmacro nprog1 ((var form) &body body)
-  "As `prog1', but `form' is also bound to the given `var' in `body'."
-  `(let ((,var ,form))
+(defmacro nprog1 (bind &body body)
+  "Use `bind' = (`var' `form'). As `prog1', but `form' is also bound
+to the given `var' in `body'."
+  `(let (,bind)
      ,@body
-     ,var))
+     ,(unbox1 bind)))
 ;; todo see also `alet'
 
