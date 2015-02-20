@@ -1,5 +1,8 @@
 (in-package :ol-utils)
 
+;; faster loading with quicklisp
+#+quicklisp(defalias ql ql:quickload)
+
 (defgeneric start-app (id &rest args)
   (:documentation "Start a registered (and installed) cl application."))
 

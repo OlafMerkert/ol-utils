@@ -130,7 +130,8 @@
            #:table-values
            #:table-keys
            #:table->alist
-           #:compose/names))
+           #:compose/names
+           #:ql))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
