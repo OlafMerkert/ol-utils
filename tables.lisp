@@ -59,3 +59,11 @@ and predicate apply directly on the keys (or entries)."
   "Convert `hash-table' into an alist."
   (nprog1 list
     (maphash (ilambda (k v) (push (cons k v) list)) hash-table)))
+
+(defun maphash-keys (function hash-table)
+  "Map `function' just over the keys of `hash-table'."
+  (maphash (lambda (k v) (declare (ignore v)) (funcall function k)) hash-table))
+
+(defun maphash-values (function hash-table)
+  "Map `function' just over the values of `hash-table'."
+  (maphash (lambda (k v) (declare (ignore k)) (funcall function v)) hash-table))

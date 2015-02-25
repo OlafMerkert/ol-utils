@@ -131,7 +131,9 @@
            #:table-keys
            #:table->alist
            #:compose/names
-           #:ql))
+           #:ql
+           #:maphash-keys
+           #:maphash-values))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
