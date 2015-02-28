@@ -99,6 +99,14 @@ g!."
 
 ;; duality of syntax with defvar, and brevity
 (defalias defpar defparameter (var val &optional doc))
+(defmacro! defpar (var val &rest doc-or-others)
+  "An alias for `defparameter', which also allows simultaneous
+definition as in `setf'."
+  (if (< (length doc-or-others) 2)
+      `(defparameter ,var ,val ,@doc-or-others)
+      `(progn
+         (defparameter ,var ,val)
+         ,@(mapcar #`(defparameter ,@a1) (partition doc-or-others 2)))))
 
 (defmacro! defmacros! (name args &body body)
   "Produces a macro that \"applies\" defmacro! on each of its
