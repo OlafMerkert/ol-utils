@@ -171,6 +171,10 @@ argument, `:reverse` which will reverse the order of the lists."
       (nreverse acc)
       (droplast (cdr list) (cons (car list) acc))))
 
+(defun take (n seq)
+  "At most the first `n' elements of `seq'."
+  (if (<= (length seq) n) seq
+      (subseq seq 0 n)))
 
 (defun split (sep list)
   "Split the list at every occurence of sep.  The result will be a

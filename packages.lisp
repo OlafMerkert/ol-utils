@@ -134,7 +134,8 @@
            #:ql
            #:maphash-keys
            #:maphash-values
-           #:string-join))
+           #:string-join
+           #:take))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
