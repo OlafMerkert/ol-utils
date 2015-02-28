@@ -15,16 +15,19 @@
           dbug))
 
 ;; Lists
-(defun group (source n)
-  "Partition the list source into a list of lists of length n."
-  (if (zerop n) (error "zero length"))
-  (labels ((rec (source acc)
-             (let ((rest (nthcdr n source)))
+(defun partition (list &optional (n 2))
+  "Partition `list' into sequences of `n' elements."
+  (check-type n integer)
+  (if (<= n 0) (error "Can only partition into lists of positive length."))
+  (labels ((rec (list acc)
+             (let ((rest (nthcdr n list)))
                (if (consp rest)
-                   (rec rest (cons (subseq source 0 n) acc))
-                   (nreverse (cons source acc))))))
-    (if source (rec source nil) nil)))
-;; TODO rename this to `partition'
+                   (rec rest (cons (subseq list 0 n) acc))
+                   (nreverse (cons list acc))))
+             ))
+    (if list (rec list nil))))
+
+(defalias group partition (source n))
 
 ;; SBCL workaround (from [[http://christophe.rhodes.io/notes/blog/posts/2014/naive_vs_proper_code-walking/]])
 #+sbcl

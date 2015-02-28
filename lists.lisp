@@ -383,14 +383,6 @@ a list of tuples (var key), where at the first occurence of `key' (the
 (defun splitn/values (list &optional (n 2))
   (values-list (splitn list n)))
 
-(defun partition (list &optional (n 2))
-  "Split `list' into sequences of `n' elements."
-  (labels ((rec (list acc)
-             (cond ((null list) (nreverse acc))
-                   ((null (nthcdr (- n 1) list)) (nreverse (cons list acc)))
-                   (t (rec (subseq list n) (cons (subseq list 0 n) acc))))))
-    (rec list nil)))
-
 (defun last1 (list)
   "Return the last element of LIST."
   (first (last list)))
