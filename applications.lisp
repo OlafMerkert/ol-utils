@@ -1,7 +1,12 @@
 (in-package :ol-utils)
 
 ;; faster loading with quicklisp
-#+quicklisp(defalias ql ql:quickload)
+#+quicklisp (defalias ql ql:quickload)
+#+quicklisp (defun ql+ (system)
+              (check-type system symbol)
+              (unless (asdf:component-loaded-p system)
+                (ql:quickload system)))
+
 
 (defgeneric start-app (id &rest args)
   (:documentation "Start a registered (and installed) cl application."))
