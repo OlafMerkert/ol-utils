@@ -135,7 +135,10 @@
            #:maphash-keys
            #:maphash-values
            #:string-join
-           #:take))
+           #:take
+           #:labels1
+           #:macrolet1
+           #:ql+))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
