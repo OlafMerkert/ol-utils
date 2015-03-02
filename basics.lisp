@@ -27,8 +27,6 @@
              ))
     (if list (rec list nil))))
 
-(defalias group partition (source n))
-
 ;; SBCL workaround (from [[http://christophe.rhodes.io/notes/blog/posts/2014/naive_vs_proper_code-walking/]])
 #+sbcl
 (eval-when (:compile-toplevel :execute)
