@@ -1,5 +1,4 @@
 (in-package #:ol-utils)
-(olr)
 
 (defun begins-with (seq start &key (test 'equal))
   "Test whether the first part of SEQ is START. TEST must be a

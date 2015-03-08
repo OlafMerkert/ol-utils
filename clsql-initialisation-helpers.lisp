@@ -7,7 +7,6 @@
    #:define-sqlite3-database))
 
 (in-package :clsql-helpers)
-(olr)
 
 ;;; some general purpose setup utilities for databases
 (defun ensure-sequences (sequences)

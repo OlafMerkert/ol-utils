@@ -1,5 +1,4 @@
 (in-package #:ol-utils)
-(olr)
 
 (defmacro ilambda (args &body body)
   "lambda form where all arguments are declared ignorable."

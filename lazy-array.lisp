@@ -1,5 +1,4 @@
 (in-package :ol-utils)
-(olr)
 
 ;;; lazy array datastructure, developed for power series computations
 

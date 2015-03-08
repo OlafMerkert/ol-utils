@@ -1,5 +1,4 @@
 (in-package :ol-utils)
-(olr)
 
 ;;; some functions to treat the usual array structure transparently as
 ;;; infinite. Unlike with lazy-array, there is no auto-filling, the

@@ -1,5 +1,4 @@
 (in-package #:ol-utils)
-(olr)
 
 ;;; Commonly used anaphoric macros
 

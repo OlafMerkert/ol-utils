@@ -1,5 +1,4 @@
 (in-package #:ol-utils)
-(olr)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun test-symbol-start (start len s)

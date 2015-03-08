@@ -1,5 +1,4 @@
 (in-package :ol-utils)
-(olr)
 
 (defalias mvbind multiple-value-bind (vars value-form &body body))
 

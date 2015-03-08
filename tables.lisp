@@ -1,5 +1,4 @@
 (in-package #:ol-utils)
-(olr)
 
 (defun gethash/c% (key table default-generator)
   "Get a value from a hash TABLE.  If it is not yet present, funcall

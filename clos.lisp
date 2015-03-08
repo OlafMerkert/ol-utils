@@ -1,5 +1,4 @@
 (in-package #:ol-utils)
-(olr)
 
 (defmacro defclass/f (name direct-superclasses
                       direct-slots &rest options)

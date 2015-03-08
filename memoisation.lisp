@@ -1,5 +1,4 @@
 (in-package :ol-utils)
-(olr)
 
 ;;; Memoization
 (defparameter initial-memoisation-size 1000)

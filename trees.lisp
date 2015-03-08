@@ -1,5 +1,4 @@
 (in-package #:ol-utils)
-(olr)
 
 (defun matching-tree-nodes (pred tree)
   "Give a list of all nodes (and leafs) that satisfy the predicate."

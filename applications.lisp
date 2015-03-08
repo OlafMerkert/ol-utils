@@ -1,5 +1,4 @@
 (in-package :ol-utils)
-(olr)
 
 ;; faster loading with quicklisp
 #+quicklisp (defalias ql ql:quickload)

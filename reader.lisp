@@ -1,6 +1,5 @@
 (in-package #:ol-utils)
 
-
 ;;;; some very useful reader macros
 
 ;; insert speed/safety declarations with #f
@@ -43,14 +42,10 @@ called a1, a2, ...j"
                     'fixnum)
                 ,@(mklist variable-names)))))
 
-(named-readtables:defreadtable ol-readtable
-  (:merge :standard)
-  (:dispatch-macro-char #\# #\d #'declare-debug-build)
-  (:dispatch-macro-char #\# #\f #'declare-fast-compile)
-  (:dispatch-macro-char #\# #\` #'|#`-reader|)
-  (:dispatch-macro-char #\# #\i #'declare-as-fixnum))
+(defun install-ol-read-macros (readtable)
+  (set-dispatch-macro-character #\# #\d #'declare-debug-build readtable)
+  (set-dispatch-macro-character #\# #\f #'declare-fast-compile readtable)
+  (set-dispatch-macro-character #\# #\` #'|#`-reader| readtable)
+  (set-dispatch-macro-character #\# #\i #'declare-as-fixnum readtable))
 
-(defmacro olr ()
-  `(in-readtable ol-readtable))
-
-
+(install-ol-read-macros *readtable*)

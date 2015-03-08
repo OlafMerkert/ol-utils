@@ -1,5 +1,4 @@
 (in-package #:ol-utils)
-(olr)
 
 (defun string-replace-all (pattern string replacement)
   "Replace all exact occurrences of pattern in string with

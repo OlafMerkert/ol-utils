@@ -1,5 +1,4 @@
 (in-package #:ol-utils)
-(olr)
 
 (defun mklist (x)
   "Ensure that x is a list."

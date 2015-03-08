@@ -1,5 +1,4 @@
 (in-package :ol-utils)
-(olr)
 
 (defun mapc-lines-of-file% (function file)
   "mapc `function' over the lines of `file'."
