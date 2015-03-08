@@ -176,7 +176,7 @@
            #:with-arefs
            #:map-tree
            #:map-tree-if
-           #:in-package+))
+           #:in-readtable))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

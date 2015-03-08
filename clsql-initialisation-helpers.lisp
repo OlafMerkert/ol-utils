@@ -4,9 +4,17 @@
    #:ensure-sequences
    #:ensure-tables
    #:ensure-tables-with-indices
-   #:define-sqlite3-database))
+   #:define-sqlite3-database
+   #:clsql-readtable))
 
 (in-package :clsql-helpers)
+
+;;; setting up a named-readtable for clsql
+(named-readtables:defreadtable clsql-readtable
+  (:merge ol-readtable)
+  (:macro-char clsql-sys::*sql-macro-open-char* #'clsql-sys::sql-reader-open)
+  (:macro-char clsql-sys::*sql-macro-close-char* (get-macro-character #\))))
+
 
 ;;; some general purpose setup utilities for databases
 (defun ensure-sequences (sequences)
