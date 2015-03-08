@@ -13,6 +13,7 @@
    :print-date/reverse))
 
 (in-package :ol-date-utils)
+(olr)
 
 (defun encode-date (day month &optional year)
   (encode-timestamp 0 0 0 0 day month

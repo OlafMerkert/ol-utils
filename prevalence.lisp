@@ -7,6 +7,7 @@
    :prevalence-id))
 
 (in-package :prevalence-utils)
+(olr)
 
 (defmacro define-prevalence-storage
     (directory &optional (storage 'storage))

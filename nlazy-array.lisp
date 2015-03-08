@@ -1,4 +1,5 @@
 (in-package :ol-utils)
+(olr)
 
 ;; provide some of the convenience macros and functions for
 ;; lazy-array, but now for ordinary (1-Ð) arrays, enabling duality of

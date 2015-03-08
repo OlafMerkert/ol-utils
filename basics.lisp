@@ -40,9 +40,9 @@
   "Flatten the tree structure of x by one."
   (labels ((rec (x acc level)
              (cond ((null x) acc)
-                   ((atom x) (cons x acc))
                    #+ol-utils::cons-walkable-backquote
                    ((typep x 'sb-impl::comma) (rec (sb-impl::comma-expr x) acc level))
+                   ((atom x) (cons x acc))
                    ((<= n level) (cons (car x) (rec (cdr x) acc level)))
                    (t (rec (car x) (rec (cdr x) acc level) (+ level 1))))))
     (rec x nil 0)))

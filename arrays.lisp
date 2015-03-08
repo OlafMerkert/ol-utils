@@ -1,4 +1,5 @@
 (in-package #:ol-utils)
+(olr)
 
 (defun list->array (list)
   "Make an array from list."

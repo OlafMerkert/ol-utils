@@ -1,4 +1,5 @@
 (in-package :ol-utils)
+(olr)
 
 (defun run-program (path-to-bin &rest args)
   #+sbcl (sb-ext:run-program path-to-bin args)

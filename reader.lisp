@@ -1,27 +1,24 @@
 (in-package #:ol-utils)
 
+
 ;;;; some very useful reader macros
 
 ;; insert speed/safety declarations with #f
-(set-dispatch-macro-character
- #\# #\f
- (lambda (stream sub-char numarg)
-   (declare (ignore stream sub-char))
-   (setq numarg (or numarg 3))
-   (unless (<= numarg 3)
-     (error "Bad value for #f: ~A" numarg))
-   `(declare (optimize (speed ,numarg)
-                       (safety ,(- 3 numarg))))))
+(defun declare-fast-compile (stream sub-char numarg)
+  (declare (ignore stream sub-char))
+  (setq numarg (or numarg 3))
+  (unless (<= numarg 3)
+    (error "Bad value for #f: ~A" numarg))
+  `(declare (optimize (speed ,numarg)
+                      (safety ,(- 3 numarg)))))
 
 ;; insert debug declaration with #d
-(set-dispatch-macro-character
- #\# #\d
- (lambda (stream sub-char numarg)
-   (declare (ignore stream sub-char))
-   (setq numarg (or numarg 2))
-   (unless (<= numarg 3)
-     (error "Bad value for #d: ~A" numarg))
-   `(declare (optimize (debug ,numarg)))))
+(defun declare-debug-build (stream sub-char numarg)
+  (declare (ignore stream sub-char))
+  (setq numarg (or numarg 2))
+  (unless (<= numarg 3)
+    (error "Bad value for #d: ~A" numarg))
+  `(declare (optimize (debug ,numarg))))
 
 ;; use #` syntax to build lambda's that build lists
 (defun |#`-reader| (stream sub-char numarg)
@@ -36,16 +33,24 @@ called a1, a2, ...j"
       ,(funcall
         (get-macro-character #\`) stream nil))))
 
-(set-dispatch-macro-character #\# #\` #'|#`-reader|)
-
 ;; declare variables as fixnum using #i (or integer with bounded bitlength)
-(set-dispatch-macro-character
- #\# #\i
- (lambda (stream sub-char numarg)
-   (declare (ignore sub-char))
-   (let ((variable-names (read stream t nil t)))
-     `(declare (,(if numarg
-                     (let ((bound (expt 2 numarg)))
+(defun declare-as-fixnum (stream sub-char numarg)
+  (declare (ignore sub-char))
+  (let ((variable-names (read stream t nil t)))
+    `(declare (,(if numarg
+                    (let ((bound (expt 2 numarg)))
                       `(integer ,(- bound) ,bound))
-                     'fixnum)
-                ,@(mklist variable-names))))))
+                    'fixnum)
+                ,@(mklist variable-names)))))
+
+(named-readtables:defreadtable ol-readtable
+  (:merge :standard)
+  (:dispatch-macro-char #\# #\d #'declare-debug-build)
+  (:dispatch-macro-char #\# #\f #'declare-fast-compile)
+  (:dispatch-macro-char #\# #\` #'|#`-reader|)
+  (:dispatch-macro-char #\# #\i #'declare-as-fixnum))
+
+(defmacro olr ()
+  `(in-readtable ol-readtable))
+
+

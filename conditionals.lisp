@@ -1,4 +1,5 @@
 (in-package #:ol-utils)
+(olr)
 
 (defmacro while% (condition &body body)
   "Execute BODY repeatedly as long as CONDITION holds."

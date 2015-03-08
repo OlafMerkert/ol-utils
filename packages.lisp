@@ -4,6 +4,7 @@
   (:nicknames #:ol)
   (:use #:cl
         #:iterate)
+  (:import-from :named-readtables #:in-readtable)
   (:export #:keyw #:gethash/c #:mappend #:ilambda
            #:length=1 #:compose #:defmacro!
            #:symb #:lambda-form-p #:defconstant/g
@@ -174,7 +175,8 @@
            #:nla-finite-test
            #:with-arefs
            #:map-tree
-           #:map-tree-if))
+           #:map-tree-if
+           #:in-package+))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

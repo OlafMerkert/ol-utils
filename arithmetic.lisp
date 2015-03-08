@@ -1,4 +1,5 @@
 (in-package #:ol-utils)
+(olr)
 
 
 ;; TODO capture the abstraction for sum and prod

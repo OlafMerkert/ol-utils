@@ -1,6 +1,6 @@
 (defsystem ol-utils
   :serial t
-  :depends-on (iterate)
+  :depends-on (iterate named-readtables)
   :components ((:file "packages")
                (:file "basics")
                (:file "reader")

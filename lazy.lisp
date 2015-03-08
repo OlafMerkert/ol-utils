@@ -1,4 +1,5 @@
 (in-package :ol-utils)
+(olr)
 
 ;;; Lazy evaluation
 ;;; from AIP
