@@ -49,3 +49,6 @@ called a1, a2, ...j"
   (set-dispatch-macro-character #\# #\i #'declare-as-fixnum readtable))
 
 (install-ol-read-macros *readtable*)
+
+(named-readtables:defreadtable ol-readtable
+  (:merge :current))
