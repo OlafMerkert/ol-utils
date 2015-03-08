@@ -1,12 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(test-symbol-start
-          def-symbol-p
-          def-symbol-transform
-          with-gensyms!
-          defmacro/g!
-          defmacro!))
-
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun test-symbol-start (start len s)
     "Check whether the symbol s matches the string start in the first

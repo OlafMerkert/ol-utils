@@ -1,11 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(list->array array->list
-          fill-array% fill-array old indices index
-          shuffle
-          arange amrange
-          alast))
-
 (defun list->array (list)
   "Make an array from list."
   (coerce list 'vector))

@@ -1,8 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(defclass/f
-          create-standard-print-object))
-
 (defmacro defclass/f (name direct-superclasses
                       direct-slots &rest options)
   "Enhancement of defclass: For slots where only a symbol is given for

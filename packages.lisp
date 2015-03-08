@@ -20,8 +20,7 @@
            #:udm #:defclass/f #:mkatom #:drop
            #:old #:nconc1 #:splitn #:collect
            #:string-replace-all #:starts-with
-           #:with-gensyms! #:mkstr #:prod
-           #:sum #:cumulative-sums
+           #:with-gensyms! #:mkstr #:cumulative-sums
            #:matching-tree-nodes #:mklist #:split
            #:def-symbol-transform #:defmemfun
            #:minimise #:filter #:ew #:amrange
@@ -138,7 +137,44 @@
            #:take
            #:labels1
            #:macrolet1
-           #:ql+))
+           #:ql+
+           #:ol-readtable
+           #:delay
+           #:force
+           #:make-pipe
+           #:empty-pipe
+           #:head
+           #:tail
+           #:pipe-elt
+           #:filter-pipe
+           #:map-pipe
+           #:append-pipes
+           #:mappend-pipes
+           #:aprog1
+           #:dbug
+           #:create-standard-print-object
+           #:lazy-aref
+           #:make-lazy-array
+           #:this
+           #:lazy-array-array
+           #:lazy-array-function
+           #:lazy-array-finite
+           #:lazy-array-default-value
+           #:la
+           #:lazy-array-take
+           #:lazy-array-drop
+           #:la-finite-test
+           #:with-lazy-arefs
+           #:la%
+           #:make-nlazy-array
+           #:nla
+           #:nla%
+           #:array-take
+           #:array-drop
+           #:nla-finite-test
+           #:with-arefs
+           #:map-tree
+           #:map-tree-if))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

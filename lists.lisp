@@ -1,28 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(mklist
-          mkatom
-          range mrange lrange
-          alternate
-          reverse/n
-          drop
-          split
-          length=1
-          append1 nconc1
-          group-by
-          collect
-          compress
-          mappend
-          assoc1
-          assoc1a
-          filter
-          splitn
-          last1
-          starts-with
-          maximise minimise
-          transpose-list
-          make-queue enqueue dequeue))
-
 (defun mklist (x)
   "Ensure that x is a list."
   (if (listp x) x (list x)))

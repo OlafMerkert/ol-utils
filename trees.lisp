@@ -1,9 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(matching-tree-nodes
-          map-tree
-          map-tree-if))
-
 (defun matching-tree-nodes (pred tree)
   "Give a list of all nodes (and leafs) that satisfy the predicate."
   (if (consp tree)

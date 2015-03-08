@@ -1,18 +1,5 @@
 (in-package :ol-utils)
 
-(export '(delay
-          force
-          make-pipe
-          empty-pipe
-          head
-          tail
-          pipe-elt
-          filter-pipe
-          map-pipe
-          append-pipes
-          mappend-pipes
-          combine-all-pipes))
-
 ;;; Lazy evaluation
 ;;; from AIP
 

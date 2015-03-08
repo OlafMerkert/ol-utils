@@ -1,9 +1,5 @@
 (in-package #:ol-utils)
 
-#|(export '(while
-          until
-          neither))|#
-
 (defmacro while% (condition &body body)
   "Execute BODY repeatedly as long as CONDITION holds."
   `(do ()

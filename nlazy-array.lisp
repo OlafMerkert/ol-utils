@@ -1,13 +1,5 @@
 (in-package :ol-utils)
 
-(export '(make-nlazy-array
-          nla
-          nla%
-          array-take
-          array-drop
-          nla-finite-test
-          with-arefs))
-
 ;; provide some of the convenience macros and functions for
 ;; lazy-array, but now for ordinary (1-Ð) arrays, enabling duality of
 ;; code.

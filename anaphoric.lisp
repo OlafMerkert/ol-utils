@@ -1,10 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(aif acond it
-          alambda self
-          aand
-          aprog1))
-
 ;;; Commonly used anaphoric macros
 
 (defmacro aif (test then &optional else)

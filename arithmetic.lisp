@@ -1,7 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(sum prod
-          cumulative-sums))
 
 ;; TODO capture the abstraction for sum and prod
 

@@ -1,9 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(swallow ilambda ilambda+
-          list->gensyms
-          compose compose/red))
-
 (defmacro ilambda (args &body body)
   "lambda form where all arguments are declared ignorable."
   `(lambda ,args

@@ -2,18 +2,6 @@
 
 ;;;; very basic Functions that are needed for macro writing etc
 
-(export '(group
-          flatten
-          flatten1
-          mkstr
-          symb keyw
-          defconstant/g
-          defsymconstant
-          ew
-          lambda-form-p
-          bind-multi
-          dbug))
-
 ;; Lists
 (defun partition (list &optional (n 2))
   "Partition `list' into sequences of `n' elements."

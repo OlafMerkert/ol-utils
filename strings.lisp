@@ -1,7 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(string-replace-all))
-
 (defun string-replace-all (pattern string replacement)
   "Replace all exact occurrences of pattern in string with
 replacement."

@@ -1,8 +1,5 @@
 (in-package #:ol-utils)
 
-(export '(gethash/c
-          sort-hash-table))
-
 (defun gethash/c% (key table default-generator)
   "Get a value from a hash TABLE.  If it is not yet present, funcall
 DEFAULT-GENERATOR and set the value to the result.  Furthermore,
