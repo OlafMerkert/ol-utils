@@ -19,12 +19,10 @@ default and return the new value."
 (defun sort-hash-table (hash-table predicate &key (key #'identity) entries)
   "Give a sorted list of the keys (or entries) of hash-table. The key
 and predicate apply directly on the keys (or entries)."
-  (let ((entries
-         (iter (for (k e) in-hashtable hash-table )
-               (if entries
-                   (collect e)
-                   (collect k)))))
-    (sort entries predicate :key key)))
+  (sort (if entries
+            (table-values hash-table)
+            (table-keys hash-table))
+        predicate :key key))
 
 (defun table-clean-if (test hash-table)
   "Remove all keys from `hash-table' where the value satisfies
