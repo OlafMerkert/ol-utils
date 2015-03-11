@@ -74,4 +74,10 @@ mentioned in `cdr' has the appropriate (single) column index."
        (defun ,(symb 'connect- name) (&optional (path ,path))
          (unless ,db-name
            (setf ,db-name (connect-sqlite3-db path))
-           (cons ',db-name (,(symb 'setup- name))))))))
+           (cons ',db-name (,(symb 'setup- name)))))
+
+       (defun ,(symb 'disconnect- name) ()
+         (when ,db-name
+           (disconnect :database ,db-name)
+           (setf ,db-name nil)
+           t)))))
