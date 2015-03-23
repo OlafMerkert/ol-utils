@@ -91,7 +91,7 @@ g!."
      `(,',whatfor ,@(rest ,g!args))))
 
 ;; duality of syntax with defvar, and brevity
-(defalias defpar defparameter (var val &optional doc))
+;; (defalias defpar defparameter (var val &optional doc))
 (defmacro! defpar (var val &rest doc-or-others)
   "An alias for `defparameter', which also allows simultaneous
 definition as in `setf'."

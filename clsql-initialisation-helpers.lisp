@@ -15,6 +15,7 @@
   (:macro-char clsql-sys::*sql-macro-open-char* #'clsql-sys::sql-reader-open)
   (:macro-char clsql-sys::*sql-macro-close-char* (get-macro-character #\))))
 
+;; (install-ol-read-macros (named-readtables:find-readtable 'clsql-readtable))
 
 ;;; some general purpose setup utilities for databases
 (defun ensure-sequences (sequences)
