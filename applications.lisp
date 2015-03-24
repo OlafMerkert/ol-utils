@@ -41,3 +41,5 @@ arguments we call mkstr, so use symbols or strings as you prefer."
 (define-application :imdbg download-helpers download-imdb-gallery download-gallery-interactive)
 
 (define-application :sa simple-accounting simple-accounting-interface simple-account)
+
+(define-application :bm bibtex-manager bibtex-manager/clim-ui manager-ui)
