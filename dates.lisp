@@ -13,7 +13,9 @@
    :print-date-and-time
    :print-date/reverse
    :parse-date/us
-   :encode-timestamp))
+   :encode-timestamp
+   :parse-month
+   :print-month))
 
 (in-package :ol-date-utils)
 
@@ -91,3 +93,25 @@ difference as REF-FROM and REF-TO."
     (mapcar (lambda (x)
               (timestamp+ x diff :sec))
             other-dates)))
+
+(defun parse-month (month-string)
+  "Encode a string YYYY-MM to a timestamp"
+  (mvbind (match registers)
+      (ppcre:scan-to-strings '(:sequence :start-anchor
+                               (:register (:greedy-repetition 2 4 :digit-class))
+                               "-"
+                               (:register (:greedy-repetition 1 2 :digit-class))
+                               :end-anchor)
+                             month-string)
+    (if match
+        (encode-date 1 (parse-integer (elt registers 1))
+                     (le1 (y (parse-integer (elt registers 0)))
+                       (cond ((< y 30) (+ 2000 y))
+                             ((< y 100) (+ 1900 y))
+                             (t y)))))))
+
+(defun print-month (month &optional stream)
+  "Format a timestamp as YYYY-MM."
+  (format stream "~4,'0D-~2,'0D"
+          (local-time:timestamp-year month)
+          (local-time:timestamp-month month)))
