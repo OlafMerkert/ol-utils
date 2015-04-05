@@ -15,7 +15,8 @@
    :parse-date/us
    :encode-timestamp
    :parse-month
-   :print-month))
+   :print-month
+   :normalise-year))
 
 (in-package :ol-date-utils)
 
@@ -63,17 +64,26 @@ for everything, with the obvious defaults."
   (cond ((stringp obj) (parse-integer obj))
         (t obj)))
 
+(defun normalise-year (year)
+  "Convert a possibly 2-digit year into 4-digit format."
+  (cond ((< year 30) (+ 2000 year))
+        ((< year 100) (+ 1900 year))
+        (t year)))
+
 (defmacro! define-parse-date (name separator parts &optional doc)
   `(defun ,name (,g!string)
      ,doc
      (let ((,g!parts (split-sequence:split-sequence ,separator ,g!string
                                                     :remove-empty-subseqs t)))
        (when ,g!parts
-         (destructuring-bind ,parts ,g!parts
-           (encode-date
-            (->integer day)
-            (->integer month)
-            (->integer year)))))))
+         (let ,(remove-if (lambda (x) (member x parts))
+                          '((day 1) (month 1) (year 1970))
+                          :key #'car)
+           (destructuring-bind ,parts ,g!parts
+             (encode-date
+              (->integer day)
+              (->integer month)
+              (normalise-year (->integer year)))))))))
 
 (define-parse-date parse-date #\. (day month &optional year)
                    "Parse a date of form DD.MM.YYYY or DD.MM.")
@@ -94,21 +104,8 @@ difference as REF-FROM and REF-TO."
               (timestamp+ x diff :sec))
             other-dates)))
 
-(defun parse-month (month-string)
-  "Encode a string YYYY-MM to a timestamp"
-  (mvbind (match registers)
-      (ppcre:scan-to-strings '(:sequence :start-anchor
-                               (:register (:greedy-repetition 2 4 :digit-class))
-                               "-"
-                               (:register (:greedy-repetition 1 2 :digit-class))
-                               :end-anchor)
-                             month-string)
-    (if match
-        (encode-date 1 (parse-integer (elt registers 1))
-                     (le1 (y (parse-integer (elt registers 0)))
-                       (cond ((< y 30) (+ 2000 y))
-                             ((< y 100) (+ 1900 y))
-                             (t y)))))))
+(define-parse-date parse-month #\-(year month)
+                   "Encode a string YYYY-MM to a timestamp")
 
 (defun print-month (month &optional stream)
   "Format a timestamp as YYYY-MM."

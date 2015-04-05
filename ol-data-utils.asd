@@ -3,7 +3,6 @@
   :depends-on (ol-utils
                cl-prevalence
                local-time
-               split-sequence
-               cl-ppcre)
+               split-sequence)
   :components ((:file "prevalence")
                (:file "dates")))
