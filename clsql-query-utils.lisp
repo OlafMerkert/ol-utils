@@ -24,3 +24,36 @@ query which selects only entries with `field' between `month' and
          ;; TODO perhaps here we better use `macrolet'
          ,@(append-to-select field body g!month g!next-month))
        (progn ,@body)))
+
+(defun first-month (table &optional (field [time]) last)
+  "Find the first month with log entries."
+  (le1 (ts  (local-time:universal-to-timestamp
+             (caar (select field :from table
+                           :order-by `((field ,(if last :desc :asc)))
+                           :limit 1))))
+    (values (local-time:timestamp-year ts)
+            (local-time:timestamp-month ts)
+            ts)))
+
+(defun last-month (table &optional (field [time]) first)
+  "Find the last month with log entries."
+  (first-month table field (not first)))
+
+(defun months-table (table field &key (first (multiple-value-list (first-month table field)))
+                                      (last (multiple-value-list (last-month table field))))
+  "Produce a list of the month where there might be log
+entries (simply the range between `first' and `last'."
+  ;; count down the months from `last' to `first'
+  (do ((year (car last))
+       (month (cadr last))
+       (year1 (car first))
+       (month1 (cadr first))
+       timestamps)
+      ((or (< year year1)
+           (and (= year year1) (< month month1)))
+       timestamps)
+    (push (ol-date-utils:encode-timestamp :year year :month month) timestamps)
+    (decf month)
+    (when (zerop month)
+      (decf year)
+      (setf month 12))))

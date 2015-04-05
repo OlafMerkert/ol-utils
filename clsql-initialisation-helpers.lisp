@@ -5,7 +5,11 @@
    #:ensure-tables
    #:ensure-tables-with-indices
    #:define-sqlite3-database
-   #:clsql-readtable))
+   #:clsql-readtable
+   #:with-month-query
+   #:first-month
+   #:last-month
+   #:months-table))
 
 (in-package :clsql-helpers)
 
