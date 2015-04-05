@@ -3,4 +3,5 @@
                clsql
                clsql-sqlite3)
   :serial t
-  :components ((:file "clsql-initialisation-helpers")))
+  :components ((:file "clsql-initialisation-helpers")
+               (:file "clsql-query-helpers")))
