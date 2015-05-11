@@ -9,7 +9,8 @@
    #:with-month-query
    #:first-month
    #:last-month
-   #:months-table))
+   #:months-table
+   #:connect-sqlite3-db))
 
 (in-package :clsql-helpers)
 
