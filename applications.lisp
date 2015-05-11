@@ -4,7 +4,8 @@
 #+quicklisp (defalias ql ql:quickload)
 #+quicklisp (defun ql+ (system)
               (check-type system symbol)
-              (unless (asdf:component-loaded-p system)
+              (unless (and (asdf:find-system system nil)
+                           (asdf:component-loaded-p system))
                 (ql:quickload system)))
 
 
