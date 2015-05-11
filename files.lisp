@@ -36,6 +36,12 @@
   (with-open-file (stream pathname :if-does-not-exist :error)
     (read stream)))
 
+(defun file->string (file)
+  "Read the entire contents of `file' into a string."
+  (with-output-to-string (output-stream)
+    (with-open-file (input-stream file :direction :input)
+      (alexandria:copy-stream input-stream output-stream))))
+
 (defpar size-prefixes '("" K M G T))
 
 (defun format-file-size (size)

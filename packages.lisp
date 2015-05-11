@@ -177,7 +177,8 @@
            #:map-tree
            #:map-tree-if
            #:in-readtable
-           #:install-ol-read-macros))
+           #:install-ol-read-macros
+           #:file->string))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils
