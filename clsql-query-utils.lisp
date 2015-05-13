@@ -25,12 +25,39 @@ query which selects only entries with `field' between `month' and
          ,@(append-to-select field body g!month g!next-month))
        (progn ,@body)))
 
+;; todo move timestamp converter to date-utils?
+(defgeneric to-timestamp (obj))
+
+(defmethod to-timestamp ((integer integer))
+  (local-time:universal-to-timestamp integer))
+
+(defmethod to-timestamp ((timestamp local-time:timestamp))
+  timestamp)
+
+(defmethod to-timestamp ((date clsql-sys:date))
+  (mvbind (day month year) (clsql-sys:decode-date date)
+    (ol-date-utils:encode-date day month year)))
+
+(defmethod to-timestamp ((time clsql-sys:wall-time))
+  (mvbind (usec second minute hour day month year) (decode-time time)
+    (ol-date-utils:encode-timestamp
+     ;; todo pass also `usec'
+     :sec second :minute minute :hour hour :day day :month month :year year)))
+
+(defmethod to-timestamp ((time-string string))
+  (local-time:parse-timestring time-string))
+
+(defmethod clsql-sys::database-output-sql ((self local-time:timestamp) database)
+  "Handle `timestamp's from `local-time' transparently in clsql."
+  (clsql-sys::database-output-sql
+   (local-time:timestamp-to-universal self) database))
+
 (defun first-month (table &optional (field [time]) last)
   "Find the first month with log entries."
-  (le1 (ts  (local-time:universal-to-timestamp
+  (let1 (ts (to-timestamp
              (caar (select field :from table
-                           :order-by `((field ,(if last :desc :asc)))
-                           :limit 1))))
+                           :order-by `((,field ,(if last :desc :asc)))
+                           :limit 1)) ))
     (values (local-time:timestamp-year ts)
             (local-time:timestamp-month ts)
             ts)))

@@ -28,7 +28,7 @@ for everything, with the obvious defaults."
   (local-time:encode-timestamp nsec sec minute hour day month year :timezone timezone :offset offset :into into))
 
 (defun encode-date (day month &optional year)
-  (encode-timestamp :day day :month  month
+  (encode-timestamp :day day :month month
                     ;; support two digit numbers for the year
                     :year (cond ((null year) (timestamp-year (today)))
                           ((< year 35) (+ 2000 year))
