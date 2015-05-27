@@ -85,9 +85,8 @@ strings or whatever."
 
 (defmacro defsymconstant (name &optional documentation)
   "Define a constant with a symbol as value."
-  `(unless (constantp ',name)
-     (defconstant ,name ',(gensym (mkstr name '-constant))
-       ,@(if documentation (list documentation)))))
+  `(defconstant ,name ',(symb+ :ol-symbolic-constants-package name)
+     ,@(if documentation (list documentation))))
 
 ;; Abbreviate eval-when
 (defmacro ew (&body body)

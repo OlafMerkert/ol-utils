@@ -1,5 +1,7 @@
 (in-package #:cl-user)
 
+(defpackage #:ol-symbolic-constants-package)
+
 (defpackage #:ol-utils
   (:nicknames #:ol)
   (:use #:cl
