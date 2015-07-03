@@ -208,8 +208,8 @@ list last)"
 Each sublist starts with the value of key on all of its elements (so
 this is actually an alist).
 
-You could think of this as calculating the inverse image of key on
-list."
+You could think of this as calculating the inverse image of `key' on
+`list'."
   (let (grouping)
     (dolist (l list)
       (let ((k (funcall key l)))
@@ -220,7 +220,7 @@ list."
     (nreverse grouping)))
 
 (defun collect (list &key singletons (test #'eql) (key #'identity))
-  "Group subsequent elements of LIST if they satisfy TEST.  Unless SINGLETONS is T, groups of only one element are flattened again."
+  "Group subsequent elements of `list' if they satisfy `test'.  Unless `singletons' is T, groups of only one element are flattened again."
   (labels ((compact-group (g)
              (if (or (cdr g) singletons)
                  (nreverse g)
@@ -330,11 +330,8 @@ a list of tuples (var key), where at the first occurence of `key' (the
 
 (defun all-p (list)
   "Test whether all elements of `list' are non-nil."
-  (if (null list)
-      t
-      (if (car list)
-          (all-p (cdr list))
-          nil)))
+  (every #'identity list))
+
 (defun filter (fn lst &optional acc)
   "filter lst through fn, dropping any nil values."
   (if lst
@@ -380,11 +377,11 @@ a list of tuples (var key), where at the first occurence of `key' (the
 
 (defun maximise (seq &key (key #'identity))
   "Find the maximum value of the sequence."
-  (apply #'max (map 'list key seq)))
+  (reduce #'max seq :key key))
 
 (defun minimise (seq &key (key #'identity))
   "Find the minimum value of the sequence."
-  (apply #'min (map 'list key seq)))
+  (reduce #'min seq :key key))
 
 (defun transpose-list (list)
   "Create a transposition of the LIST of lists."
