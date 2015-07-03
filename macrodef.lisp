@@ -87,6 +87,7 @@ g!."
   "Create an alias for a function or macro."
   (unless args (setf args `(&rest ,g!rest)))
   `(defmacro ,alias (&whole ,g!args ,@args)
+     ,(format nil "An alias for ~(`~A'~)." whatfor)
      (declare (ignore ,@(args->names args)))
      `(,',whatfor ,@(rest ,g!args))))
 
