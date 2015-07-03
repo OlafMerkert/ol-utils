@@ -83,12 +83,28 @@ g!."
                   (t (list x))))
           args)))
 
-(defmacro! defalias (alias whatfor &optional args)
+(define-condition deprecated-function-warning (style-warning)
+  ((deprecated-function-name :initarg :function-name
+                             :reader deprecated-function-name)
+   (alternative-function-name :initarg :alternative
+                              :reader alternative-function-name)))
+
+(defmethod print-object ((warning deprecated-function-warning) stream)
+  (format stream "The function `~A' is deprecated~@[, consider using `~A' instead~]."
+          (deprecated-function-name warning)
+          (alternative-function-name warning)))
+
+
+(defmacro! defalias (alias whatfor &optional args deprecated)
   "Create an alias for a function or macro."
   (unless args (setf args `(&rest ,g!rest)))
   `(defmacro ,alias (&whole ,g!args ,@args)
      ,(format nil "An alias for ~(`~A'~)." whatfor)
      (declare (ignore ,@(args->names args)))
+     ,(if deprecated
+          `(warn 'deprecated-function-warning
+                 :function-name ',alias
+                 :alternative ',whatfor))
      `(,',whatfor ,@(rest ,g!args))))
 
 ;; duality of syntax with defvar, and brevity

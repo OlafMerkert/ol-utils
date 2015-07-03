@@ -350,7 +350,7 @@ a list of tuples (var key), where at the first occurence of `key' (the
                       (rec (mapcar #'cdr lists) acc)))))
     (rec (cons list lists) nil)))
 
-(defalias group partition (source n))
+(defalias group partition (source n) t)
 
 (defun splitn (list &optional (n 2))
   "Split `list' into sequences of all `n'-th elements."
