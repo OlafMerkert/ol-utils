@@ -2,11 +2,12 @@
 
 ;; faster loading with quicklisp
 #+quicklisp (defalias ql ql:quickload)
-#+quicklisp (defun ql+ (system)
-              (check-type system symbol)
-              (unless (and (asdf:find-system system nil)
-                           (asdf:component-loaded-p system))
-                (ql:quickload system)))
+#+quicklisp (defun ql+ (systems)
+              (dolist (system (mklist systems))
+                (check-type system symbol)
+                (unless (and (asdf:find-system system nil)
+                             (asdf:component-loaded-p system))
+                  (ql:quickload system))))
 
 
 (defgeneric start-app (id &rest args)
