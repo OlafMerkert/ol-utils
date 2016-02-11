@@ -180,7 +180,8 @@
            #:map-tree-if
            #:in-readtable
            #:install-ol-read-macros
-           #:file->string))
+           #:file->string
+           #:mapc-tree))
 
 (defpackage #:ol-user
   (:use #:cl #:ol-utils

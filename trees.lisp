@@ -16,6 +16,13 @@
       (cons (map-tree fn (car tree))
             (map-tree fn (cdr tree)))))
 
+(defun mapc-tree (fn tree)
+  "Map FN on all leafs of TREE, conserving the structure."
+  (if (atom tree)
+      (funcall fn tree)
+      (progn (map-tree fn (car tree))
+             (map-tree fn (cdr tree)))))
+
 (defun map-tree-if (pred fn tree)
   "Map FN just on the leafs of TREE, that satisfy PRED."
   (map-tree (lambda (leaf)
