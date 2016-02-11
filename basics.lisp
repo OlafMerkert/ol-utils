@@ -110,7 +110,8 @@ strings or whatever."
 format, but prepends 'DEBUG' and appends a line-break."
   (princ "DEBUG: " *debug-stream*)
   (apply #'format *debug-stream* string args)
-  (terpri *debug-stream*))
+  (terpri *debug-stream*)
+  (finish-output *debug-stream*))
 
 (defparameter *progress-stream* t)
 (declaim (inline progress-event))
