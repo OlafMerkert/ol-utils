@@ -6,7 +6,7 @@ The goal of this system is to provide some personalised/personalisable lisp util
 *** ol-utils
 The main package which contains almost all the utilities. It has the nickname =:OL=, in analogy to =:CL=. There is also the =:OL-USER= package, which I use as default REPL package instead of =:CL-USER=.
 
-It depends on 
+It depends on some packages (available through [[https://www.quicklisp.org/beta/][Quicklisp]]):
 + [[https://common-lisp.net/project/named-readtables/][NAMED-READTABLES]] for defining =ol-readtable= (installed by default)
 + [[https://common-lisp.net/project/iterate/][iterate]] (custom extensions)
 + [[https://common-lisp.net/project/alexandria/][Alexandria]]
@@ -18,16 +18,20 @@ Some utility functions for working with [[http://clsql.kpe.io/][CLSQL]], mainly 
 I adapted a few of those suggested in "Let Over Lambda", and have used them frequently.
 
 The read-macros are loaded by default, probably loading the standard readtable should get rid of them again.
-* functionality
-+ [[file:packages.lisp][packages]]
+* Philosophy
+When working on particular projects, I sometimes write general utilities (as needed). When cleaning up code, they get proper documentation and get moved into the =ol-utils= project.
+
+As =ol-utils= is used in all my projects, it provides a consistent environment for me when programming Common Lisp.
+* Functionality
++ [[file:packages.lisp][packages]] ::
 + [[file:basics.lisp][basics]] :: string and symbol building, list utilities required for macros
 + [[file:reader.lisp][reader]] :: read macros
 + [[file:macrodef.lisp][macrodef]] :: =defmacro!= and friends
 + [[file:binding.lisp][binding]] :: shorter aliases for binding macros
 + [[file:conditionals.lisp][conditionals]] :: =while%= and related
 + [[file:anaphoric.lisp][anaphoric]] :: my favourite anaphoric macros
-+ [[file:setf.lisp][setf]]
-+ [[file:sequences.lisp][sequences]]
++ [[file:setf.lisp][setf]] ::
++ [[file:sequences.lisp][sequences]] ::
 + [[file:functions.lisp][functions]] :: composition and variation of =lambda=
 + [[file:lists.lisp][lists]] :: list building/transformation and access, queues and custom mapping functions
 + [[file:trees.lisp][trees]] :: basic tree walking
@@ -37,17 +41,13 @@ The read-macros are loaded by default, probably loading the standard readtable s
 + [[file:lazy-array.lisp][lazy-array]] :: infinite length arrays (vectors), see also math-utils
 + [[file:nlazy-array.lisp][nlazy-array]] :: lazy array API ported to normal arrays
 + [[file:infinite-array.lisp][infinite]] :: a simpler approach to infinite arrays
-+ [[file:strings.lisp][strings]]
-+ [[file:arithmetic.lisp][arithmetic]]
++ [[file:strings.lisp][strings]] ::
++ [[file:arithmetic.lisp][arithmetic]] ::
 + [[file:tables.lisp][tables]] :: hash-table access helper, converting between alists and hash-tables
-+ [[file:clos.lisp][clos]]
++ [[file:clos.lisp][clos]] ::
 + [[file:files.lisp][files]] :: iterating on lines of a file
 + [[file:applications.lisp][applications]] :: a function to quickly launch my lisp applications
-+ [[file:portability.lisp][portability]]
-* Philosophy
-When working on particular projects, I sometimes write general utilities (as needed). When cleaning up code, they get proper documentation and get moved into the =ol-utils= project.
-
-As =ol-utils= is used in all my projects, it provides a consistent environment for me when programming Common Lisp.
++ [[file:portability.lisp][portability]] ::
 * Tasks
 ** TODO reuse utilities from other projects
 Check out [[https://common-lisp.net/project/alexandria/][Alexandria]] and other utility collections.
@@ -56,3 +56,7 @@ A large part functions are so simple that testing does not make sense. It is unl
 
 However testing would be a good idea for some of the more complicated functions.
 ** TODO check completeness of documentation
+** TODO add proper license
+also a header for each file
+** TODO check for unused functions
+** TODO collect utilities from my other projects
