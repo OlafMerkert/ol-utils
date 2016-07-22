@@ -1,0 +1,58 @@
+* ol-utils
+In this place I collect all the little lisp functions and utilities which seem to be of general use in different projects. I took a lot of inspiration from "[[http://www.paulgraham.com/onlisp.html][On Lisp]]" by Paul Graham, and "[[http://www.letoverlambda.com/][Let Over Lambda]]" by Doug Hoyte (both books heavily recommended).
+
+The goal of this system is to provide some personalised/personalisable lisp utilities for myself. Originally, everything should be self-contained (without any dependencies), however mid-term I would like to replace custom implementations with imports from other utility packages.
+** available systems/packages
+*** ol-utils
+The main package which contains almost all the utilities. It has the nickname =:OL=, in analogy to =:CL=. There is also the =:OL-USER= package, which I use as default REPL package instead of =:CL-USER=.
+
+It depends on 
++ [[https://common-lisp.net/project/named-readtables/][NAMED-READTABLES]] for defining =ol-readtable= (installed by default)
++ [[https://common-lisp.net/project/iterate/][iterate]] (custom extensions)
++ [[https://common-lisp.net/project/alexandria/][Alexandria]]
+*** ol-data-utils
+Utilities for [[https://common-lisp.net/project/cl-prevalence/][CL-PREVALENCE]] (setting up stores) and functions for printing and parsing dates for [[https://www.common-lisp.net/project/local-time/][LOCAL-TIME]]
+*** ol-sql-utils
+Some utility functions for working with [[http://clsql.kpe.io/][CLSQL]], mainly related to date queries. It bridges between [[https://common-lisp.net/project/local-time/][LOCAL-TIME]] data types and CLSQL data types.
+** read-macros
+I adapted a few of those suggested in "Let Over Lambda", and have used them frequently.
+
+The read-macros are loaded by default, probably loading the standard readtable should get rid of them again.
+* functionality
++ [[file:packages.lisp][packages]]
++ [[file:basics.lisp][basics]] :: string and symbol building, list utilities required for macros
++ [[file:reader.lisp][reader]] :: read macros
++ [[file:macrodef.lisp][macrodef]] :: =defmacro!= and friends
++ [[file:binding.lisp][binding]] :: shorter aliases for binding macros
++ [[file:conditionals.lisp][conditionals]] :: =while%= and related
++ [[file:anaphoric.lisp][anaphoric]] :: my favourite anaphoric macros
++ [[file:setf.lisp][setf]]
++ [[file:sequences.lisp][sequences]]
++ [[file:functions.lisp][functions]] :: composition and variation of =lambda=
++ [[file:lists.lisp][lists]] :: list building/transformation and access, queues and custom mapping functions
++ [[file:trees.lisp][trees]] :: basic tree walking
++ [[file:memoisation.lisp][memoisation]] :: memoisation functions/macros using both hash-tables and arrays
++ [[file:lazy.lisp][lazy]] :: lazy evaluation and pipes
++ [[file:arrays.lisp][arrays]] :: (sub)array iteration and filling (also for multidimensional arrays)
++ [[file:lazy-array.lisp][lazy-array]] :: infinite length arrays (vectors), see also math-utils
++ [[file:nlazy-array.lisp][nlazy-array]] :: lazy array API ported to normal arrays
++ [[file:infinite-array.lisp][infinite]] :: a simpler approach to infinite arrays
++ [[file:strings.lisp][strings]]
++ [[file:arithmetic.lisp][arithmetic]]
++ [[file:tables.lisp][tables]] :: hash-table access helper, converting between alists and hash-tables
++ [[file:clos.lisp][clos]]
++ [[file:files.lisp][files]] :: iterating on lines of a file
++ [[file:applications.lisp][applications]] :: a function to quickly launch my lisp applications
++ [[file:portability.lisp][portability]]
+* Philosophy
+When working on particular projects, I sometimes write general utilities (as needed). When cleaning up code, they get proper documentation and get moved into the =ol-utils= project.
+
+As =ol-utils= is used in all my projects, it provides a consistent environment for me when programming Common Lisp.
+* Tasks
+** TODO reuse utilities from other projects
+Check out [[https://common-lisp.net/project/alexandria/][Alexandria]] and other utility collections.
+** TODO write tests for more complicated functions
+A large part functions are so simple that testing does not make sense. It is unlikely I would change them, and their correctness is obvious from the definition.
+
+However testing would be a good idea for some of the more complicated functions.
+** TODO check completeness of documentation
